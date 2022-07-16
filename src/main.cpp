@@ -1,16 +1,32 @@
 #include <Arduino.h>
+#include <FastLED.h>
+
+#include <Adafruit_ADXL345_U.h>
+
 #include <network.h>
 
 
 #define latch 14 // pin # of latch that keeps the device on
 #define BTN 12 // pin # of button
 
+
+CRGB leds[54];
+Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
+
+
+long currentTime = millis();
+
+
 /*TODO
 lambda fucntions in index html
 
 test Wifi.setOutputPower
 
+network.h get a variable for ssid and pass
 
+specify number of retries initializing?
+
+add "tags" before debug messages 
 
 */
 
@@ -28,15 +44,9 @@ void setup() {
 
   Serial.begin(74880); // open serial
   wirelessSetup();
-  //WiFi.setOutputPower(10); //20.5 max 0 lowest
-  /*Serial.print("Setting soft-AP configuration ... "); //Wifi setup
-  Serial.println(WiFi.softAPConfig(local_IP, gateway, subnet) ? "Ready" : "Failed!");
-  Serial.print("Setting soft-AP ... ");
-  Serial.println(WiFi.softAP("LedCube", "OooShiny") ? "Ready" : "Failed!");
-  Serial.print("Soft-AP IP address = ");
-  Serial.println(WiFi.softAPIP());*/
 
-
+  initServer();
+  
 
 }
 
