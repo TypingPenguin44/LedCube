@@ -1,0 +1,5 @@
+battery safety disconnect relocate
+all data lines cut inside needs to be soldered to make connection
+ADXL VS pin is power hook it to power
+esp01f pin 16 IS INPUT...MOVE "DO" TO 13
+adxl hook up interrupts if needed

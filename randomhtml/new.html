@@ -1,0 +1,193 @@
+<!DOCTYPE HTML><html>
+<head>
+	<meta name="viewport" charset="UTF-8" content="width=device-width, initial-scale=1">
+	<title>LED Driver</title>
+	<style>
+		table {
+			width: 360px;}
+		td{
+			width: 180px;}
+		html {
+			font-family: Arial;
+			display: inline-block;
+			text-align: center;}
+		p {
+			font-size: 14px;
+			color: #FFFFFF;}
+		body {
+			background-color: #36393e;
+			max-width: 360px;
+			margin:0px auto;
+			padding-bottom: 25px;
+			font-family: sans-serif;
+			color: #bfbfbf;}
+		.sliders { 
+			-webkit-appearance: none;
+			margin: 14px;
+			width: 320px;
+			height: 25px;
+			background: #2f3136;
+		    outline: none;
+		    -webkit-transition: .2s;
+		    transition: opacity .2s;}
+		.sliders::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 35px;
+			height: 35px;
+			background: #ffe600;
+			cursor: pointer;}
+		.sliders::-moz-range-thumb { 
+			width: 35px; 
+			height: 35px; 
+			background: #ffe600; 
+			cursor: pointer;} 
+
+		.textbox{
+			background-color: #2f3136;
+			color: #bfbfbf;}
+		.button{
+			width: 90px;
+			height: 50px;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			color: #bfbfbf;
+
+			background-color: #2f3136;
+			padding: 0px 0px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 12px;
+			margin: 4px 2px;
+			cursor: pointer;
+		}
+		button:hover {
+			background: #42444a;
+			cursor: pointer;
+		}
+		.button1 {
+			/*background-color: #79808c;*/
+		}
+		.button2 {
+			width:60px;
+			height:25px;
+		}
+		.redtext{
+			color: #F04747;
+		}
+		.purpletext{
+			color: #7c30c2;
+		}
+		.cyantext{
+			color: #0af0ec;
+		}
+		.orangetext{
+			color: #ff7700;
+		}
+		.presettext{
+			color: #27f554;
+		}
+		.topbox{
+			background-color: #2b2c2e;
+		}
+	</style>
+</head>
+<body>
+	<div class="topbox" style="overflow: hidden;">
+		<p style="float: left; margin-left: 20px;"><b>LedCube</b></p>
+		<p style="float: right; margin-right: 20px">%BATT%</p>
+	</div>
+
+	<p><input type="range" onchange="updateSlider(this)" id="rSlider" min="0" max="1023" value="0" step="1" class="sliders"></p>
+	
+	<p><input type="range" onchange="updateSlider(this)" id="gSlider" min="0" max="1023" value="0" step="1" class="sliders"></p>
+	
+	<p><input type="range" onchange="updateSlider(this)" id="bSlider" min="0" max="1023" value="0" step="1" class="sliders"></p>
+
+	
+	
+	<table>
+		<tr>
+			<td><button class="button presettext" type="button" onclick="button(0)">%BUTTON0NAME%</button></td>
+			<td><button class="button presettext" type="button" onclick="button(1)">%BUTTON1NAME%</button></td>
+			<td><button class="button presettext" type="button" onclick="button(2)">%BUTTON2NAME%</button></td>
+			<td><button class="button presettext" type="button" onclick="button(3)">%BUTTON3NAME%</button></td>
+		</tr>
+		<tr>
+			<td><button class="button presettext" type="button" onclick="button(4)">%BUTTON4NAME%</button></td>
+			<td><button class="button presettext" type="button" onclick="button(5)">%BUTTON5NAME%</button></td>
+			<td><button class="button presettext" type="button" onclick="button(6)">%BUTTON6NAME%</button></td>
+			<td><button class="button presettext" type="button" onclick="button(7)">%BUTTON7NAME%</button></td>
+		</tr>
+	</table>
+	<p>Functions</p>
+	<table>
+		<tr>
+			<td><button class="button button1 orangetext" type="button" onclick="updateSlider()"><b>STATIC</b></button></td>
+			<td><button class="button button1 purpletext" type="button" onclick="rainbow()"><b>Rainbow</b></button></td>
+			<td><button class="button button1 cyantext" type="button" onclick="fade()"><b>Fade</b></button></td>
+			<td><button class="button button1 redtext" type="button" onclick="off()"><b>OFF</b></button></td>
+		</tr>
+	</table>
+<script>
+function updateSlider() {
+	var rSliderValue = document.getElementById("rSlider").value;
+	document.getElementById("r").innerHTML = rSliderValue;
+	var gSliderValue = document.getElementById("gSlider").value;
+	document.getElementById("g").innerHTML = gSliderValue;
+	var bSliderValue = document.getElementById("bSlider").value;
+	document.getElementById("b").innerHTML = bSliderValue;
+
+	console.log(rSliderValue);
+	console.log(gSliderValue);
+	console.log(bSliderValue);
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/color?r=" + rSliderValue + "&g=" + gSliderValue + "&b=" + bSliderValue, true);
+	xhr.send();
+}
+function save() {
+	var name = document.getElementById("name").value;
+	//location.reload();
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/save?W="+ name, true);
+	xhr.send();
+}
+function fade(){
+	var name = document.getElementById("name").value;
+	if (name.length == 0){
+		name = 1;
+	}
+	var rValue = document.getElementById("rSlider").value;
+	var gValue = document.getElementById("gSlider").value;
+	var bValue = document.getElementById("bSlider").value;
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/fade?r=" + rValue + "&g=" + gValue + "&b=" + bValue + "&d=" + name, true);
+	xhr.send();
+}
+function rainbow(){
+	var name = document.getElementById("name").value;
+	if (name.length == 0){
+		name = 1;
+	}
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/rainbow?d=" + name , true);
+	xhr.send();
+}
+function off(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/off", true);
+	xhr.send();
+}
+function button(a){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/button?num=" + a, true);
+	xhr.send();
+}
+</script>
+</body>
+</html>

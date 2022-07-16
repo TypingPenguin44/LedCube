@@ -1,0 +1,123 @@
+<!DOCTYPE HTML><html>
+<head>
+	<meta name="viewport" charset="UTF-8" content="width=device-width, initial-scale=1">
+	<title>LedCube</title>
+	<style>
+		html {
+			font-family: Arial;
+			display: inline-block;}
+		body {
+			background-color: #36393e;
+
+			margin:0px auto;
+			padding-bottom: 25px;
+			font-family: sans-serif;
+			/*text-align: center;*/}
+		.topnav {
+			overflow: hidden;
+			background-color: #333;
+			font-size: 12px;
+			color: #FFFFFF;
+			height: 40px;
+		}
+
+		.topnav p {
+			float: left;
+			color: ;
+			padding: 0px 15px 0px 15px;
+		}
+		label {padding-left: 15px;}
+		input {
+			margin:0;
+			vertical-align: bottom;
+			position: relative;
+			top: -1px;
+			right: 5px;
+		}
+		.sliders{
+			margin: 5px 30px 5px 30px;
+			width: 300px;
+		}
+		
+	</style>
+</head>
+<body>
+	<div class="topnav">
+		<table>
+			<tr>
+				<th><p><b>LedCube</b></p></th> <!-- Rainbow color text? <span>-->
+				<th><label><input type="checkbox" name="">Leds ON</label></th>
+				<th>
+					<p style="padding: 0px 5px 0px 120px;">100</p>
+					<p style="padding: 0px 0px 0px 0px;">%</p>
+				<th>
+			</tr>
+		</table>	
+	</div>
+	<div>
+		<p><input type="range" onchange="updateSlider(this)" id="rSlider" min="0" max="255" value="0" step="1" class="sliders"></p>
+	
+		<p><input type="range" onchange="updateSlider(this)" id="gSlider" min="0" max="255" value="0" step="1" class="sliders"></p>
+		
+		<p><input type="range" onchange="updateSlider(this)" id="bSlider" min="0" max="255" value="0" step="1" class="sliders"></p>
+	</div>
+<script>
+function updateSlider() {
+	var rSliderValue = document.getElementById("rSlider").value;
+	document.getElementById("r").innerHTML = rSliderValue;
+	var gSliderValue = document.getElementById("gSlider").value;
+	document.getElementById("g").innerHTML = gSliderValue;
+	var bSliderValue = document.getElementById("bSlider").value;
+	document.getElementById("b").innerHTML = bSliderValue;
+
+	console.log(rSliderValue);
+	console.log(gSliderValue);
+	console.log(bSliderValue);
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/color?r=" + rSliderValue + "&g=" + gSliderValue + "&b=" + bSliderValue, true);
+	xhr.send();
+}
+function save() {
+	var name = document.getElementById("name").value;
+	//location.reload();
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/save?W="+ name, true);
+	xhr.send();
+}
+function fade(){
+	var name = document.getElementById("name").value;
+	if (name.length == 0){
+		name = 1;
+	}
+	var rValue = document.getElementById("rSlider").value;
+	var gValue = document.getElementById("gSlider").value;
+	var bValue = document.getElementById("bSlider").value;
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/fade?r=" + rValue + "&g=" + gValue + "&b=" + bValue + "&d=" + name, true);
+	xhr.send();
+}
+function rainbow(){
+	var name = document.getElementById("name").value;
+	if (name.length == 0){
+		name = 1;
+	}
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/rainbow?d=" + name , true);
+	xhr.send();
+}
+function off(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/off", true);
+	xhr.send();
+}
+function button(a){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/button?num=" + a, true);
+	xhr.send();
+}
+</script>
+</body>
+</html>
