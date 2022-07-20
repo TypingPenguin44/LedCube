@@ -3,19 +3,22 @@
 
 #include <Adafruit_ADXL345_U.h>
 
+#include <betterDelay.h>
 #include <network.h>
+#include <button.h>
+#include <defs.h>
+#include <gfx.h>
 
 
-#define latch 14 // pin # of latch that keeps the device on
-#define BTN 12 // pin # of button
 
 
 CRGB leds[54];
 Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
 
-long currentTime = millis();
 
+extern long currentTime;// = millis();
+long currentTime;
 
 /*TODO
 lambda fucntions in index html
@@ -28,12 +31,18 @@ specify number of retries initializing?
 
 add "tags" before debug messages 
 
+button.h
+the button held down while forever loops can crash the system
+delay in button holding? add timer?
+
 */
 
 /*
 STRUCTURE
 
 */
+uint8_t MODE = 0;
+extern int gfx_color;
 
 void setup() {
   //initialize pins
@@ -44,12 +53,16 @@ void setup() {
 
   Serial.begin(74880); // open serial
   wirelessSetup();
+  gfx_setup();
 
   initServer();
-  
+  Serial.println(MODE);
 
 }
 
 void loop() {
+  gfx_rainbow();
+  Serial.println(gfx_color);
+  delay(30);
   // put your main code here, to run repeatedly:
 }

@@ -21,7 +21,7 @@ IPAddress subnet(255,255,255,0);
 void wirelessSetup();
 void setPaths();
 
-
+#endif
 
 void wirelessSetup()
 {
@@ -129,5 +129,3 @@ void initServer()
   });
   server.begin();
 }
-
-#endif

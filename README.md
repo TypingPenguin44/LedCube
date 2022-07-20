@@ -16,4 +16,6 @@
  ## Software
 Arduino platform not esp-idf because I was familiar with it.
 
+All code needs to be non-blocking because the cube is running a webserver + wifi and with delay() or other easier timing conventions that wouldn't be possible.
+
 
