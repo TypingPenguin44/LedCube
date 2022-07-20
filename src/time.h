@@ -1,4 +1,5 @@
 bool time_check(unsigned long interval);
+bool time_in_check(unsigned long interval);
 void time_setPrev();
 
 /**

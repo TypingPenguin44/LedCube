@@ -4,13 +4,16 @@
 #include <Arduino.h>
 
 #define NUM_LEDS 54
-#define latch 14 // pin # of latch that keeps the device on
-#define BTN 12 // pin # of button
+#define latch 5 // 14 // pin # of latch that keeps the device on
+#define BTN 13 // 12 // pin # of button
+#define LED_PIN 4 //13
 #define DOUBLE_PRESS_TIME 250
 #define LONG_PRESS_TIME 1000
 #define SLEEP_PRESS_TIME 3000
+#define DEBOUNCE 60
 
 
 extern uint8_t MODE;
 extern bool rendered;
 extern bool clear;
+extern unsigned long time_now;

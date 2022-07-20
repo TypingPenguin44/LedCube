@@ -5,7 +5,7 @@ CRGB gfx_leds[NUM_LEDS] = {0};  // zero initialize array.
 
 
 void gfx_setup() {
-  FastLED.addLeds<WS2812B, 13, GRB>(gfx_leds, NUM_LEDS);
+  FastLED.addLeds<WS2812B, LED_PIN, GRB>(gfx_leds, NUM_LEDS);
 }
 
 

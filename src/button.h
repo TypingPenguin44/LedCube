@@ -9,7 +9,7 @@
 
 #ifdef DEBUG_ESP_PORT
   #ifndef DEBUG_MSG
-  #define DEBUG_MSG(...) DEBUG_ESP_PORT.printf( __VA_ARGS__"\n")
+  #define DEBUG_MSG(...) DEBUG_ESP_PORT.printf( __VA_ARGS__)
   #endif
 #else
 #define DEBUG_MSG(...)
@@ -29,7 +29,6 @@ void inputCheck();
 
 #endif
 
-  
 
 /**
 * @brief Check button for input
@@ -42,33 +41,35 @@ void inputCheck() {
   {
     if(digitalRead(BTN) == HIGH) // if button is pressed
     {
-      time_setPrev(); // set previous btn press to now
-
       if (single_press == false) // if not btn press before set it true
       {
         single_press = true;
-      }
-      // if pressed AND pressed again in 250ms register as double press
-      else if(single_press == true && time_check(DOUBLE_PRESS_TIME))
+        DEBUG_MSG("[button_check] Single press\n");
+        Serial.println(time_now);
+      } // if pressed AND pressed again in 250ms register as double press
+      else if(single_press == true && time_in_check(DOUBLE_PRESS_TIME))
       {
         while(digitalRead(BTN) == HIGH){} //if still pressed infinite loop
         double_press = true;
         single_press = false;
+        DEBUG_MSG("[button_check] Double press\n");
+        Serial.println(time_now);
       }
+      time_setPrev(); // set previous btn press to now
     }
 
     while (digitalRead(BTN) == HIGH) {
       buf = time_map(1000, 900, 0, 0, 8);
-      clear = true;
+      //clear = true;
       if (buf > 1) // if buf more than one call anim
       {
         gfx_loading(buf, 0);
       } 
       delay(5);
       if (digitalRead(BTN) == HIGH && time_check(LONG_PRESS_TIME)) {  //if button held down more than 1s
-
+        DEBUG_MSG("[button_check] Longpress\n");
         if (MODE == 0 || MODE == 1) {
-          clear = true;
+          //clear = true;
           MODE = 2;
         } else if(MODE == 2) {
           MODE = 0;
@@ -80,7 +81,7 @@ void inputCheck() {
           if (digitalRead(BTN) == HIGH && time_check(SLEEP_PRESS_TIME)) { //after 3s of holding exec
             if (MODE == 0 || MODE == 1 || MODE == 2) { //remove mode == 2 to only able to go into charge from mode2 and holding to superlong
               MODE = 3;
-              clear = false;
+              //clear = false;
             } else if(MODE == 3) {
               MODE = 0;
             }
@@ -96,7 +97,7 @@ void inputCheck() {
       time_setPrev();
       if (single_press == false){
         single_press = true;
-      }else if(single_press == true && time_check(DOUBLE_PRESS_TIME)){
+      }else if(single_press == true && time_in_check(DOUBLE_PRESS_TIME)){
         while(digitalRead(BTN) == HIGH){}
         double_press = true;
         single_press = false;
@@ -109,10 +110,10 @@ void inputCheck() {
         gfx_loading(buf, 0);
       } // if buf more than one call anim
       delay(5);
-      rendered = false;
+      //rendered = false;
       if(digitalRead(BTN) == HIGH && time_check(1500)){  //if button held down more than 1500ms 
         MODE = 2;
-        clear = true;
+        //clear = true;
         while(digitalRead(BTN) == HIGH){} //if button still pressed
         single_press = false; //set to false to prevent anim increment while trying to switch modes
       }

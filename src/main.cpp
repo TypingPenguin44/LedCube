@@ -3,7 +3,7 @@
 
 #include <Adafruit_ADXL345_U.h>
 
-#include <betterDelay.h>
+//#include <betterDelay.h>
 #include <network.h>
 #include <button.h>
 #include <defs.h>
@@ -13,7 +13,7 @@
 
 
 CRGB leds[54];
-Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
+//Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
 
 
@@ -35,12 +35,9 @@ button.h
 the button held down while forever loops can crash the system
 delay in button holding? add timer?
 
+set pins and define globals!
 */
 
-/*
-STRUCTURE
-
-*/
 uint8_t MODE = 0;
 extern int gfx_color;
 
@@ -52,17 +49,17 @@ void setup() {
   pinMode(BTN, INPUT);
 
   Serial.begin(74880); // open serial
-  wirelessSetup();
+  //wirelessSetup();
   gfx_setup();
 
-  initServer();
+  //initServer();
   Serial.println(MODE);
 
 }
 
 void loop() {
   gfx_rainbow();
-  Serial.println(gfx_color);
-  delay(30);
-  // put your main code here, to run repeatedly:
+  inputCheck();
+  //delay(30);
+
 }

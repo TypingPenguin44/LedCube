@@ -2,7 +2,9 @@
 #define NETWORK_H
 
 #ifdef DEBUG_ESP_PORT
-#define DEBUG_MSG(...) DEBUG_ESP_PORT.printf( __VA_ARGS__ "\n")
+  #ifndef DEBUG_MSG
+  #define DEBUG_MSG(...) DEBUG_ESP_PORT.printf( __VA_ARGS__)
+  #endif
 #else
 #define DEBUG_MSG(...)
 #endif
@@ -25,10 +27,10 @@ void setPaths();
 
 void wirelessSetup()
 {
-  DEBUG_MSG("Setting soft-AP configuration ..."); //Wifi setup
-  DEBUG_MSG(WiFi.softAPConfig(local_IP, gateway, subnet) ? "Ready" : "Failed!");
-  DEBUG_MSG("Setting soft-AP ... ");
-  DEBUG_MSG(WiFi.softAP("LedCube", "OooShiny") ? "Ready" : "Failed!");
+  DEBUG_MSG("Setting soft-AP configuration ...\n"); //Wifi setup
+  DEBUG_MSG(WiFi.softAPConfig(local_IP, gateway, subnet) ? "Ready\n" : "Failed!\n");
+  DEBUG_MSG("Setting soft-AP ... \n");
+  DEBUG_MSG(WiFi.softAP("LedCube", "OooShiny") ? "Ready\n" : "Failed!\n");
 }
 
 
