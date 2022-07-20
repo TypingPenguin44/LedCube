@@ -3,6 +3,8 @@
 
 #include <defs.h>
 #include <Arduino.h>
+#include <time.h>
+#include <gfx.h>
 
 
 #ifdef DEBUG_ESP_PORT
@@ -16,17 +18,14 @@
 bool single_press = false;
 bool double_press = false;
 bool long_press = false;
-bool clear = false;
+
+
 
 int buf = 0;
 
 void startupReset();
 void inputCheck();
-int map_to(int value, int valFrom, int valTo, int from, int to);
 
-Wait wt = Wait();
-
-extern uint8_t MODE;
 
 #endif
 
@@ -39,19 +38,18 @@ extern uint8_t MODE;
 */
 void inputCheck() {
 
-  /*if(MODE == 0 || MODE == 1 || MODE == 2 || MODE == 3)
+  if(MODE == 0 || MODE == 1 || MODE == 2 || MODE == 3)
   {
     if(digitalRead(BTN) == HIGH) // if button is pressed
     {
-      wt.set_prev(); // set previous btn press to now
-      wt.set(DOUBLE_PRESS_TIME);
+      time_setPrev(); // set previous btn press to now
 
       if (single_press == false) // if not btn press before set it true
       {
         single_press = true;
       }
       // if pressed AND pressed again in 250ms register as double press
-      else if(single_press == true && wt.check())
+      else if(single_press == true && time_check(DOUBLE_PRESS_TIME))
       {
         while(digitalRead(BTN) == HIGH){} //if still pressed infinite loop
         double_press = true;
@@ -59,77 +57,76 @@ void inputCheck() {
       }
     }
 
-    while(digitalRead(BTN) == HIGH){
-      buf = wt.map_to(1000, 900, 0, 0, 8);
+    while (digitalRead(BTN) == HIGH) {
+      buf = time_map(1000, 900, 0, 0, 8);
       clear = true;
       if (buf > 1) // if buf more than one call anim
       {
-        loading(buf, 0);
+        gfx_loading(buf, 0);
       } 
       delay(5);
-      if(digitalRead(BTN) == HIGH && currMillis - lastButtonPress >= 1000){  //if button held down more than 1s
-        lastButtonPress = currMillis;
-        if(MODE == 0 || MODE == 1){
+      if (digitalRead(BTN) == HIGH && time_check(LONG_PRESS_TIME)) {  //if button held down more than 1s
+
+        if (MODE == 0 || MODE == 1) {
           clear = true;
           MODE = 2;
-        }else if(MODE == 2){
+        } else if(MODE == 2) {
           MODE = 0;
         }
-        while(digitalRead(BTN) == HIGH){ //if button still pressed
-          buf = map((lastButtonPress+3000)-currMillis, 3000, 0, 0, 8); //call animation
-          longpress(buf, 1);
+        while (digitalRead(BTN) == HIGH) { //if button still pressed
+          buf = time_map(3000, 3000, 0, 0, 8);
+          gfx_loading(buf, 1);
           delay(5);
-          if(digitalRead(12) == HIGH && currMillis - lastButtonPress >= 3000){ //after 3s of holding exec
-            if(MODE == 0 || MODE == 1 || MODE == 2){ //remove mode == 2 to only able to go into charge from mode2 and holding to superlong
+          if (digitalRead(BTN) == HIGH && time_check(SLEEP_PRESS_TIME)) { //after 3s of holding exec
+            if (MODE == 0 || MODE == 1 || MODE == 2) { //remove mode == 2 to only able to go into charge from mode2 and holding to superlong
               MODE = 3;
               clear = false;
-            }else if(MODE == 3){
+            } else if(MODE == 3) {
               MODE = 0;
             }
-            while(digitalRead(12) == HIGH){} //infinite loop while still holding
+            while(digitalRead(BTN) == HIGH) {} //infinite loop while still holding
           }
         }
-        singlePress = false; //set to false to prevent anim increment while trying to switch modes
+        single_press = false; //set to false to prevent anim increment while trying to switch modes
       }
     }
   }
   if(MODE == 4){
-    if(digitalRead(12) == HIGH){
-      currMillis = millis();
-      lastButtonPress = currMillis;
-      if (singlePress == false){
-        singlePress = true;
-      }else if(singlePress == true && currMillis - lastButtonPress <= 250){
+    if(digitalRead(BTN) == HIGH){
+      time_setPrev();
+      if (single_press == false){
+        single_press = true;
+      }else if(single_press == true && time_check(DOUBLE_PRESS_TIME)){
         while(digitalRead(BTN) == HIGH){}
-        doublePress = true;
-        singlePress = false;
+        double_press = true;
+        single_press = false;
       }
     }
 
-    while(digitalRead(12) == HIGH){
-      currMillis = millis();
-      buf = map((lastButtonPress+1500)-currMillis, 1500, 0, 0, 8);
-      if (buf > 1){longpress(buf, 0);} // if buf more than one call anim
+    while(digitalRead(BTN) == HIGH){
+      buf = time_map(1500, 1500, 0, 0, 8);
+      if (buf > 1){
+        gfx_loading(buf, 0);
+      } // if buf more than one call anim
       delay(5);
       rendered = false;
-      if(digitalRead(12) == HIGH && currMillis - lastButtonPress >= 1500){  //if button held down more than 1500ms 
-        lastButtonPress = currMillis;
+      if(digitalRead(BTN) == HIGH && time_check(1500)){  //if button held down more than 1500ms 
         MODE = 2;
         clear = true;
-        while(digitalRead(12) == HIGH){} //if button still pressed
-        singlePress = false; //set to false to prevent anim increment while trying to switch modes
+        while(digitalRead(BTN) == HIGH){} //if button still pressed
+        single_press = false; //set to false to prevent anim increment while trying to switch modes
       }
     }
   }
   if(MODE == 5){
-    if(digitalRead(12) == HIGH){
-      currMillis = millis();
-      lastButtonPress = currMillis;
-      singlePress = true;
+    if(digitalRead(BTN) == HIGH){
+      time_setPrev();
+      single_press = true;
       while(digitalRead(BTN) == HIGH){}
     }
   }
-  currMillis = millis();
+  /*
+
   //handle buttonpresses
   if(singlePress == true && currMillis - lastButtonPress >= 250){ //250ms after a press it executes    
     s = 255; //set hsv values to max in case it was modified in the webview 
@@ -196,8 +193,4 @@ void inputCheck() {
     }
     shake = false;
   }*/
-}
-
-int map_to(int value, int valFrom, int valTo, int from, int to) {
-  return 0;
 }

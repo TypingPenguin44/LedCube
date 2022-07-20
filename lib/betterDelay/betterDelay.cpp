@@ -38,7 +38,7 @@ uint8_t Wait::check()
   }
  
   if ((now - previous_millis) >= interval_millis) {
-	  previous_millis = now ; 
+	  previous_millis = now; 
     return 1;
   }
   
