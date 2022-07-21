@@ -13,7 +13,7 @@
 #define LONG_PRESS_TIME 1000
 #define SLEEP_PRESS_TIME 3000
 #define DEBOUNCE 60
-#define gfx_normal 2
+#define gfx_normal 4
 #define gfx_gyro 0
 
 

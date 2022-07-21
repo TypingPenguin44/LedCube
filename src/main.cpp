@@ -38,6 +38,7 @@ set pins and define globals!.
 shomehow define NOT JUST DECALRE variables logically lol
 */
 
+
 uint8_t MODE = 0;
 
 void setup() {
@@ -54,6 +55,14 @@ void setup() {
   gfx[1].interval = 60;
   gfx[1].place = 1;
   gfx[1].adxl = false;
+
+  gfx[2].interval = 40;
+  gfx[2].place = 2;
+  gfx[2].adxl = false;
+
+  gfx[3].interval = 20;
+  gfx[3].place = 3;
+  gfx[3].adxl = false;
   current_anim = 0;
 
   Serial.begin(74880); // open serial

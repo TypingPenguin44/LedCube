@@ -17,8 +17,6 @@ bool single_press = false;
 bool double_press = false;
 bool long_press = false;
 
-
-
 int buf = 0;
 
 
@@ -28,7 +26,6 @@ int buf = 0;
 * and it causes problems with wifi on a single threaded cpu like the esp8285 
 */
 void button_check() {
-
   if(MODE == 0 || MODE == 1 || MODE == 2 || MODE == 3)
   {
     if(digitalRead(BTN) == HIGH) // if button is pressed
