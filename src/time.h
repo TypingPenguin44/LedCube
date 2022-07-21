@@ -15,4 +15,6 @@ void time_trigger(unsigned long prev, int interval);
  */
 int time_map(int interval, int valFrom, int valTo, int from, int to);
 
-bool time_anim(bool gyro);
+bool time_anim();
+
+bool time_test(int interval);

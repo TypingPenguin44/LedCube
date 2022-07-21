@@ -15,7 +15,6 @@ animations gfx[10];
 
 
 
-CRGB leds[54];
 //Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
 
@@ -34,7 +33,9 @@ button.h
 the button held down while forever loops can crash the system
 delay in button holding? add timer?
 
-set pins and define globals!
+set pins and define globals!.
+
+shomehow define NOT JUST DECALRE variables logically lol
 */
 
 uint8_t MODE = 0;
@@ -48,6 +49,11 @@ void setup() {
 
   gfx[0].interval = 40;
   gfx[0].place = 0;
+  gfx[0].adxl = false;
+
+  gfx[1].interval = 60;
+  gfx[1].place = 1;
+  gfx[1].adxl = false;
   current_anim = 0;
 
   Serial.begin(74880); // open serial
@@ -60,10 +66,18 @@ void setup() {
 }
 
 void loop() {
-  if (time_anim(0)) {
+  /*if (time_anim()) {
     gfx_rainbow();
+  }*/
+  yield();
+  gfx_animHandler();
+  if (time_test(2000)) {
+    Serial.print("Mode: ");
+    Serial.print(MODE);
+    Serial.print(" Anim: ");
+    Serial.println(current_anim);
   }
-  inputCheck();
+  button_check();
   //delay(30);
 
 }

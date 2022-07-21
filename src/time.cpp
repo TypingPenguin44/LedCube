@@ -82,11 +82,23 @@ int time_map(int interval, int valFrom, int valTo, int from, int to)
   
 }
 
-bool time_anim(bool gyro) {
+bool time_anim() {
   time_now = millis();
 
   if ((time_now - gfx[current_anim].last_trig) >= gfx[current_anim].interval) {
     gfx[current_anim].last_trig = time_now;
+    return 1;
+  }
+
+  return 0;
+}
+unsigned long time_testPrev = 0;
+
+bool time_test(int interval) {
+  time_now = millis();
+
+  if (time_now - time_testPrev >= interval) {
+    time_testPrev = time_now;
     return 1;
   }
 

@@ -13,11 +13,15 @@
 #define LONG_PRESS_TIME 1000
 #define SLEEP_PRESS_TIME 3000
 #define DEBOUNCE 60
+#define gfx_normal 2
+#define gfx_gyro 0
+
 
 typedef struct {
   unsigned long last_trig;
   int interval;
   int place;
+  bool adxl;
 } animations;
 
 extern animations gfx[10];
@@ -28,5 +32,8 @@ extern bool clear;
 extern unsigned long time_now;
 
 extern int current_anim;
+extern uint8_t gfx_h;
+extern uint8_t gfx_s;
+extern uint8_t gfx_v;
 
 #endif
