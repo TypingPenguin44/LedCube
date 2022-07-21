@@ -1,6 +1,7 @@
-bool time_check(unsigned long interval);
-bool time_in_check(unsigned long interval);
+bool time_check(int interval);
+bool time_in_check(int interval);
 void time_setPrev();
+void time_trigger(unsigned long prev, int interval);
 
 /**
  * @brief Maps value to remaining time to interval end
@@ -13,3 +14,5 @@ void time_setPrev();
  * @return int 
  */
 int time_map(int interval, int valFrom, int valTo, int from, int to);
+
+bool time_anim(bool gyro);

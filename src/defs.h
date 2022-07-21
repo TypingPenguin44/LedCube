@@ -1,3 +1,5 @@
+#ifndef DEFS_H
+#define DEFS_H
 /*
 * Global variables which are used everywhere
 */
@@ -12,8 +14,19 @@
 #define SLEEP_PRESS_TIME 3000
 #define DEBOUNCE 60
 
+typedef struct {
+  unsigned long last_trig;
+  int interval;
+  int place;
+} animations;
+
+extern animations gfx[10];
 
 extern uint8_t MODE;
 extern bool rendered;
 extern bool clear;
 extern unsigned long time_now;
+
+extern int current_anim;
+
+#endif

@@ -3,22 +3,21 @@
 
 #include <Adafruit_ADXL345_U.h>
 
-//#include <betterDelay.h>
 #include <network.h>
 #include <button.h>
 #include <defs.h>
 #include <gfx.h>
 
 
+int current_anim = 0;
+
+animations gfx[10];
+
 
 
 CRGB leds[54];
 //Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
-
-
-extern long currentTime;// = millis();
-long currentTime;
 
 /*TODO
 lambda fucntions in index html
@@ -39,7 +38,6 @@ set pins and define globals!
 */
 
 uint8_t MODE = 0;
-extern int gfx_color;
 
 void setup() {
   //initialize pins
@@ -47,6 +45,10 @@ void setup() {
   digitalWrite(latch, HIGH); // keep the device on
 
   pinMode(BTN, INPUT);
+
+  gfx[0].interval = 40;
+  gfx[0].place = 0;
+  current_anim = 0;
 
   Serial.begin(74880); // open serial
   //wirelessSetup();
@@ -58,7 +60,9 @@ void setup() {
 }
 
 void loop() {
-  gfx_rainbow();
+  if (time_anim(0)) {
+    gfx_rainbow();
+  }
   inputCheck();
   //delay(30);
 

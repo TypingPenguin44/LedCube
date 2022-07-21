@@ -78,6 +78,7 @@ void inputCheck() {
           buf = time_map(3000, 3000, 0, 0, 8);
           gfx_loading(buf, 1);
           delay(5);
+          
           if (digitalRead(BTN) == HIGH && time_check(SLEEP_PRESS_TIME)) { //after 3s of holding exec
             if (MODE == 0 || MODE == 1 || MODE == 2) { //remove mode == 2 to only able to go into charge from mode2 and holding to superlong
               MODE = 3;
@@ -85,7 +86,8 @@ void inputCheck() {
             } else if(MODE == 3) {
               MODE = 0;
             }
-            while(digitalRead(BTN) == HIGH) {} //infinite loop while still holding
+            Serial.println("infinite");
+            while(digitalRead(BTN) == HIGH) {yield();} //infinite loop while still holding
           }
         }
         single_press = false; //set to false to prevent anim increment while trying to switch modes
