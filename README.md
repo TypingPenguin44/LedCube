@@ -21,6 +21,7 @@ All code needs to be non-blocking because the cube is running a webserver + wifi
 
 
 MODE 0: Normal animation mode nothing too fancy
-MODE 1: Animations which react to gyro sensor
-
+MODE 1: Animations which react to adx345 sensor
+MODE 2: System on, No lights
+MODE 3: Simple charging indicator
 

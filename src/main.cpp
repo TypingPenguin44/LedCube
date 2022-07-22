@@ -36,6 +36,9 @@ delay in button holding? add timer?
 set pins and define globals!.
 
 shomehow define NOT JUST DECALRE variables logically lol
+
+global settings from phone to turn off and on shake to cycle animations == shake sets single press true in certain modes
+
 */
 
 
