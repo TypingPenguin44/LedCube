@@ -29,12 +29,14 @@ void gfx_animHandler(){
         gfx_donut();
         break;
       case 4:
+        gfx_dice();
         break;
       case 5:
         break;
       case 6:
         break;
       case 7:
+        gfx_charge();
         break;
       default:
         //implement yellow loading lol
@@ -43,8 +45,17 @@ void gfx_animHandler(){
   }
 }
 
-void gfx_dice(uint8_t side){
-  switch(side){
+void gfx_charge(){
+  BATTERY = analogRead(A0);
+  gfx_h = map(BATTERY, 637, 860, 0, 95);
+  gfx_leds[4] = CHSV(gfx_h, 255, 50);
+  FastLED.show();
+}
+
+//sensor should be called separately 
+uint8_t gfx_dice_side = 0;
+void gfx_dice(){
+  switch(gfx_dice_side){
     case 1:
       gfx_leds[4] = CHSV(gfx_h, gfx_s, gfx_v);
     break;

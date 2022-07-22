@@ -1,0 +1,513 @@
+<!DOCTYPE HTML><html>
+<head>
+	<meta name="viewport" charset="UTF-8" content="width=400px">
+
+	<title>LedCube</title>
+	<style>
+		/*<meta name="viewport" charset="UTF-8" content="width=device-width, initial-scale=1">*/
+		table {
+			width: 100%;
+			max-width: 400px;
+		}
+		td{
+			width: 180px;
+		}
+		html {
+			font-family: Arial;
+			display: inline-block;
+			text-align: center;
+		}
+		p {
+			font-size: 1rem;
+			color: #FFFFFF;}
+		body {
+			max-width: 400px;
+			background-color: #36393e;
+			margin:0px auto;
+			padding-bottom: 25px;
+			font-family: sans-serif;
+			color: #bfbfbf;}
+		.sliders { 
+			-webkit-appearance: none;
+			margin: auto;
+			width: 88%;
+			height: 25px;
+			background: #2f3136;
+		    outline: none;
+			max-width: 400px;
+		    -webkit-transition: .2s;
+		    transition: opacity .2s;}
+		.sliders::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 35px;
+			height: 35px;
+			background: #fcfc00;
+			cursor: pointer;}
+		.sliders::-moz-range-thumb { 
+			width: 35px; 
+			height: 35px; 
+			background: #fff200; 
+			cursor: pointer;} 
+
+		.textbox{
+			background-color: #2f3136;
+			color: #bfbfbf;}
+		.button{
+			width: 90px;
+			height: 50px;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			color: #bfbfbf;
+			background-color: #2f3136;
+			padding: 0px 0px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 12px;
+			margin: 4px 2px;
+			cursor: pointer;
+		}
+		button:hover {
+			background: #42444a;
+			cursor: pointer;
+		}
+		button:focus{
+			background-color: #2f3136;
+		}
+		/*.button1 {
+			background-color: #79808c;
+		}*/
+		.button2 {
+			width:60px;
+			height:25px;
+		}
+		.collapsible {
+			background-color: #2f3136;;
+			color: white;
+			cursor: pointer;
+			padding: 18px;
+			width: 100%;
+			max-width: 400px;
+			border: none;
+			text-align: left;
+			outline: none;
+			font-size: 15px;
+		}
+		.active, .collapsible:hover {
+			background-color: #42444a;
+		}
+		.collapsible:after {
+			content: '\002B';
+			color: white;
+			font-weight: bold;
+			float: right;
+			margin-left: 5px;
+		}
+		.active:after {
+			content: "\2212";
+		}
+		.content {
+			/*padding: 0 18px;*/
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.2s ease-out;
+		}
+		.redtext{
+			color: #F04747;
+		}
+		.purpletext{
+			color: #7c30c2;
+		}
+		.cyantext{
+			color: #0af0ec;
+		}
+		.orangetext{
+			color: #ff7700;
+		}
+		.presettext, .greentext{
+			color: #27f554;
+		}
+		.colorSample{
+			background-color: #0af0ec;
+		}
+		.title {
+			text-shadow: 2px 2px 4px #000000;			
+			/* Chrome, Safari, Opera */
+			/*-webkit-animation: rainbow 5s infinite;
+			/* Standar Syntax */
+			animation: rainbow 5s infinite; 
+		}
+		/* Chrome, Safari, Opera */
+		@-webkit-keyframes rainbow{
+			0%{color: orange;}	
+			10%{color: purple;}	
+			20%{color: red;}
+			30%{color: CadetBlue;}
+			40%{color: yellow;}
+			50%{color: coral;}
+			60%{color: green;}
+			70%{color: cyan;}
+			80%{color: DeepPink;}
+			90%{color: DodgerBlue;}
+			100%{color: orange;}
+		}
+		/* Standar Syntax */
+		@keyframes rainbow{
+			0%{color: orange;}	
+			10%{color: purple;}	
+			20%{color: red;}
+			30%{color: CadetBlue;}
+			40%{color: yellow;}
+			50%{color: coral;}
+			60%{color: green;}
+			70%{color: cyan;}
+			80%{color: DeepPink;}
+			90%{color: DodgerBlue;}
+			100%{color: orange;}
+		}
+	</style>
+</head>
+<body>
+	<table>
+		<tr>
+			<td><p class="title cyantext"><b>LedCube</b></p></td>
+			<td><p>Battery: <span id='percent'></span></p></td>
+		</tr>
+		<tr>
+			<td><p>Rainbow</p></td>
+			<td><button class="button purpletext" type="button" onclick="rainbowButton(0)">Rainbow</button></td>
+		</tr>
+		<tr>
+			<td><p>Snake</p></td>
+			<td><button class="button purpletext" type="button" onclick="rainbowButton(1)">Rainbow</button></td>
+			<td><button class="button presettext" type="button" onclick="staticButton(1)">Static</button></td>
+		</tr>
+		<tr>
+			<td><p>Snake++</p></td>
+			<td><button class="button purpletext" type="button" onclick="rainbowButton(2)">Rainbow</button></td>
+			<td><button class="button presettext" type="button" onclick="staticButton(2)">Static</button></td>
+		</tr>
+		<tr>
+			<td><p>Donut</p></td>
+			<td><button class="button purpletext" type="button" onclick="rainbowButton(3)">Rainbow</button></td>
+			<td><button class="button presettext" type="button" onclick="staticButton(3)">Static</button></td>
+		</tr>
+		<tr>
+			<td><p>Fade</p></td>
+			<td></td>
+			<td><button class="button presettext" type="button" onclick="staticButton(4)">Static</button></td>
+		</tr>
+		<tr>
+			<td><p>Static</p></td>
+			<td></td>
+			<td><button class="button presettext" type="button" onclick="staticButton(5)">Static</button></td>
+		</tr>
+	</table>
+	<p></p>
+	<table>
+		<tr>
+			<td><p>Dice</p></td>
+			<td><button class="button purpletext" type="button" onclick="adxlRainbowButton(0)">Rainbow</button></td>
+			<td><button class="button presettext" type="button" onclick="adxlStaticButton(0)">Static</button></td>
+		</tr>
+		<tr>
+			<td><p>Loading</p></td>
+			<td><button class="button purpletext" type="button" onclick="adxlRainbowButton(1)">Rainbow</button></td>
+			<td><button class="button presettext" type="button" onclick="adxlStaticButton(1)">Static</button></td>
+		</tr>
+	</table>
+	<button type="button" class="collapsible">Static Color Selection</button>
+	<div class="content">
+		<p><input type="range" id="hSlider" onchange="updateSlider(this)" min="0" max="255" value="255" step="1" class="sliders"></p>
+		
+		<p><input type="range" id="sSlider" onchange="updateSlider(this)" min="0" max="255" value="255" step="1" class="sliders"></p>
+		
+		<p><input type="range" id="vSlider" onchange="updateSlider(this)" min="0" max="255" value="127" step="1" class="sliders"></p>
+		<table>
+			<tr>
+				<td><p>H: <span id="h"></span></p></td>
+				<td><p>S: <span id="s"></span></p></td>
+				<td><p>V: <span id="v"></span></p></td>
+			</tr>
+		</table>
+	</div>
+	<p></p>
+	<table>
+		<tr>
+			<td><button class="button button1 " type="button" onclick="press()"><b>Press</b></button></td>
+			<td><button class="button button1 " type="button" onclick="doublePress()"><b>DoublePress</b></button></td>
+			<td><button class="button button1 " type="button" onclick="longPress()"><b>LongPress</b></button></td>
+		</tr>
+		<tr>
+			<td><button class="button button1 " type="button" onclick="superLong()"><b>SuperLong</b></button></td>
+			<td><button class="button button1 cyantext" type="button" onclick="updateCount()"><b>Charge</b></button></td>
+			<td><button class="button button1" type="button" onclick="shake()"><b>Shake</b></button></td>
+		</tr>
+	</table>
+	<p></p>
+	<button type="button" class="collapsible">Advanced</button>
+	<div class="content">
+		<p><input type="range" id="delay" onchange="" min="0" max="200" value="0" step="1" class="sliders"></p>
+		<table>
+			<tr>
+				<td><span id="delayFeedback"></span></td>
+				<td><button class="button button1" type="button" onclick="setDelay()"><b>Set Delay</b></button></td>
+				<td><button class="button button1" type="button" onclick="resetDelay()"><b>Reset Delay</b></button></td>
+			</tr>
+			<tr>
+				<td><button class="button button1" type="button" onclick="tempSaveDelay()"> <b>Save Delay</b></button></td>
+				<td><button class="button button1" type="button" onclick="reloadDelays()"> <b>Reset Delays</b></button></td>
+				<td><button class="button button1 orangetext" type="button" onclick="reload()"> <b>Reload Config</b></button></td>
+			</tr>
+			<tr>
+				<td><button class="button button1 redtext" type="button" onclick="saveAllConfig()"> <b>SAVE ALL</b></button></td>
+				<td><button class="button button1 redtext" type="button" onclick="reset()"> <b>RESET</b></button></td>
+				<td><button class="button button1 redtext" type="button" onclick="off()"> <b>OFF</b></button></td>
+			</tr>
+		</table>
+	</div>
+	<button type="button" class="collapsible">Toggles</button>
+		<div class="content">
+			<table>
+				<tr>
+					<td><p>Shake</p></td>
+					<td><button class="button button1 greentext" type="button" onclick="loadVar(0,1)"> <b>Enable</b></button></td>
+					<td><button class="button button1 redtext" type="button" onclick="loadVar(0,0)"> <b>Disable</b></button></td>
+				</tr>
+				<tr>
+					<td><p>Static Mode</p></td>
+					<td><button class="button button1 greentext" type="button" onclick="loadVar(1,1)"> <b>Enable</b></button></td>
+					<td><button class="button button1 redtext" type="button" onclick="loadVar(1,0)"> <b>Disable</b></button></td>
+				</tr>
+				<tr>
+					<td><p>Roll Mode</p></td>
+					<td><button class="button button1 greentext" type="button" onclick="loadVar(2,1)"> <b>Enable</b></button></td>
+					<td><button class="button button1 redtext" type="button" onclick="loadVar(2,0)"> <b>Disable</b></button></td>
+				</tr>
+			</table>
+		</div>
+<script>
+/*Loading battery precentage/value*/
+window.onload = function useless(){
+	updateCount();
+}
+setInterval(updateCount, 10000);
+
+function updateCount(){  
+	ajaxLoad('getPercent'); 
+}
+
+var ajaxRequest = null;
+if (window.XMLHttpRequest){
+	ajaxRequest = new XMLHttpRequest();
+} else {
+	ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+}
+
+function ajaxLoad(ajaxURL){
+	if(!ajaxRequest){
+		alert('AJAX is not supported.'); 
+		return; 
+	}
+
+	ajaxRequest.open('GET',ajaxURL,true);
+	ajaxRequest.onreadystatechange = function(){
+		if(ajaxRequest.readyState == 4 && ajaxRequest.status==200){
+			var ajaxResult = ajaxRequest.responseText;
+			document.getElementById('percent').innerHTML = ajaxResult;
+		}
+	}
+	ajaxRequest.send();
+}
+/*collapsible things*/
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+  });
+}
+ 
+//update sliders feedback
+var hSlider = document.getElementById("hSlider");
+var hOutput = document.getElementById("h");
+hOutput.innerHTML = hSlider.value;
+hSlider.oninput = function() {
+  hOutput.innerHTML = this.value;
+}
+
+var sSlider = document.getElementById("sSlider");
+var sOutput = document.getElementById("s");
+sOutput.innerHTML = sSlider.value;
+sSlider.oninput = function() {
+  sOutput.innerHTML = this.value;
+}
+
+var vSlider = document.getElementById("vSlider");
+var vOutput = document.getElementById("v");
+vOutput.innerHTML = vSlider.value;
+vSlider.oninput = function() {
+  vOutput.innerHTML = this.value;
+}
+
+
+var delayIn = document.getElementById("delay");
+var delayOut = document.getElementById("delayFeedback");
+delayOut.innerHTML = delayIn.value;
+delayIn.oninput = function() {
+  delayOut.innerHTML = this.value;
+}
+
+/*function hslToHex(h, s, l) {
+	h = Math.round((h/255)*360);
+	s = Math.round((s/255)*100);
+	l = Math.round((l/255)*100);
+	l /= 100;
+	const a = s * Math.min(l, 1 - l) / 100;
+	const f = n => {
+		const k = (n + h / 30) % 12;
+		const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+		return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
+	};
+	document.getElementById("colorSample").style.backgroundColor = `#${f(0)}${f(8)}${f(4)}`;
+}*/
+
+/*sending values back*/
+function updateSlider() {
+
+	var hSliderValue = document.getElementById("hSlider").value;
+	var sSliderValue = document.getElementById("sSlider").value;
+	var vSliderValue = document.getElementById("vSlider").value;
+
+	console.log(hSliderValue);
+	console.log(sSliderValue);
+	console.log(vSliderValue);
+	//hslToHex(hSliderValue, sSliderValue, vSliderValue);
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/staticRefresh?h=" + hSliderValue + "&s=" + sSliderValue + "&v=" + vSliderValue, true);
+	xhr.send();
+}
+/*other functions*/
+function shake(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/shake", true);
+	xhr.send();
+}
+function staticButton(a){
+	var hSliderValue = document.getElementById("hSlider").value;
+	var sSliderValue = document.getElementById("sSlider").value;
+	var vSliderValue = document.getElementById("vSlider").value;
+
+	console.log(hSliderValue);
+	console.log(sSliderValue);
+	console.log(vSliderValue);
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/static?id=" + a + "&h="+ hSliderValue + "&s=" + sSliderValue + "&v=" + vSliderValue, true);
+	xhr.send();
+}
+function rainbowButton(a){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/rainbow?id=" + a, true);
+	xhr.send();
+}
+
+function adxlRainbowButton(a){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/adxlRainbow?id=" + a, true);
+	xhr.send()
+}
+function adxlStaticButton(a){
+	var hSliderValue = document.getElementById("hSlider").value;
+	var sSliderValue = document.getElementById("sSlider").value;
+	var vSliderValue = document.getElementById("vSlider").value;
+
+	console.log(hSliderValue);
+	console.log(sSliderValue);
+	console.log(vSliderValue);
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/adxlStatic?id=" + a + "&h="+ hSliderValue + "&s=" + sSliderValue + "&v=" + vSliderValue, true);
+	xhr.send();
+}
+
+function press(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/press" , true);
+	xhr.send()
+}
+function doublePress(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/doublePress" , true);
+	xhr.send()
+}
+function longPress(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/longPress" , true);
+	xhr.send()
+}
+function superLong(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/superLong" , true);
+	xhr.send()
+}
+function setDelay(){
+	var delay = document.getElementById("delay").value;
+	console.log(delay);
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/delay?val=" + delay, true);
+	xhr.send();
+}
+function resetDelay(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/resetDelay", true);
+	xhr.send();
+}
+function tempSaveDelay(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/tempSaveDelay", true);
+	xhr.send();
+}
+function saveAllConfig(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/saveAllConfig", true);
+	xhr.send();
+}
+function loadVar(num, val){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/loadVar?num=" + num + "&val=" + val, true);
+	xhr.send();
+}
+function off(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/off", true);
+	xhr.send();
+}
+function reset(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/reset", true);
+	xhr.send();
+}
+function reload(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/reload", true);
+	xhr.send();
+}
+function reloadDelays(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/reloadDelays", true);
+	xhr.send();
+}
+
+</script>
+</body>
+</html>

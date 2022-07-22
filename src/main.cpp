@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <FastLED.h>
 
-#include <Adafruit_ADXL345_U.h>
 
 #include <network.h>
 #include <button.h>
@@ -15,7 +14,7 @@ animations gfx[10];
 
 
 
-//Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
+
 
 
 /*TODO
@@ -39,9 +38,14 @@ shomehow define NOT JUST DECALRE variables logically lol
 
 global settings from phone to turn off and on shake to cycle animations == shake sets single press true in certain modes
 
+
+maybve figure out a way to reorder the animations... switch cases need constant values smh
+if else is best for this but idk if this feature is useful at all
+
+check accel on startup 
 */
-
-
+bool shakeCycle = false;
+int BATTERY = 0;
 uint8_t MODE = 0;
 
 void setup() {
@@ -50,22 +54,25 @@ void setup() {
   digitalWrite(latch, HIGH); // keep the device on
 
   pinMode(BTN, INPUT);
+  button_accelSetup();
+
+
+
 
   gfx[0].interval = 40;
-  gfx[0].place = 0;
   gfx[0].adxl = false;
 
   gfx[1].interval = 60;
-  gfx[1].place = 1;
   gfx[1].adxl = false;
 
   gfx[2].interval = 40;
-  gfx[2].place = 2;
   gfx[2].adxl = false;
 
   gfx[3].interval = 20;
-  gfx[3].place = 3;
   gfx[3].adxl = false;
+
+  gfx[7].interval = 2000;
+  gfx[7].adxl = false;
   current_anim = 0;
 
   Serial.begin(74880); // open serial
@@ -77,13 +84,16 @@ void setup() {
 
 }
 
-void loop() {
-  /*if (time_anim()) {
-    gfx_rainbow();
-  }*/
+void loop(){
   yield();
+  
+  /*if (shakeCycle || gfx[current_anim].adxl){
+    button_sensorRead();
+  }*/ //kinda should rethink this currently it only modofies sides var it aint got nothing to do with shake detect
   gfx_animHandler();
-  if (time_test(2000)) {
+
+
+  if (time_test(2000)){
     Serial.print("Mode: ");
     Serial.print(MODE);
     Serial.print(" Anim: ");
@@ -93,3 +103,54 @@ void loop() {
   //delay(30);
 
 }
+
+
+/*
+{
+  "modules": [
+    {
+      "interval": 40,
+      "adxl": "0"
+    },
+    {
+      "interval": 60,
+      "adxl": "0"
+    },
+    {
+      "interval": 40,
+      "adxl": "0"
+    },
+    {
+      "interval": 40,
+      "adxl": "0"
+    },
+    {
+      "interval": 40,
+      "adxl": "0"
+    },
+    {
+      "interval": 40,
+      "adxl": "0"
+    },
+    {
+      "interval": 40,
+      "adxl": "0"
+    },
+    {
+      "interval": 40,
+      "adxl": "0"
+    },
+    {
+      "interval": 40,
+      "adxl": "0"
+    },
+    {
+      "interval": 40,
+      "adxl": "0"
+    },
+    {
+      "interval": 40,
+      "adxl": "0"
+    }
+  ]
+}*/

@@ -11,6 +11,7 @@
 
 unsigned long time_now;
 unsigned long time_previous_press;
+unsigned long time_previous_sensor;
 
 
 
@@ -102,5 +103,15 @@ bool time_test(int interval) {
     return 1;
   }
 
+  return 0;
+}
+
+
+bool time_sensor() {
+  time_now = millis();
+  if ((time_now - time_previous_sensor) >= SENSOR_TIME) {
+    time_previous_sensor = time_now;
+    return 1;
+  }
   return 0;
 }

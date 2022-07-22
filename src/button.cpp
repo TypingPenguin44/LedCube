@@ -3,6 +3,7 @@
 #include <time.h>
 #include <gfx.h>
 #include <button.h>
+#include <Adafruit_ADXL345_U.h>
 
 
 #ifdef DEBUG_ESP_PORT
@@ -13,12 +14,14 @@
 #define DEBUG_MSG(...)
 #endif
 
+
 bool single_press = false;
 bool double_press = false;
 bool long_press = false;
 
 int buf = 0;
 
+Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
 /**
 * @brief Check button for input
@@ -119,4 +122,38 @@ void button_handler() {
     }
     shake = false;
   }*/
+}
+
+void button_accelSetup(){
+  if(!accel.begin()){ //adxl345 setup
+    Serial.println("Ooops, no ADXL345 detected ... Check your wiring!");
+    Serial.println("Disabling sensor...");
+  }else{
+    accel.setRange(ADXL345_RANGE_8_G); //SetRange 16, 8, 4, 2
+  }
+}
+
+void button_sensorRead(){
+  if(time_sensor()){
+    sensors_event_t event; 
+    accel.getEvent(&event);
+  
+    int x = event.acceleration.x;
+    int y = event.acceleration.y;
+    int z = event.acceleration.z;
+    
+    if(z < -7){
+      gfx_dice_side = 1;
+    }else if(z > 7){
+      gfx_dice_side = 6;
+    }else if(x < -7){
+      gfx_dice_side = 3;
+    }else if(x > 7){
+      gfx_dice_side = 4;
+    }else if(y < -7){
+      gfx_dice_side = 2;
+    }else if(y > 7){
+      gfx_dice_side = 5;
+    }
+  }
 }

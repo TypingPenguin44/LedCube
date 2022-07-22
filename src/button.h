@@ -7,5 +7,7 @@
 void button_startReset();
 void button_check();
 void button_handler();
+void button_sensorRead();
+void button_accelSetup();
 
 #endif
