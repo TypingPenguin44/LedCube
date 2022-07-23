@@ -41,5 +41,10 @@ extern Adafruit_ADXL345_Unified accel;
 extern uint8_t gfx_dice_side;
 
 extern bool shakeCycle;
+extern bool static_colors;
+
+extern bool single_press;
+extern bool double_press;
+extern bool long_press;
 
 #endif

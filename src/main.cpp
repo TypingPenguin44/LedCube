@@ -6,6 +6,7 @@
 #include <defs.h>
 #include <gfx.h>
 #include <settings.h>
+#include <time.h>
 
 int current_anim = 0;
 
@@ -46,6 +47,8 @@ do i need to stop spiffs?
 on button press reset static thingy
 
 implement toggles
+
+mode switching and sstatic_colors thingy make uniform and not dumb
 */
 bool shakeCycle = false;
 int BATTERY = 0;
@@ -105,7 +108,7 @@ void loop(){
   gfx_animHandler();
 
 
-  if (time_test(2000)){
+  if(time_test(2000)){
     Serial.print("Mode: ");
     Serial.print(MODE);
     Serial.print(" Anim: ");

@@ -227,9 +227,9 @@
 		<p><input type="range" id="vSlider" onchange="updateSlider(this)" min="0" max="255" value="255" step="1" class="sliders"></p>
 		<table>
 			<tr>
-				<td style="width:100px;"><p>H: <span id="h"></span></p></td>
-				<td style="width:100px;"><p>S: <span id="s"></span></p></td>
-				<td style="width:100px;"><p>V: <span id="v"></span></p></td>
+				<td style="width:100px;"><p>H: <span id="h">0</span></p></td>
+				<td style="width:100px;"><p>S: <span id="s">255</span></p></td>
+				<td style="width:100px;"><p>V: <span id="v">255</span></p></td>
         <td style="width:100px; background-color: transparent;" id="sample" name="sample" ></td>
 			</tr>
 		</table>
@@ -259,7 +259,7 @@
 				<td><button class="button button1 orangetext" type="button" onclick="reload()"> <b>Reload Config</b></button></td>
         <td><button class="button button1 redtext" type="button" onclick="save_config()"> <b>SAVE ALL</b></button></td>
 				<td><button class="button button1 redtext" type="button" onclick="off()"> <b>OFF</b></button></td>
-        <td><button class="button button1 cyantext" type="button" onclick="update_battery()"><b>Charge</b></button></td>
+        <td><button class="button button1 cyantext" type="button" onclick="charge()"><b>Charge</b></button></td>
 			</tr>
 		</table>
 	</div>
@@ -328,32 +328,7 @@ for (i = 0; i < coll.length; i++) {
   });
 }
 
-
-
- 
 //update sliders feedback
-const hSlider = document.getElementById("hSlider");
-const hOutput = document.getElementById("h");
-hOutput.innerHTML = hSlider.value;
-hSlider.oninput = function() {
-  hOutput.innerHTML = this.value;
-}
-
-const sSlider = document.getElementById("sSlider");
-const sOutput = document.getElementById("s");
-sOutput.innerHTML = sSlider.value;
-sSlider.oninput = function() {
-  sOutput.innerHTML = this.value;
-}
-
-const vSlider = document.getElementById("vSlider");
-const vOutput = document.getElementById("v");
-vOutput.innerHTML = vSlider.value;
-vSlider.oninput = function() {
-  vOutput.innerHTML = this.value;
-}
-
-
 const delayIn = document.getElementById("delay");
 const delayOut = document.getElementById("delayFeedback");
 delayOut.innerHTML = delayIn.value;
@@ -361,8 +336,16 @@ delayIn.oninput = function() {
   delayOut.innerHTML = this.value;
 }
 
+const hSlider = document.getElementById("hSlider");
+const hOutput = document.getElementById("h");
 hSlider.oninput = function() {setSample(hSlider, hOutput)};
+
+const sSlider = document.getElementById("sSlider");
+const sOutput = document.getElementById("s");
 sSlider.oninput = function() {setSample(sSlider, sOutput)};
+
+const vSlider = document.getElementById("vSlider");
+const vOutput = document.getElementById("v");
 vSlider.oninput = function() {setSample(vSlider, vOutput)};
 
 function hsvToRgb(h, s, v){
@@ -386,8 +369,6 @@ function hsvToRgb(h, s, v){
   return color;
 }
 
-
-
 function setSample(slider, output){
   output.innerHTML = slider.value;
   //var color = new String("hsl(" + Math.round(hSlider.value / 255) + ", " + Math.round(sSlider.value / 255 * 100) + "%, "+ Math.round(vSlider.value / 255 * 100) + "%)");
@@ -395,21 +376,6 @@ function setSample(slider, output){
   var element = document.getElementById("sample");
   element.style.backgroundColor = hsvToRgb(hSlider.value / 255, sSlider.value / 255, vSlider.value / 255);
 }
-
-
-/*function hslToHex(h, s, l) {
-	h = Math.round((h/255)*360);
-	s = Math.round((s/255)*100);
-	l = Math.round((l/255)*100);
-	l /= 100;
-	const a = s * Math.min(l, 1 - l) / 100;
-	const f = n => {
-		const k = (n + h / 30) % 12;
-		const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-		return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
-	};
-	document.getElementById("colorSample").style.backgroundColor = `#${f(0)}${f(8)}${f(4)}`;
-}*/
 
 /*sending values back*/
 function updateSlider() {
@@ -422,54 +388,27 @@ function updateSlider() {
 	//console.log(sSliderValue);
 	//console.log(vSliderValue);
 
-	//hslToHex(hSliderValue, sSliderValue, vSliderValue);
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/staticRefresh?h=" + hSliderValue + "&s=" + sSliderValue + "&v=" + vSliderValue, true);
+	xhr.open("GET", "/colors?h=" + hSliderValue + "&s=" + sSliderValue + "&v=" + vSliderValue, true);
 	xhr.send();
 }
 
 /*other functions*/
-function shake(){
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/shake", true);
-	xhr.send();
-}
-function staticButton(a){
-	var hSliderValue = document.getElementById("hSlider").value;
-	var sSliderValue = document.getElementById("sSlider").value;
-	var vSliderValue = document.getElementById("vSlider").value;
 
-	console.log(hSliderValue);
-	console.log(sSliderValue);
-	console.log(vSliderValue);
+function anim(id, static = 0){
+  if(static == 1){
+    console.log(hSlider.value);
+    console.log(sSlider.value);
+    console.log(vSlider.value);
 
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/static?id=" + a + "&h="+ hSliderValue + "&s=" + sSliderValue + "&v=" + vSliderValue, true);
-	xhr.send();
-}
-function rainbowButton(a){
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/rainbow?id=" + a, true);
-	xhr.send();
-}
-
-function adxlRainbowButton(a){
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/adxlRainbow?id=" + a, true);
-	xhr.send()
-}
-function adxlStaticButton(a){
-	var hSliderValue = document.getElementById("hSlider").value;
-	var sSliderValue = document.getElementById("sSlider").value;
-	var vSliderValue = document.getElementById("vSlider").value;
-
-	console.log(hSliderValue);
-	console.log(sSliderValue);
-	console.log(vSliderValue);
-
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/adxlStatic?id=" + a + "&h="+ hSliderValue + "&s=" + sSliderValue + "&v=" + vSliderValue, true);
-	xhr.send();
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/static?id=" + a + "&h="+ hSlider.value + "&s=" + sSlider.value + "&v=" + vSlider.value, true);
+    xhr.send();
+  } else {
+    var xhr = new XMLHttpRequest();
+	  xhr.open("GET", "/anim?id=" + a, true);
+	  xhr.send();
+  }
 }
 
 function press(){
@@ -477,46 +416,36 @@ function press(){
 	xhr.open("GET", "/press" , true);
 	xhr.send()
 }
-function doublePress(){
+function double_press(){
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/doublePress" , true);
+	xhr.open("GET", "/doublepress" , true);
 	xhr.send()
 }
-function longPress(){
+function long_press(){
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/longPress" , true);
+	xhr.open("GET", "/longpress" , true);
 	xhr.send()
 }
-function superLong(){
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/superLong" , true);
-	xhr.send()
-}
-function setDelay(){
+function set_delay(){
 	var delay = document.getElementById("delay").value;
 	console.log(delay);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "/delay?val=" + delay, true);
 	xhr.send();
 }
-function resetDelay(){
+function reset_delay(){
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/resetDelay", true);
+	xhr.open("GET", "/resetdelay", true);
 	xhr.send();
 }
-function tempSaveDelay(){
+function save_delay(){
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/tempSaveDelay", true);
+	xhr.open("GET", "/savedelay", true);
 	xhr.send();
 }
-function saveAllConfig(){
+function save_config(){
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/saveAllConfig", true);
-	xhr.send();
-}
-function loadVar(num, val){
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/loadVar?num=" + num + "&val=" + val, true);
+	xhr.open("GET", "/saveconfig", true);
 	xhr.send();
 }
 function off(){
@@ -534,9 +463,9 @@ function reload(){
 	xhr.open("GET", "/reload", true);
 	xhr.send();
 }
-function reloadDelays(){
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/reloadDelays", true);
+function charge(){
+  var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/charge", true);
 	xhr.send();
 }
 
