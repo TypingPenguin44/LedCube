@@ -12,11 +12,13 @@
 
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+
 #include <ESPAsyncWebServer.h>
+#include <ESPAsyncTCP.h>
 
 AsyncWebServer server(80);
 
-IPAddress local_IP(192,168,4,2);
+IPAddress local_IP(192,168,4,1);
 IPAddress gateway(192,168,4,1);
 IPAddress subnet(255,255,255,0);
 
@@ -27,6 +29,7 @@ void setPaths();
 
 void wirelessSetup()
 {
+  WiFi.mode(WIFI_AP);
   DEBUG_MSG("Setting soft-AP configuration ...\n"); //Wifi setup
   DEBUG_MSG(WiFi.softAPConfig(local_IP, gateway, subnet) ? "Ready\n" : "Failed!\n");
   DEBUG_MSG("Setting soft-AP ... \n");
@@ -42,7 +45,8 @@ void initServer()
     //request->send(SPIFFS, "/index.html", String(), false, processor);
   });
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/index.html", String(), false);//, processor);
+    //request->send(SPIFFS, "/index.html", String(), false);//, processor);
+    request->send(SPIFFS, "/gfx_settings.json", String(), false);
   });
   server.on("/static", HTTP_GET, [](AsyncWebServerRequest *request){
     Serial.println("staticbutton");

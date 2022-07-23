@@ -6,6 +6,7 @@
 #include <button.h>
 #include <defs.h>
 #include <gfx.h>
+#include <settings.h>
 
 
 int current_anim = 0;
@@ -42,19 +43,26 @@ global settings from phone to turn off and on shake to cycle animations == shake
 maybve figure out a way to reorder the animations... switch cases need constant values smh
 if else is best for this but idk if this feature is useful at all
 
+
 check accel on startup 
+
+maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
+
+do i need to stop spiffs?
 */
 bool shakeCycle = false;
 int BATTERY = 0;
 uint8_t MODE = 0;
 
 void setup() {
+  Serial.begin(74880); // open serial
   //initialize pins
   pinMode(latch, OUTPUT);
   digitalWrite(latch, HIGH); // keep the device on
 
   pinMode(BTN, INPUT);
   button_accelSetup();
+  //settings_fsSetup();
 
 
 
@@ -73,9 +81,16 @@ void setup() {
 
   gfx[7].interval = 2000;
   gfx[7].adxl = false;
+
+  gfx[9].interval = 50;
+  gfx[9].adxl = true;
   current_anim = 0;
 
-  Serial.begin(74880); // open serial
+  
+  /*settings_save();
+  settings_load();
+  settings_save();*/
+
   //wirelessSetup();
   gfx_setup();
 

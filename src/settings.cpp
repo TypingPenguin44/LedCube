@@ -15,7 +15,7 @@ void settings_save(){
 
   File file = SPIFFS.open("/gfx_settings.json", "w");
 
-  if (!file) {
+  if(!file){
     Serial.println(F("Failed to create file"));
     return;
   }
@@ -30,9 +30,34 @@ void settings_save(){
   }
   
   // Serialize JSON to file
-  if (serializeJson(doc, file) == 0) {
+  if (serializeJson(doc, file) == 0){
     Serial.println(F("Failed to write to file"));
   }
   // Close the file
+  file.close();
+}
+
+void settings_load(){
+  File file = SPIFFS.open("/gfx_settings.json", "r");
+
+  if(!file){
+    Serial.println(F("Failed to create file"));
+    return;
+  }
+  DynamicJsonDocument doc(1024);
+  DeserializationError error = deserializeJson(doc, file);
+
+  if(error){
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    return;
+  }
+
+  //JsonArray arr = doc["gfx"].as<JsonArray>();
+  for (JsonObject item : doc["gfx"].as<JsonArray>()){
+    gfx[item].interval = item["interval"];
+    gfx[item].adxl = item["adxl"];
+  }
+
   file.close();
 }
