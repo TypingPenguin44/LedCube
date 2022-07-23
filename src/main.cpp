@@ -1,22 +1,15 @@
 #include <Arduino.h>
 #include <FastLED.h>
 
-
 #include <network.h>
 #include <button.h>
 #include <defs.h>
 #include <gfx.h>
 #include <settings.h>
 
-
 int current_anim = 0;
 
 animations gfx[10];
-
-
-
-
-
 
 /*TODO
 lambda fucntions in index html
@@ -49,6 +42,10 @@ check accel on startup
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
 
 do i need to stop spiffs?
+
+on button press reset static thingy
+
+implement toggles
 */
 bool shakeCycle = false;
 int BATTERY = 0;
@@ -118,54 +115,3 @@ void loop(){
   //delay(30);
 
 }
-
-
-/*
-{
-  "modules": [
-    {
-      "interval": 40,
-      "adxl": "0"
-    },
-    {
-      "interval": 60,
-      "adxl": "0"
-    },
-    {
-      "interval": 40,
-      "adxl": "0"
-    },
-    {
-      "interval": 40,
-      "adxl": "0"
-    },
-    {
-      "interval": 40,
-      "adxl": "0"
-    },
-    {
-      "interval": 40,
-      "adxl": "0"
-    },
-    {
-      "interval": 40,
-      "adxl": "0"
-    },
-    {
-      "interval": 40,
-      "adxl": "0"
-    },
-    {
-      "interval": 40,
-      "adxl": "0"
-    },
-    {
-      "interval": 40,
-      "adxl": "0"
-    },
-    {
-      "interval": 40,
-      "adxl": "0"
-    }
-  ]
-}*/

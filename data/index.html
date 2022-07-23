@@ -61,7 +61,7 @@
 			border-radius: 4px;
 			color: #bfbfbf;
 			background-color: #2f3136;
-			padding: 0px 0px;
+			/*padding: 0px 0px;*/
 			text-align: center;
 			text-decoration: none;
 			display: inline-block;
@@ -134,9 +134,6 @@
 		}
 		.title {
 			text-shadow: 2px 2px 4px #000000;			
-			/* Chrome, Safari, Opera */
-			/*-webkit-animation: rainbow 5s infinite;
-			/* Standar Syntax */
 			animation: rainbow 5s infinite; 
 		}
 		/* Chrome, Safari, Opera */
@@ -177,59 +174,63 @@
 		</tr>
 		<tr>
 			<td><p>Rainbow</p></td>
-			<td><button class="button purpletext" type="button" onclick="rainbowButton(0)">Rainbow</button></td>
+			<td><button class="button purpletext" type="button" onclick="anim(0)">Rainbow</button></td>
 		</tr>
 		<tr>
 			<td><p>Snake</p></td>
-			<td><button class="button purpletext" type="button" onclick="rainbowButton(1)">Rainbow</button></td>
-			<td><button class="button presettext" type="button" onclick="staticButton(1)">Static</button></td>
+			<td><button class="button purpletext" type="button" onclick="anim(1)">Rainbow</button></td>
+			<td><button class="button presettext" type="button" onclick="static_anim(1)">Static</button></td>
 		</tr>
 		<tr>
 			<td><p>Snake++</p></td>
-			<td><button class="button purpletext" type="button" onclick="rainbowButton(2)">Rainbow</button></td>
-			<td><button class="button presettext" type="button" onclick="staticButton(2)">Static</button></td>
+			<td><button class="button purpletext" type="button" onclick="anim(2)">Rainbow</button></td>
+			<td><button class="button presettext" type="button" onclick="static_anim(2)">Static</button></td>
 		</tr>
 		<tr>
 			<td><p>Donut</p></td>
-			<td><button class="button purpletext" type="button" onclick="rainbowButton(3)">Rainbow</button></td>
-			<td><button class="button presettext" type="button" onclick="staticButton(3)">Static</button></td>
+			<td><button class="button purpletext" type="button" onclick="anim(3)">Rainbow</button></td>
+			<td><button class="button presettext" type="button" onclick="static_anim(3)">Static</button></td>
 		</tr>
 		<tr>
 			<td><p>Fade</p></td>
 			<td></td>
-			<td><button class="button presettext" type="button" onclick="staticButton(4)">Static</button></td>
+			<td><button class="button presettext" type="button" onclick="static_anim(4)">Static</button></td>
 		</tr>
 		<tr>
 			<td><p>Static</p></td>
 			<td></td>
-			<td><button class="button presettext" type="button" onclick="staticButton(5)">Static</button></td>
+			<td><button class="button presettext" type="button" onclick="static_anim(5)">Static</button></td>
 		</tr>
 	</table>
 	<p></p>
-	<table>
-		<tr>
-			<td><p>Dice</p></td>
-			<td><button class="button purpletext" type="button" onclick="adxlRainbowButton(0)">Rainbow</button></td>
-			<td><button class="button presettext" type="button" onclick="adxlStaticButton(0)">Static</button></td>
-		</tr>
-		<tr>
-			<td><p>Loading</p></td>
-			<td><button class="button purpletext" type="button" onclick="adxlRainbowButton(1)">Rainbow</button></td>
-			<td><button class="button presettext" type="button" onclick="adxlStaticButton(1)">Static</button></td>
-		</tr>
-	</table>
+  <button type="button" class="collapsible">Reactive Animaions</button>
+  <div class="content">
+    <table>
+      <tr>
+        <td><p>Dice</p></td>
+        <td><button class="button purpletext" type="button" onclick="anim(0)">Rainbow</button></td>
+        <td><button class="button presettext" type="button" onclick="static_anim(0)">Static</button></td>
+      </tr>
+      <tr>
+        <td><p>Loading</p></td>
+        <td><button class="button purpletext" type="button" onclick="anim(1)">Rainbow</button></td>
+        <td><button class="button presettext" type="button" onclick="static_anim(1)">Static</button></td>
+      </tr>
+    </table>
+  </div>
 	<button type="button" class="collapsible">Static Color Selection</button>
 	<div class="content">
-		<p><input type="range" id="hSlider" onchange="updateSlider(this)" min="0" max="255" value="255" step="1" class="sliders"></p>
+		<p><input type="range" id="hSlider" onchange="updateSlider(this)" min="0" max="255" value="0" step="1" class="sliders"></p>
 		
 		<p><input type="range" id="sSlider" onchange="updateSlider(this)" min="0" max="255" value="255" step="1" class="sliders"></p>
 		
-		<p><input type="range" id="vSlider" onchange="updateSlider(this)" min="0" max="255" value="127" step="1" class="sliders"></p>
+		<p><input type="range" id="vSlider" onchange="updateSlider(this)" min="0" max="255" value="255" step="1" class="sliders"></p>
 		<table>
 			<tr>
-				<td><p>H: <span id="h"></span></p></td>
-				<td><p>S: <span id="s"></span></p></td>
-				<td><p>V: <span id="v"></span></p></td>
+				<td style="width:100px;"><p>H: <span id="h"></span></p></td>
+				<td style="width:100px;"><p>S: <span id="s"></span></p></td>
+				<td style="width:100px;"><p>V: <span id="v"></span></p></td>
+        <td style="width:100px; background-color: transparent;" id="sample" name="sample" ></td>
 			</tr>
 		</table>
 	</div>
@@ -237,34 +238,28 @@
 	<table>
 		<tr>
 			<td><button class="button button1 " type="button" onclick="press()"><b>Press</b></button></td>
-			<td><button class="button button1 " type="button" onclick="doublePress()"><b>DoublePress</b></button></td>
-			<td><button class="button button1 " type="button" onclick="longPress()"><b>LongPress</b></button></td>
-		</tr>
-		<tr>
-			<td><button class="button button1 " type="button" onclick="superLong()"><b>SuperLong</b></button></td>
-			<td><button class="button button1 cyantext" type="button" onclick="updateCount()"><b>Charge</b></button></td>
-			<td><button class="button button1" type="button" onclick="shake()"><b>Shake</b></button></td>
+			<td><button class="button button1 " type="button" onclick="double_press()"><b>Double Press</b></button></td>
+			<td><button class="button button1 " type="button" onclick="long_press()"><b>Sleep</b></button></td>
 		</tr>
 	</table>
 	<p></p>
 	<button type="button" class="collapsible">Advanced</button>
 	<div class="content">
-		<p><input type="range" id="delay" onchange="" min="0" max="200" value="0" step="1" class="sliders"></p>
+		<p><input type="range" id="delay" onchange="" min="0" max="255" value="0" step="1" class="sliders"></p>
 		<table>
 			<tr>
-				<td><span id="delayFeedback"></span></td>
-				<td><button class="button button1" type="button" onclick="setDelay()"><b>Set Delay</b></button></td>
-				<td><button class="button button1" type="button" onclick="resetDelay()"><b>Reset Delay</b></button></td>
+				<td style="width:100px;"><span id="delayFeedback"></span></td>
+				<td style="width:100px;"><button class="button button1" type="button" onclick="set_delay()"><b>Set Delay</b></button></td>
+				<td style="width:100px;"><button class="button button1" type="button" onclick="reset_delay()"><b>Reset Delay</b></button></td>
+        <td style="width:100px;"><button class="button button1" type="button" onclick="save_delay()"> <b>Save Delay</b></button></td>
 			</tr>
+    </table>
+    <table>
 			<tr>
-				<td><button class="button button1" type="button" onclick="tempSaveDelay()"> <b>Save Delay</b></button></td>
-				<td><button class="button button1" type="button" onclick="reloadDelays()"> <b>Reset Delays</b></button></td>
 				<td><button class="button button1 orangetext" type="button" onclick="reload()"> <b>Reload Config</b></button></td>
-			</tr>
-			<tr>
-				<td><button class="button button1 redtext" type="button" onclick="saveAllConfig()"> <b>SAVE ALL</b></button></td>
-				<td><button class="button button1 redtext" type="button" onclick="reset()"> <b>RESET</b></button></td>
+        <td><button class="button button1 redtext" type="button" onclick="save_config()"> <b>SAVE ALL</b></button></td>
 				<td><button class="button button1 redtext" type="button" onclick="off()"> <b>OFF</b></button></td>
+        <td><button class="button button1 cyantext" type="button" onclick="update_battery()"><b>Charge</b></button></td>
 			</tr>
 		</table>
 	</div>
@@ -272,30 +267,25 @@
 		<div class="content">
 			<table>
 				<tr>
-					<td><p>Shake</p></td>
-					<td><button class="button button1 greentext" type="button" onclick="loadVar(0,1)"> <b>Enable</b></button></td>
-					<td><button class="button button1 redtext" type="button" onclick="loadVar(0,0)"> <b>Disable</b></button></td>
+					<td><p>Shake to cycle</p></td>
+					<td><button class="button button1 greentext" type="button" onclick=""> <b>Enable</b></button></td>
+					<td><button class="button button1 redtext" type="button" onclick=""> <b>Disable</b></button></td>
 				</tr>
 				<tr>
-					<td><p>Static Mode</p></td>
-					<td><button class="button button1 greentext" type="button" onclick="loadVar(1,1)"> <b>Enable</b></button></td>
-					<td><button class="button button1 redtext" type="button" onclick="loadVar(1,0)"> <b>Disable</b></button></td>
-				</tr>
-				<tr>
-					<td><p>Roll Mode</p></td>
-					<td><button class="button button1 greentext" type="button" onclick="loadVar(2,1)"> <b>Enable</b></button></td>
-					<td><button class="button button1 redtext" type="button" onclick="loadVar(2,0)"> <b>Disable</b></button></td>
+					<td><p>Roll</p></td>
+					<td><button class="button button1 greentext" type="button" onclick=""> <b>Enable</b></button></td>
+					<td><button class="button button1 redtext" type="button" onclick=""> <b>Disable</b></button></td>
 				</tr>
 			</table>
 		</div>
 <script>
 /*Loading battery precentage/value*/
 window.onload = function useless(){
-	updateCount();
+	update_battery();
 }
-setInterval(updateCount, 10000);
+setInterval(update_battery, 10000);
 
-function updateCount(){  
+function update_battery(){  
 	ajaxLoad('getPercent'); 
 }
 
@@ -321,6 +311,7 @@ function ajaxLoad(ajaxURL){
 	}
 	ajaxRequest.send();
 }
+
 /*collapsible things*/
 var coll = document.getElementsByClassName("collapsible");
 var i;
@@ -336,36 +327,75 @@ for (i = 0; i < coll.length; i++) {
     } 
   });
 }
+
+
+
  
 //update sliders feedback
-var hSlider = document.getElementById("hSlider");
-var hOutput = document.getElementById("h");
+const hSlider = document.getElementById("hSlider");
+const hOutput = document.getElementById("h");
 hOutput.innerHTML = hSlider.value;
 hSlider.oninput = function() {
   hOutput.innerHTML = this.value;
 }
 
-var sSlider = document.getElementById("sSlider");
-var sOutput = document.getElementById("s");
+const sSlider = document.getElementById("sSlider");
+const sOutput = document.getElementById("s");
 sOutput.innerHTML = sSlider.value;
 sSlider.oninput = function() {
   sOutput.innerHTML = this.value;
 }
 
-var vSlider = document.getElementById("vSlider");
-var vOutput = document.getElementById("v");
+const vSlider = document.getElementById("vSlider");
+const vOutput = document.getElementById("v");
 vOutput.innerHTML = vSlider.value;
 vSlider.oninput = function() {
   vOutput.innerHTML = this.value;
 }
 
 
-var delayIn = document.getElementById("delay");
-var delayOut = document.getElementById("delayFeedback");
+const delayIn = document.getElementById("delay");
+const delayOut = document.getElementById("delayFeedback");
 delayOut.innerHTML = delayIn.value;
 delayIn.oninput = function() {
   delayOut.innerHTML = this.value;
 }
+
+hSlider.oninput = function() {setSample(hSlider, hOutput)};
+sSlider.oninput = function() {setSample(sSlider, sOutput)};
+vSlider.oninput = function() {setSample(vSlider, vOutput)};
+
+function hsvToRgb(h, s, v){
+  var r, g, b;
+
+  var i = Math.floor(h * 6);
+  var f = h * 6 - i;
+  var p = v * (1 - s);
+  var q = v * (1 - f * s);
+  var t = v * (1 - (1 - f) * s);
+
+  switch (i % 6) {
+    case 0: r = v, g = t, b = p; break;
+    case 1: r = q, g = v, b = p; break;
+    case 2: r = p, g = v, b = t; break;
+    case 3: r = p, g = q, b = v; break;
+    case 4: r = t, g = p, b = v; break;
+    case 5: r = v, g = p, b = q; break;
+  }
+  var color = new String("rgb(" + Math.round(r * 255) + ", " + Math.round(g * 255) + ", "+ Math.round(b * 255) + ")");
+  return color;
+}
+
+
+
+function setSample(slider, output){
+  output.innerHTML = slider.value;
+  //var color = new String("hsl(" + Math.round(hSlider.value / 255) + ", " + Math.round(sSlider.value / 255 * 100) + "%, "+ Math.round(vSlider.value / 255 * 100) + "%)");
+  //console.log(color);
+  var element = document.getElementById("sample");
+  element.style.backgroundColor = hsvToRgb(hSlider.value / 255, sSlider.value / 255, vSlider.value / 255);
+}
+
 
 /*function hslToHex(h, s, l) {
 	h = Math.round((h/255)*360);
@@ -388,14 +418,16 @@ function updateSlider() {
 	var sSliderValue = document.getElementById("sSlider").value;
 	var vSliderValue = document.getElementById("vSlider").value;
 
-	console.log(hSliderValue);
-	console.log(sSliderValue);
-	console.log(vSliderValue);
+	//console.log(hSliderValue);
+	//console.log(sSliderValue);
+	//console.log(vSliderValue);
+
 	//hslToHex(hSliderValue, sSliderValue, vSliderValue);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "/staticRefresh?h=" + hSliderValue + "&s=" + sSliderValue + "&v=" + vSliderValue, true);
 	xhr.send();
 }
+
 /*other functions*/
 function shake(){
 	var xhr = new XMLHttpRequest();

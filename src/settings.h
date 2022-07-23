@@ -1,3 +1,3 @@
 void settings_save();
-void settings_fsSetup();
-void settings_load();
+void settings_setup_gfx();
+void settings_load_gfx();

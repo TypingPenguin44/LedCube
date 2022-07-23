@@ -2,7 +2,7 @@
 #include <FS.h>
 #include <defs.h>
 
-void settings_fsSetup(){
+void settings_setup(){
   if(!SPIFFS.begin()){ //spiffs setup
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
@@ -10,7 +10,7 @@ void settings_fsSetup(){
 }
   
 
-void settings_save(){
+void settings_save_gfx(){
   SPIFFS.remove("/gfx_settings.json");
 
   File file = SPIFFS.open("/gfx_settings.json", "w");
@@ -37,7 +37,7 @@ void settings_save(){
   file.close();
 }
 
-void settings_load(){
+void settings_load_gfx(){
   File file = SPIFFS.open("/gfx_settings.json", "r");
 
   if(!file){
