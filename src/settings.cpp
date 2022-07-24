@@ -2,6 +2,17 @@
 #include <FS.h>
 #include <defs.h>
 
+static const animations default_gfx[10] = {{0, 40, 0},
+                                           {0, 60, 0},
+                                           {0, 0, 0},
+                                           {0, 0, 0},
+                                           {0, 0, 0},
+                                           {0, 0, 0},
+                                           {0, 0, 0},
+                                           {0, 0, 0},
+                                           {0, 0, 0},
+                                           {0, 0, 0}};
+
 void settings_setup(){
   if(!SPIFFS.begin()){ //spiffs setup
     Serial.println("An Error has occurred while mounting SPIFFS");
@@ -60,4 +71,16 @@ void settings_load_gfx(){
   }
 
   file.close();
+}
+
+void settings_reset_delays(){
+  for(int i = 0; i < 10; i++){
+    gfx[i].interval = default_gfx[i].interval;
+    //gfx[i].adxl = default_gfx[i].adxl; //u cant change this lol 
+  }
+  settings_save_gfx();
+}
+
+void settings_reset(){
+  
 }

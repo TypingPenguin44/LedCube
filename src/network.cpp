@@ -4,6 +4,7 @@
 #include <ESPAsyncWebServer.h>
 #include <ESPAsyncTCP.h>
 #include <defs.h>
+#include <settings.h>
 
 #ifdef DEBUG_ESP_PORT
   #ifndef DEBUG_MSG
@@ -92,30 +93,28 @@ void network_initServer()
 
   server.on("/resetdelay", HTTP_GET, [](AsyncWebServerRequest *request){
     //use a static cosnt array with all values for reset 
+    //then save
+    settings_reset_delays();
     request->send(200);
   });
   server.on("/savedelay", HTTP_GET, [](AsyncWebServerRequest *request){
     //save gfx to file
+    settings_save_gfx();
     request->send(200);
   });
   server.on("/saveAllConfig", HTTP_GET, [](AsyncWebServerRequest *request){
     //save all configs, other config for shake and roll?
     request->send(200);
   });
-  server.on("/loadVar", HTTP_GET, [](AsyncWebServerRequest *request){
-   
-    request->send(200);
-  });
   server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request){
+
     request->send(200);
   });
   server.on("/reset", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(200);
   });
   server.on("/reload", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200);
-  });
-  server.on("/reloadDelays", HTTP_GET, [](AsyncWebServerRequest *request){
+    settings_load_gfx();
     request->send(200);
   });
   server.begin();

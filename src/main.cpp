@@ -49,6 +49,8 @@ on button press reset static thingy
 implement toggles
 
 mode switching and sstatic_colors thingy make uniform and not dumb
+
+implement off and stuff
 */
 bool shakeCycle = false;
 int BATTERY = 0;
