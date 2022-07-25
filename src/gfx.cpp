@@ -29,14 +29,15 @@ void gfx_animHandler(){
         gfx_donut();
         break;
       case 4:
-        
+        gfx_diagonal();
         break;
       case 5:
-        gfx_dice();
+        gfx_dpad();
         break;
-      case 6:
+      case 8:
+      gfx_dice();
         break;
-      case 7:
+      case 9:
         gfx_charge();
         break;
       default:
@@ -106,6 +107,7 @@ bool gfx_diagonal_sideStart = true;
 int gfx_diagonal_start = 0;
 int gfx_diagonal_opCount = 0;
 int gfx_diagonal_current = 0;
+int gfx_diagonal_leds[3] = {0};
 
 void gfx_diagonal(){
   if(gfx_diagonal_sideStart){
@@ -113,58 +115,130 @@ void gfx_diagonal(){
 
     if(gfx_diagonal_first){
       gfx_diagonal_first = false;
-      //gfx_diagonal_start = gfx_diagonal_helper[random(0, 4)]; //select a stating led
-      gfx_diagonal_start = 0; // testing
+      gfx_diagonal_start = gfx_diagonal_helper[random(0, 4)]; //select a stating led
+      for(int i = 0; i < 3; i++){
+        gfx_diagonal_leds[i] = gfx_diagonal_start;
+      }
     }
-      
-    gfx_diagonal_current = gfx_diagonal_start; // set current led as start
+  
+    gfx_diagonal_leds[0] = gfx_diagonal_start; // set current led as start
+    //Serial.print("start: ");
+    //Serial.println(gfx_diagonal_current);
 
   }else if(gfx_diagonal_opCount != 2){ //else if because need to show first led as well
     gfx_diagonal_opCount++; //count how many times it iterated
 
+    gfx_diagonal_leds[2] = gfx_diagonal_leds[1];
+    gfx_diagonal_leds[1] = gfx_diagonal_leds[0];
+
     //decide wich direction next led should be
     if(gfx_diagonal_start % 9 == 0){
-      gfx_diagonal_current += 4;
+      gfx_diagonal_leds[0] += 4;
     }else if(gfx_diagonal_start % 9 == 2){
-      gfx_diagonal_current += 4;
+      gfx_diagonal_leds[0] += 2;
     } else if(gfx_diagonal_start % 9 == 6){
-      gfx_diagonal_current -= 2;
+      gfx_diagonal_leds[0] -= 2;
     } else if(gfx_diagonal_start % 9 == 8){
-      gfx_diagonal_current -= 4;
+      gfx_diagonal_leds[0] -= 4;
     }
+    //Serial.print("op: ");
+    //Serial.print(gfx_diagonal_opCount);
+    //Serial.print(" led: ");
+    //Serial.println(gfx_diagonal_current);
   }else{
+    //Serial.println("New side");
     //pick new side
     gfx_diagonal_sideStart = true;
     gfx_diagonal_opCount = 0;
 
     int next = random(0, 2);
-    gfx_diagonal_start = gfx_diagonal_route[gfx_diagonal_current][next];
+    //Serial.print("random: ");
+    //Serial.println(next);
+    gfx_diagonal_start = gfx_diagonal_route[gfx_diagonal_leds[0]][next];
+    //Serial.print("newstrat: ");
+    //Serial.println(gfx_diagonal_start);
 
+    //one cycle missing here, it will pause here it aint really visible 
+    //solution is to break this up into more functions
   }
   //ligth it up
-  gfx_leds[gfx_diagonal_current] = CHSV(gfx_h, 255, 255);
+  gfx_leds[gfx_diagonal_leds[2]] = CHSV(gfx_h, 255, 100);
+  gfx_leds[gfx_diagonal_leds[1]] = CHSV(gfx_h, 255, 170);
+  gfx_leds[gfx_diagonal_leds[0]] = CHSV(gfx_h, 255, 255);
   gfx_cycleColor();
   FastLED.show();
-  FastLED.clearData(); //?
+  FastLED.clearData();
 }
-
-int gfx_dpad_cornerVal = 255;
+int gfx_dpad_cornerVal = 0;
 int gfx_dpad_centerVal = 0;
 int gfx_dpad_sideVal = 0;
+bool gfx_dpad_sideNeg = false;
+bool gfx_dpad_explode = false; //if i wanna transition smoother
+
+void gfx_dpad(){
+  if(gfx_dpad_explode){
+
+    for(int i = 0; i < 6; i++){ //6 sides of cube
+      gfx_leds[1 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[3 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[5 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[7 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+
+      gfx_leds[4 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
+    }
+    FastLED.show();
+    FastLED.clearData();
+
+    gfx_dpad_sideVal -= 4;
+    if(gfx_dpad_sideVal <= 0){
+      gfx_dpad_sideVal = 0;
+    }
+
+    gfx_dpad_centerVal -= 2;
+    if(gfx_dpad_centerVal <= 0){
+      gfx_dpad_explode = false;
+      gfx_dpad_cornerVal = 0;
+      gfx_cycleColor(20);
+    }
+  }else{
+    for(int i = 0; i < 6; i++){ //6 sides of cube
+      gfx_leds[0 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[2 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[6 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[8 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+    }
+    FastLED.show();
+    FastLED.clearData();
+  
+    gfx_dpad_cornerVal += 2;
+    if(gfx_dpad_cornerVal >= 255){
+      gfx_dpad_explode = true;
+      gfx_dpad_centerVal = 255;
+      gfx_dpad_sideVal = 255;
+      gfx_cycleColor(20);
+    }
+  }
+}
+
+
+/*int gfx_dpad_cornerVal = 255;
+int gfx_dpad_centerVal = 0;
+int gfx_dpad_sideVal = 0;
+bool gfx_dpad_sideNeg = false;
 bool gfx_dpad_explode = false; //if i wanna transition smoother
 void gfx_dpad(){
   if(gfx_dpad_explode == false){
     for(int i = 0; i < 6; i++){ //6 sides of cube
-      gfx_leds[0 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[2 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[6 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[8 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[0 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[2 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[6 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[8 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
 
-      gfx_leds[4 * i] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
+      gfx_leds[4 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
     }
     FastLED.show();
     //cleardata?
-    //FastLED.clearData();
+    FastLED.clearData();
     gfx_dpad_cornerVal--;
     gfx_dpad_centerVal++;
     if(gfx_dpad_centerVal == 255){
@@ -173,34 +247,43 @@ void gfx_dpad(){
     }
   }else{
     for(int i = 0; i < 6; i++){ //6 sides of cube
-      gfx_leds[0 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[2 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[6 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[8 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[0 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[2 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[6 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[8 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
 
-      gfx_leds[1 * i] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
-      gfx_leds[3 * i] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
-      gfx_leds[5 * i] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
-      gfx_leds[7 * i] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[1 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[3 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[5 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[7 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
 
-      gfx_leds[4 * i] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
+      gfx_leds[4 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
     }
     FastLED.show();
     //cleardata?
-    //FastLED.clearData();
-    gfx_dpad_sideVal += 15;    
-    gfx_dpad_cornerVal += 10;
-    gfx_dpad_centerVal -= 10;
+    FastLED.clearData();
+    if(gfx_dpad_sideNeg){
+      gfx_dpad_sideVal -= 7;
+    }else{
+      gfx_dpad_sideVal += 7;
+    }
+       
+    gfx_dpad_cornerVal += 2;
+    gfx_dpad_centerVal -= 2;
     if(gfx_dpad_sideVal >= 255){
+      gfx_dpad_sideNeg = true;
       gfx_dpad_sideVal = 255;
+    }else if(gfx_dpad_sideVal <= 0){
+      gfx_dpad_sideVal = 0;
     }
     if(gfx_dpad_cornerVal >= 255){
       gfx_dpad_cornerVal = 255;
       gfx_dpad_centerVal = 0;
       gfx_dpad_explode = false;
+      gfx_dpad_sideNeg = false;
     }
   }
-}
+}*/
 
 void gfx_charge(){
   BATTERY = analogRead(A0);
@@ -268,7 +351,7 @@ void gfx_donut(){
   }else{
     fill_solid(gfx_leds, NUM_LEDS, CHSV(gfx_h, gfx_s, gfx_v));
     for(int i = 0; i < 6; i++){
-      gfx_leds[4 + (i*9)] = CHSV(gfx_h, gfx_s, gfx_v);
+      gfx_leds[4 + (i*9)] = CHSV(0, 0, 0);
     }
     gfx_v -= 5;
     if(gfx_v <= 0){
@@ -280,10 +363,18 @@ void gfx_donut(){
   gfx_cycleColor();
   FastLED.clearData();
 }
-
 void gfx_cycleColor(){
   //if(staticMode == false){
-    gfx_h++;
+    gfx_h += 1;
+    if(gfx_h >= 255){
+      gfx_h = 0;
+    }
+  //}
+}
+
+void gfx_cycleColor(int a){
+  //if(staticMode == false){
+    gfx_h += a;
     if(gfx_h >= 255){
       gfx_h = 0;
     }
@@ -395,6 +486,7 @@ void gfx_loading(uint8_t leds, bool stageTwo){
 
 void gfx_reset() {
   //leave h alone maybe add these in setup?
+  gfx_diagonal_first = true;
   gfx_s = 255;
   gfx_v = 255;
 }

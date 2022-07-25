@@ -55,6 +55,8 @@ implement toggles
 mode switching and sstatic_colors thingy make uniform and not dumb
 
 implement off and stuff
+still artifacting....... damned fastled lib
+ it was somethign with clear or cleardata or smthn
 */
 bool shakeCycle = false;
 int BATTERY = 0;
@@ -85,8 +87,11 @@ void setup() {
   gfx[3].interval = 20;
   gfx[3].adxl = false;
 
-  gfx[4].interval = 250;
-  gfx[3].adxl = false;
+  gfx[4].interval = 60;
+  gfx[4].adxl = false;
+
+  gfx[5].interval = 20;
+  gfx[5].adxl = false;
 
 
   gfx[7].interval = 2000;
@@ -95,7 +100,7 @@ void setup() {
   gfx[9].interval = 50;
   gfx[9].adxl = true;
 
-  current_anim = 4; //?
+  current_anim = 5; //?
 
   
   /*settings_save();

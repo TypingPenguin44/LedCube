@@ -7,14 +7,14 @@
 #include <Adafruit_ADXL345_U.h>
 
 #define NUM_LEDS 54
-#define latch 5 // 14 // pin # of latch that keeps the device on
-#define BTN 13 // 12 // pin # of button
-#define LED_PIN 4 //13
+#define latch 14//5 // 14 // pin # of latch that keeps the device on
+#define BTN 12//13 // 12 // pin # of button
+#define LED_PIN 13//4 //13
 #define DOUBLE_PRESS_TIME 250
 #define LONG_PRESS_TIME 1000
 #define SLEEP_PRESS_TIME 3000
 #define DEBOUNCE 60
-#define gfx_normal 4
+#define gfx_normal 6
 #define gfx_gyro 0
 #define SENSOR_TIME 20
 
