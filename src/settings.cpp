@@ -2,16 +2,16 @@
 #include <FS.h>
 #include <defs.h>
 
-static const animations default_gfx[10] = {{0, 40, 0},
-                                           {0, 60, 0},
+static const animations default_gfx[10] = {{0, 40, 0}, //rainbow
+                                           {0, 60, 0}, //sanke 
+                                           {0, 40, 0}, //snake++
+                                           {0, 20, 0}, //donut
+                                           {0, 60, 0}, //diagonal
+                                           {0, 20, 0}, //dpad?
                                            {0, 0, 0},
                                            {0, 0, 0},
-                                           {0, 0, 0},
-                                           {0, 0, 0},
-                                           {0, 0, 0},
-                                           {0, 0, 0},
-                                           {0, 0, 0},
-                                           {0, 0, 0}};
+                                           {0, 50, 0}, //dice
+                                           {0, 2000, 0}}; //charge
 
 void settings_setup(){
   if(!SPIFFS.begin()){ //spiffs setup
@@ -20,7 +20,6 @@ void settings_setup(){
   }
 }
   
-
 void settings_save_gfx(){
   SPIFFS.remove("/gfx_settings.json");
 

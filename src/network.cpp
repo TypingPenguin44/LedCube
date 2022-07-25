@@ -29,6 +29,11 @@ void network_setup()
   DEBUG_MSG(WiFi.softAP("LedCube", "OooShiny") ? "Ready\n" : "Failed!\n");
 }
 
+void network_stop(){
+  DEBUG_MSG("[Network] Turning off wifi");
+  WiFi.mode(WIFI_OFF);
+}
+
 void network_initServer()
 {
   server.onNotFound([](AsyncWebServerRequest *request){

@@ -15,7 +15,7 @@
 #define SLEEP_PRESS_TIME 3000
 #define DEBOUNCE 60
 #define gfx_normal 6
-#define gfx_gyro 0
+#define gfx_gyro 1
 #define SENSOR_TIME 20
 
 

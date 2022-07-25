@@ -57,66 +57,47 @@ mode switching and sstatic_colors thingy make uniform and not dumb
 implement off and stuff
 still artifacting....... damned fastled lib
  it was somethign with clear or cleardata or smthn
+
+
+ startup reset, the toggles save and read and stuff
+ HANDLING ADXL ANIM!
+
+ make the turnoff thingy
+
+ static mdoe, switch out all chsv(xyz) thginys to actually have the hsv variables
 */
 bool shakeCycle = false;
 int BATTERY = 0;
 uint8_t MODE = 0;
 
 void setup() {
-  Serial.begin(74880); // open serial
-  //initialize pins
   pinMode(latch, OUTPUT);
+  pinMode(BTN, INPUT);
   digitalWrite(latch, HIGH); // keep the device on
 
-  pinMode(BTN, INPUT);
-  button_accelSetup();
-  //settings_fsSetup();
-
-
-
-
-  gfx[0].interval = 40;
-  gfx[0].adxl = false;
-
-  gfx[1].interval = 60;
-  gfx[1].adxl = false;
-
-  gfx[2].interval = 40;
-  gfx[2].adxl = false;
-
-  gfx[3].interval = 20;
-  gfx[3].adxl = false;
-
-  gfx[4].interval = 60;
-  gfx[4].adxl = false;
-
-  gfx[5].interval = 20;
-  gfx[5].adxl = false;
-
-
-  gfx[7].interval = 2000;
-  gfx[7].adxl = false;
-
-  gfx[9].interval = 50;
-  gfx[9].adxl = true;
-
-  current_anim = 5; //?
-
+  Serial.begin(74880); // open serial
   
-  /*settings_save();
-  settings_load();
-  settings_save();*/
+  network_stop(); //wifi off
 
-  //wirelessSetup();
-  gfx_setup();
+  settings_setup(); //setup spiffs
 
-  //initServer();
-  Serial.println(MODE);
+  gfx_setup(); //init gfx
 
+  button_startReset(); //check for startup reset
+
+  settings_load_gfx(); //read config from file
+  //maybe load other toggles here aswell
+
+  button_accelSetup(); //init adxl
+
+  network_setup(); //init wifi
+  network_initServer(); //init server
+
+  current_anim = 0;
 }
 
 void loop(){
-  yield();
+  yield(); //its good to have it here idk if its needed
   
   /*if (shakeCycle || gfx[current_anim].adxl){
     button_sensorRead();
@@ -131,6 +112,4 @@ void loop(){
     Serial.println(current_anim);
   }
   button_check();
-  //delay(30);
-
 }
