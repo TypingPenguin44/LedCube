@@ -106,6 +106,17 @@ bool time_test(int interval) {
   return 0;
 }
 
+unsigned long time_clearPrev = 0;
+bool time_clear(int interval) {
+  time_now = millis();
+
+  if (time_now - time_clearPrev >= interval) {
+    time_clearPrev = time_now;
+    return 1;
+  }
+  return 0;
+}
+
 
 bool time_sensor() {
   time_now = millis();

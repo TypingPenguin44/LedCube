@@ -1,8 +1,12 @@
 {
-    "menu": [[0,1,50,255,255],[1,0,90,255,255], [2,0,130,255,255], [3,0,214,255,255], [4,0,50,255,255], [14,0,50,255,255], [14,0,50,255,255], [7,0,175,255,255], [8,1,0,255,255]],
-    /*"shakeEnabled": "0",
-    "staticMode": "0",
-    "rollEnabled": "0",*/
-    "delay": [15,60,40,20,20, 0],
-    "gyroDelay": [20, 60]
+  "gfx":[{"interval":40,"adxl":false},
+        {"interval":60,"adxl":false},
+        {"interval":40,"adxl":false},
+        {"interval":20,"adxl":false},
+        {"interval":60,"adxl":false},
+        {"interval":20,"adxl":false},
+        {"interval":0,"adxl":false},
+        {"interval":0,"adxl":false},
+        {"interval":50,"adxl":true},
+        {"interval":2000,"adxl":false}]
 }

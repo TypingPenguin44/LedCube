@@ -40,8 +40,8 @@ void network_initServer()
     request->send(404, "text/plain", "404 Not found");
   });
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/index.html", String(), false);//, processor);
-    //request->send(SPIFFS, "/gfx_settings.json", String(), false);
+    //request->send(SPIFFS, "/index.html", String(), false);//, processor);
+    request->send(SPIFFS, "/gfx_settings.json", String(), false);
   });
   server.on("/static", HTTP_GET, [](AsyncWebServerRequest *request){
     current_anim = request->getParam("id")->value().toInt();

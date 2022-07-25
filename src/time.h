@@ -18,4 +18,6 @@ int time_map(int interval, int valFrom, int valTo, int from, int to);
 bool time_anim();
 
 bool time_test(int interval);
+bool time_clear(int interval);
+
 bool time_sensor();

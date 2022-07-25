@@ -10,7 +10,7 @@ static const animations default_gfx[10] = {{0, 40, 0}, //rainbow
                                            {0, 20, 0}, //dpad?
                                            {0, 0, 0},
                                            {0, 0, 0},
-                                           {0, 50, 0}, //dice
+                                           {0, 50, 1}, //dice
                                            {0, 2000, 0}}; //charge
 
 void settings_setup(){
@@ -51,7 +51,7 @@ void settings_load_gfx(){
   File file = SPIFFS.open("/gfx_settings.json", "r");
 
   if(!file){
-    Serial.println(F("Failed to create file"));
+    Serial.println(F("Failed to open file"));
     return;
   }
   DynamicJsonDocument doc(1024);
@@ -63,10 +63,10 @@ void settings_load_gfx(){
     return;
   }
 
-  //JsonArray arr = doc["gfx"].as<JsonArray>();
-  for (JsonObject item : doc["gfx"].as<JsonArray>()){
-    gfx[item].interval = item["interval"];
-    gfx[item].adxl = item["adxl"];
+  for (int i = 0; i < 10; i++){
+    JsonObject item = doc["gfx"][i];
+    gfx[i].interval = item["interval"];
+    gfx[i].adxl = item["adxl"];
   }
 
   file.close();

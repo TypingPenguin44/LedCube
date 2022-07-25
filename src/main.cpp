@@ -8,8 +8,6 @@
 #include <settings.h>
 #include <time.h>
 
-int current_anim = 0;
-
 animations gfx[10];
 /*anim
 
@@ -69,6 +67,13 @@ still artifacting....... damned fastled lib
 bool shakeCycle = false;
 int BATTERY = 0;
 uint8_t MODE = 0;
+int current_anim = 0;
+bool static_colors = false;
+void printconfig(){
+  for (int i = 0; i < 10; i++){
+    Serial.println(gfx[i].interval);
+  }
+}
 
 void setup() {
   pinMode(latch, OUTPUT);
@@ -76,24 +81,39 @@ void setup() {
   digitalWrite(latch, HIGH); // keep the device on
 
   Serial.begin(74880); // open serial
+  Serial.println("config");
+  printconfig();
+  Serial.println();
   
   network_stop(); //wifi off
+  Serial.println("wifi off");
 
   settings_setup(); //setup spiffs
+  Serial.println("fs setup");
 
   gfx_setup(); //init gfx
+  Serial.println("init gfx");
 
   button_startReset(); //check for startup reset
+  Serial.println("startup reset");
 
   settings_load_gfx(); //read config from file
   //maybe load other toggles here aswell
+  Serial.println("load gfx");
+
+  //gfx[1].interval = 60;
+
+  Serial.println("config");
+  printconfig();
+  Serial.println();
 
   button_accelSetup(); //init adxl
+  Serial.println("setup adxl");
 
-  network_setup(); //init wifi
-  network_initServer(); //init server
+  //network_setup(); //init wifi
+  //network_initServer(); //init server
 
-  current_anim = 0;
+  
 }
 
 void loop(){
@@ -102,9 +122,18 @@ void loop(){
   /*if (shakeCycle || gfx[current_anim].adxl){
     button_sensorRead();
   }*/ //kinda should rethink this currently it only modofies sides var it aint got nothing to do with shake detect
-  gfx_animHandler();
-
-
+  if(gfx[current_anim].adxl){
+    button_sensorRead(); //timer already in function
+  }
+  if(MODE != 2){
+    gfx_animHandler();
+  }else if (MODE == 2){
+    if(time_clear(2000)){
+      //lil bit dumb way to clear leds when in mode 2 and playign with loading anim
+      gfx_clear();
+    }
+  }
+  
   if(time_test(2000)){
     Serial.print("Mode: ");
     Serial.print(MODE);

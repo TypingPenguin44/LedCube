@@ -1,5 +1,6 @@
 #include <defs.h>
 #include <gfx.h>
+#define FASTLED_ALLOW_INTERRUPTS 0
 #include <FastLED.h>
 #include <time.h>
 CRGB gfx_leds[NUM_LEDS] = {0};  // zero initialize array.
@@ -484,11 +485,15 @@ void gfx_loading(uint8_t leds, bool stageTwo){
   FastLED.clearData(); //might be useless
 }
 
-void gfx_reset() {
+void gfx_reset(){
   //leave h alone maybe add these in setup?
   gfx_diagonal_first = true;
   gfx_s = 255;
   gfx_v = 255;
+}
+void gfx_clear(){
+  FastLED.clearData();
+  FastLED.show();
 }
 
 
