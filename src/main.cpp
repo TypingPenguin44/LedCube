@@ -11,6 +11,10 @@
 int current_anim = 0;
 
 animations gfx[10];
+/*anim
+
+diagonal line pulling trail traversing sides 
+*/
 
 /*TODO
 lambda fucntions in index html
@@ -81,12 +85,17 @@ void setup() {
   gfx[3].interval = 20;
   gfx[3].adxl = false;
 
+  gfx[4].interval = 250;
+  gfx[3].adxl = false;
+
+
   gfx[7].interval = 2000;
   gfx[7].adxl = false;
 
   gfx[9].interval = 50;
   gfx[9].adxl = true;
-  current_anim = 0;
+
+  current_anim = 4; //?
 
   
   /*settings_save();

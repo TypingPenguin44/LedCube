@@ -29,9 +29,10 @@ void gfx_animHandler(){
         gfx_donut();
         break;
       case 4:
-        gfx_dice();
+        
         break;
       case 5:
+        gfx_dice();
         break;
       case 6:
         break;
@@ -41,6 +42,162 @@ void gfx_animHandler(){
       default:
         //implement yellow loading lol
         break;
+    }
+  }
+}
+const uint8_t gfx_diagonal_route[54][2] {{35, 38}, //0
+                                         {0, 0}, //1
+                                         {26, 29}, //2
+                                         {0, 0}, //3
+                                         {0, 0}, //4
+                                         {0, 0}, //5
+                                         {42, 9}, //6
+                                         {0, 0}, //7
+                                         {11, 20}, //8
+                                         {6, 42}, //9
+                                         {0, 0}, //10
+                                         {20, 8}, //11
+                                         {0, 0}, //12
+                                         {0, 0}, //13
+                                         {0, 0}, //14
+                                         {42, 47}, //15
+                                         {0, 0}, //16
+                                         {53, 18}, //17
+                                         {17, 53}, //18
+                                         {0, 0}, //19
+                                         {8, 11}, //20
+                                         {0, 0}, //21
+                                         {0, 0}, //22
+                                         {0, 0}, //23
+                                         {51, 27}, //24
+                                         {0, 0}, //25
+                                         {29, 2}, //26
+                                         {24, 51}, //27
+                                         {0, 0}, //28
+                                         {2, 26}, //29
+                                         {0, 0}, //30
+                                         {0, 0}, //31
+                                         {0, 0}, //32
+                                         {45, 36}, //33
+                                         {0, 0}, //34
+                                         {38, 0}, //35
+                                         {33, 45}, //36
+                                         {0, 0}, //37
+                                         {0, 35}, //38
+                                         {0, 0}, //39
+                                         {0, 0}, //40
+                                         {0, 0}, //41
+                                         {47, 15}, //42
+                                         {0, 0}, //43
+                                         {9, 6}, //44
+                                         {36, 33}, //45
+                                         {0, 0}, //46
+                                         {15, 42}, //47
+                                         {0, 0}, //48
+                                         {0, 0}, //49
+                                         {0, 0}, //50
+                                         {27, 24}, //51
+                                         {0, 0}, //52
+                                         {18, 17} //53
+};
+const uint8_t gfx_diagonal_helper[4] = {0, 2, 6, 8};
+bool gfx_diagonal_first = true; //needs to be reset when anim called again put in gfx reset
+bool gfx_diagonal_sideStart = true;
+int gfx_diagonal_start = 0;
+int gfx_diagonal_opCount = 0;
+int gfx_diagonal_current = 0;
+
+void gfx_diagonal(){
+  if(gfx_diagonal_sideStart){
+    gfx_diagonal_sideStart = false;
+
+    if(gfx_diagonal_first){
+      gfx_diagonal_first = false;
+      //gfx_diagonal_start = gfx_diagonal_helper[random(0, 4)]; //select a stating led
+      gfx_diagonal_start = 0; // testing
+    }
+      
+    gfx_diagonal_current = gfx_diagonal_start; // set current led as start
+
+  }else if(gfx_diagonal_opCount != 2){ //else if because need to show first led as well
+    gfx_diagonal_opCount++; //count how many times it iterated
+
+    //decide wich direction next led should be
+    if(gfx_diagonal_start % 9 == 0){
+      gfx_diagonal_current += 4;
+    }else if(gfx_diagonal_start % 9 == 2){
+      gfx_diagonal_current += 4;
+    } else if(gfx_diagonal_start % 9 == 6){
+      gfx_diagonal_current -= 2;
+    } else if(gfx_diagonal_start % 9 == 8){
+      gfx_diagonal_current -= 4;
+    }
+  }else{
+    //pick new side
+    gfx_diagonal_sideStart = true;
+    gfx_diagonal_opCount = 0;
+
+    int next = random(0, 2);
+    gfx_diagonal_start = gfx_diagonal_route[gfx_diagonal_current][next];
+
+  }
+  //ligth it up
+  gfx_leds[gfx_diagonal_current] = CHSV(gfx_h, 255, 255);
+  gfx_cycleColor();
+  FastLED.show();
+  FastLED.clearData(); //?
+}
+
+int gfx_dpad_cornerVal = 255;
+int gfx_dpad_centerVal = 0;
+int gfx_dpad_sideVal = 0;
+bool gfx_dpad_explode = false; //if i wanna transition smoother
+void gfx_dpad(){
+  if(gfx_dpad_explode == false){
+    for(int i = 0; i < 6; i++){ //6 sides of cube
+      gfx_leds[0 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[2 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[6 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[8 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+
+      gfx_leds[4 * i] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
+    }
+    FastLED.show();
+    //cleardata?
+    //FastLED.clearData();
+    gfx_dpad_cornerVal--;
+    gfx_dpad_centerVal++;
+    if(gfx_dpad_centerVal == 255){
+      gfx_dpad_explode = true;
+      gfx_dpad_cornerVal = 0;
+    }
+  }else{
+    for(int i = 0; i < 6; i++){ //6 sides of cube
+      gfx_leds[0 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[2 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[6 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[8 * i] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+
+      gfx_leds[1 * i] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[3 * i] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[5 * i] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[7 * i] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+
+      gfx_leds[4 * i] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
+    }
+    FastLED.show();
+    //cleardata?
+    //FastLED.clearData();
+    gfx_dpad_sideVal += 15;    
+    gfx_dpad_cornerVal += 10;
+    gfx_dpad_centerVal -= 10;
+    if(gfx_dpad_sideVal >= 255){
+      gfx_dpad_sideVal = 255;
+    }
+    if(gfx_dpad_cornerVal >= 255){
+      gfx_dpad_cornerVal = 255;
+      gfx_dpad_centerVal = 0;
+      gfx_dpad_explode = false;
     }
   }
 }

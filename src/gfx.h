@@ -13,3 +13,4 @@ void gfx_snakePlus();
 void gfx_donut();
 void gfx_dice();
 void gfx_charge();
+void gfx_dpad();
