@@ -126,3 +126,15 @@ bool time_sensor() {
   }
   return 0;
 }
+
+unsigned long time_ISR_prev = 0;
+bool time_ISR() {
+  time_now = millis();
+
+  if (time_now - time_ISR_prev >= 600) {
+    time_ISR_prev = time_now;
+    return 1;
+  }
+
+  return 0;
+}

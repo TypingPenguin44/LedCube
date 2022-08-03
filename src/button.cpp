@@ -117,26 +117,27 @@ void button_handler() {
     shake = false;
   }*/
 
-  if(long_press){
+  if(long_press) {
     long_press = false;
     DEBUG_MSG("[button_check] Long press\n");
-    if (MODE == 0 || MODE == 1) {
-        gfx_clear();
-        MODE = 2;
-      } else if(MODE == 2) {
-        MODE = 0;
-      }
+    if(MODE == 0 || MODE == 1) {
+      gfx_clear();
+      MODE = 2;
+    } else if(MODE == 2) { //if in sleep mode go back to normal with longpress
+      MODE = 0;
+    }
+    if(MODE == 3) { //if in charge mode go back to normal with longpress
+      MODE = 0;
+      current_anim = 0;
+    }
   }
   if(sleep_press){
     sleep_press = false;
     DEBUG_MSG("[button_check] Sleep press\n");
-    if (MODE == 0 || MODE == 1 || MODE == 2) { 
+    if(MODE == 0 || MODE == 1 || MODE == 2) { 
       gfx_clear();
       MODE = 3;
       current_anim = 9; //set anim to charge
-    } else if(MODE == 3) {
-      MODE = 0;
-      current_anim = 0;
     }
   }
 }
@@ -179,7 +180,7 @@ void button_startReset(){
   while (digitalRead(BTN) == HIGH) {
     buf = time_map(3000, 3000, 0, 0, 8);
     gfx_loading(buf, 1);
-    delay(5);
+    delay(20);
     if(time_check(SLEEP_PRESS_TIME)){
       DEBUG_MSG("RESET...\n");
       settings_reset_delays();

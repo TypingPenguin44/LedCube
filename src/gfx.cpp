@@ -165,9 +165,9 @@ void gfx_diagonal(){
     //solution is to break this up into more functions
   }
   //ligth it up
-  gfx_leds[gfx_diagonal_leds[2]] = CHSV(gfx_h, 255, 100);
-  gfx_leds[gfx_diagonal_leds[1]] = CHSV(gfx_h, 255, 170);
-  gfx_leds[gfx_diagonal_leds[0]] = CHSV(gfx_h, 255, 255);
+  gfx_leds[gfx_diagonal_leds[2]] = CHSV(gfx_h, gfx_s, 100);
+  gfx_leds[gfx_diagonal_leds[1]] = CHSV(gfx_h, gfx_s, 170);
+  gfx_leds[gfx_diagonal_leds[0]] = CHSV(gfx_h, gfx_s, 255);
   gfx_cycleColor();
   FastLED.show();
   FastLED.clearData();
@@ -182,12 +182,12 @@ void gfx_dpad(){
   if(gfx_dpad_explode){
 
     for(int i = 0; i < 6; i++){ //6 sides of cube
-      gfx_leds[1 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
-      gfx_leds[3 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
-      gfx_leds[5 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
-      gfx_leds[7 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
+      gfx_leds[1 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_sideVal);
+      gfx_leds[3 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_sideVal);
+      gfx_leds[5 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_sideVal);
+      gfx_leds[7 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_sideVal);
 
-      gfx_leds[4 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
+      gfx_leds[4 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_centerVal);
     }
     FastLED.show();
     FastLED.clearData();
@@ -205,10 +205,10 @@ void gfx_dpad(){
     }
   }else{
     for(int i = 0; i < 6; i++){ //6 sides of cube
-      gfx_leds[0 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[2 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[6 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[8 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
+      gfx_leds[0 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_cornerVal);
+      gfx_leds[2 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_cornerVal);
+      gfx_leds[6 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_cornerVal);
+      gfx_leds[8 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_cornerVal);
     }
     FastLED.show();
     FastLED.clearData();
@@ -367,21 +367,21 @@ void gfx_donut(){
   FastLED.clearData();
 }
 void gfx_cycleColor(){
-  //if(staticMode == false){
+  if(static_colors == false){
     gfx_h += 1;
     if(gfx_h >= 255){
       gfx_h = 0;
     }
-  //}
+  }
 }
 
 void gfx_cycleColor(int a){
-  //if(staticMode == false){
+  if(static_colors == false){
     gfx_h += a;
     if(gfx_h >= 255){
       gfx_h = 0;
     }
-  //}
+  }
 }
 
 const byte gfx_snake_route[54] = {0,1,2,3,4,5,6,7,8,11,10,9,14,13,12,17,16,15,47,46,45,50,49,48,53,52,51,24,23,18,19,20,21,22,25,26,27,32,33,34,31,28,29,30,35,36,41,42,43,44,39,40,37,38};
@@ -453,7 +453,7 @@ void gfx_snakePlus(){
 //int gfx_color = 0;
 
 void gfx_rainbow(){
-  fill_solid(gfx_leds, 54, CHSV(gfx_h,255,200));
+  fill_solid(gfx_leds, 54, CHSV(gfx_h,255,255));
   delay(1);
   FastLED.show();
   gfx_h++;

@@ -5,6 +5,7 @@
 #include <ESPAsyncTCP.h>
 #include <defs.h>
 #include <settings.h>
+#include <gfx.h>
 
 #ifdef DEBUG_ESP_PORT
   #ifndef DEBUG_MSG
@@ -41,7 +42,9 @@ void network_initServer()
     request->send(404, "text/plain", "404 Not found");
   });
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    //request->send(SPIFFS, "/index.html", String(), false);//, processor);
+    request->send(SPIFFS, "/index.html", String(), false);
+  });
+  server.on("/config", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/gfx_settings.json", String(), false);
   });
   server.on("/static", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -53,6 +56,7 @@ void network_initServer()
     request->send(200);
   });
   server.on("/colors", HTTP_GET, [](AsyncWebServerRequest *request){
+    //if color slider altered switch to static?
     if(static_colors){
       gfx_h = request->getParam("h")->value().toInt();
       gfx_s = request->getParam("s")->value().toInt();
@@ -63,33 +67,39 @@ void network_initServer()
 
   server.on("/anim", HTTP_GET, [](AsyncWebServerRequest *request){
     current_anim = request->getParam("id")->value().toInt();
+    gfx_reset();
+    Serial.println(current_anim);
     static_colors = false;
     request->send(200);
   });
-
-  //Switches to MODE 2 (sleep) and clears LEDs, if in sleep it returns back to last MODE 
   server.on("/shake", HTTP_GET, [](AsyncWebServerRequest *request){
-   
+    //####
     request->send(200);
   });
+
   //sends battery charge value to control page
   server.on("/getPercent", HTTP_GET, [](AsyncWebServerRequest *request){
-   
-    request->send(200);
     //AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", String(battery));
     //response->addHeader("Server","ESP Async Web Server");
     //request->send(response);
   });
   server.on("/press", HTTP_GET, [](AsyncWebServerRequest *request){
     single_press = true;
+    static_colors = false;
+    gfx_reset();
     request->send(200);
   });
   server.on("/doublepress", HTTP_GET, [](AsyncWebServerRequest *request){
     double_press = true;
+    static_colors = false;
+    //Serial.println()
+    gfx_reset();
     request->send(200);
   });
   server.on("/longpress", HTTP_GET, [](AsyncWebServerRequest *request){
     long_press = true;
+    static_colors = false;
+    gfx_reset();
     request->send(200);
   });
   server.on("/delay", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -98,13 +108,10 @@ void network_initServer()
   });
 
   server.on("/resetdelay", HTTP_GET, [](AsyncWebServerRequest *request){
-    //use a static cosnt array with all values for reset 
-    //then save
     settings_reset_delays();
     request->send(200);
   });
   server.on("/savedelay", HTTP_GET, [](AsyncWebServerRequest *request){
-    //save gfx to file
     settings_save_gfx();
     request->send(200);
   });
@@ -113,7 +120,7 @@ void network_initServer()
     request->send(200);
   });
   server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request){
-
+    settings_shutdown();
     request->send(200);
   });
   server.on("/reset", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -121,6 +128,10 @@ void network_initServer()
   });
   server.on("/reload", HTTP_GET, [](AsyncWebServerRequest *request){
     settings_load_gfx();
+    request->send(200);
+  });
+  server.on("/charge", HTTP_GET, [](AsyncWebServerRequest *request){
+    sleep_press = true;
     request->send(200);
   });
   server.begin();

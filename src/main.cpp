@@ -10,32 +10,16 @@
 #include <time.h>
 
 animations gfx[10];
-/*anim
 
-diagonal line pulling trail traversing sides 
-*/
 
 /*TODO
 lambda fucntions in index html
 
 test Wifi.setOutputPower
 
-network.h get a variable for ssid and pass
-
-specify number of retries initializing?
-
 add "tags" before debug messages 
 
-button.h
-the button held down while forever loops can crash the system
-delay in button holding? add timer?
-
-set pins and define globals!.
-
-shomehow define NOT JUST DECALRE variables logically lol
-
 global settings from phone to turn off and on shake to cycle animations == shake sets single press true in certain modes
-
 
 maybve figure out a way to reorder the animations... switch cases need constant values smh
 if else is best for this but idk if this feature is useful at all
@@ -44,6 +28,8 @@ if else is best for this but idk if this feature is useful at all
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
 
 do i need to stop spiffs?
+SPIFFS.end()
+
 
 on button press reset static thingy
 
@@ -51,28 +37,22 @@ implement toggles
 
 mode switching and sstatic_colors thingy make uniform and not dumb
 
-implement off and stuff
-still artifacting....... damned fastled lib
- it was somethign with clear or cleardata or smthn
+ test turnoff
 
-
- startup reset, the toggles save and read and stuff
- HANDLING ADXL ANIM!
-
- make the turnoff thingy
-
- static mdoe, switch out all chsv(xyz) thginys to actually have the hsv variables
+ static mdoe, switch out all chsv(xyz) thginys to actually have the variables
+  kinda done 
 
  get the other led lib from libtest
 
-
- quit charge mode to mode 1, with single loading 
+ wifi still dropping but it stays connected at start
 */
 bool shakeCycle = false;
 int BATTERY = 0;
 uint8_t MODE = 0;
 int current_anim = 0;
 bool static_colors = false;
+
+
 void printconfig(){
   for (int i = 0; i < 10; i++){
     Serial.print(gfx[i].interval);
@@ -80,6 +60,20 @@ void printconfig(){
     Serial.println(gfx[i].adxl);
   }
 }
+
+uint8_t ISR_press_count = 0;
+
+ICACHE_RAM_ATTR void off() {
+  if(ISR_press_count == 3){
+    Serial.println("power off");
+    settings_shutdown();
+    
+  }else{
+    ISR_press_count++;
+    time_ISR_prev = millis();
+  }
+}
+
 
 void setup() {
   
@@ -119,6 +113,11 @@ void setup() {
 
 void loop(){
   yield(); //its good to have it here idk if its needed
+
+  if(time_ISR() && ISR_press_count != 0){
+    ISR_press_count = 0;
+    Serial.println("Isr Count Reset");
+  }
   
   /*if (shakeCycle || gfx[current_anim].adxl){
     button_sensorRead();

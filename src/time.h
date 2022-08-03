@@ -21,3 +21,4 @@ bool time_test(int interval);
 bool time_clear(int interval);
 
 bool time_sensor();
+bool time_ISR();

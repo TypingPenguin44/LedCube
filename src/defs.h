@@ -55,5 +55,9 @@ extern bool static_colors;
 extern bool single_press;
 extern bool double_press;
 extern bool long_press;
+extern bool sleep_press;
+
+
+extern unsigned long time_ISR_prev;
 
 #endif

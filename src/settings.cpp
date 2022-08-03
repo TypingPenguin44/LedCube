@@ -19,6 +19,12 @@ void settings_setup(){
     return;
   }
 }
+
+void settings_shutdown(){
+  SPIFFS.end();
+  Serial.end();
+  digitalWrite(latch, LOW);
+}
   
 void settings_save_gfx(){
   SPIFFS.remove("/gfx_settings.json");
