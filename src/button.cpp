@@ -91,8 +91,8 @@ void button_handler() {
       }
     }else if (MODE == 1){ //if in double mode increment double anim
       current_anim++;
-      if(current_anim >= gfx_normal + gfx_accel){ //wrap around
-        current_anim = gfx_normal;
+      if(current_anim >= 9){ //wrap around
+        current_anim = 8; //####
       }
     }
   }else if (double_press == true){
@@ -101,9 +101,13 @@ void button_handler() {
 
     if(MODE == 0){
       MODE = 1;
+      gfx_clear();
+      current_anim = 8;
     }
     else if(MODE == 1){
       MODE = 0;  
+      gfx_clear();
+      current_anim = 0;
     }    
   }/*else if(shake == true){
     if(animDouble == 1){

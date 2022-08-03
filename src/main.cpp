@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#define FASTLED_ALLOW_INTERRUPTS 0
 #include <FastLED.h>
 
 #include <network.h>
@@ -40,8 +41,6 @@ maybve figure out a way to reorder the animations... switch cases need constant 
 if else is best for this but idk if this feature is useful at all
 
 
-check accel on startup 
-
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
 
 do i need to stop spiffs?
@@ -63,6 +62,11 @@ still artifacting....... damned fastled lib
  make the turnoff thingy
 
  static mdoe, switch out all chsv(xyz) thginys to actually have the hsv variables
+
+ get the other led lib from libtest
+
+
+ quit charge mode to mode 1, with single loading 
 */
 bool shakeCycle = false;
 int BATTERY = 0;
@@ -71,19 +75,20 @@ int current_anim = 0;
 bool static_colors = false;
 void printconfig(){
   for (int i = 0; i < 10; i++){
-    Serial.println(gfx[i].interval);
+    Serial.print(gfx[i].interval);
+    Serial.print(" ");
+    Serial.println(gfx[i].adxl);
   }
 }
 
 void setup() {
+  
   pinMode(latch, OUTPUT);
   pinMode(BTN, INPUT);
   digitalWrite(latch, HIGH); // keep the device on
 
   Serial.begin(74880); // open serial
-  Serial.println("config");
-  printconfig();
-  Serial.println();
+  
   
   network_stop(); //wifi off
   Serial.println("wifi off");
@@ -100,9 +105,6 @@ void setup() {
   settings_load_gfx(); //read config from file
   //maybe load other toggles here aswell
   Serial.println("load gfx");
-
-  //gfx[1].interval = 60;
-
   Serial.println("config");
   printconfig();
   Serial.println();
@@ -110,9 +112,8 @@ void setup() {
   button_accelSetup(); //init adxl
   Serial.println("setup adxl");
 
-  //network_setup(); //init wifi
-  //network_initServer(); //init server
-
+  network_setup(); //init wifi
+  network_initServer(); //init server
   
 }
 
@@ -124,21 +125,23 @@ void loop(){
   }*/ //kinda should rethink this currently it only modofies sides var it aint got nothing to do with shake detect
   if(gfx[current_anim].adxl){
     button_sensorRead(); //timer already in function
+    //Serial.println("yo");
   }
   if(MODE != 2){
     gfx_animHandler();
-  }else if (MODE == 2){
-    if(time_clear(2000)){
-      //lil bit dumb way to clear leds when in mode 2 and playign with loading anim
-      gfx_clear();
-    }
+  }else if (MODE == 2 && time_clear(2000)){
+    //lil bit dumb way to clear leds when in mode 2 and playign with loading anim
+    //should be moved to animhandler
+    gfx_clear();
   }
   
   if(time_test(2000)){
     Serial.print("Mode: ");
     Serial.print(MODE);
     Serial.print(" Anim: ");
-    Serial.println(current_anim);
+    Serial.print(current_anim);
+    Serial.print(" side: ");
+    Serial.println(gfx_dice_side);
   }
   button_check();
 }

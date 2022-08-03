@@ -1,6 +1,6 @@
 #include <defs.h>
 #include <gfx.h>
-#define FASTLED_ALLOW_INTERRUPTS 0
+
 #include <FastLED.h>
 #include <time.h>
 CRGB gfx_leds[NUM_LEDS] = {0};  // zero initialize array.
@@ -36,7 +36,7 @@ void gfx_animHandler(){
         gfx_dpad();
         break;
       case 8:
-      gfx_dice();
+        gfx_dice();
         break;
       case 9:
         gfx_charge();
@@ -47,6 +47,8 @@ void gfx_animHandler(){
     }
   }
 }
+
+//cant think of a better perfoming method, lots of unused memory
 const uint8_t gfx_diagonal_route[54][2] {{35, 38}, //0
                                          {0, 0}, //1
                                          {26, 29}, //2

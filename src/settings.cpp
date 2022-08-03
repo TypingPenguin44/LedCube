@@ -37,6 +37,9 @@ void settings_save_gfx(){
     JsonObject obj = arr.createNestedObject();
     obj["interval"] = gfx[i].interval;
     obj["adxl"] = gfx[i].adxl;
+    /*Serial.print(i);
+    Serial.print(" ");
+    Serial.println(gfx[i].adxl);*/
   }
   
   // Serialize JSON to file
@@ -75,7 +78,7 @@ void settings_load_gfx(){
 void settings_reset_delays(){
   for(int i = 0; i < 10; i++){
     gfx[i].interval = default_gfx[i].interval;
-    //gfx[i].adxl = default_gfx[i].adxl; //u cant change this lol 
+    gfx[i].adxl = default_gfx[i].adxl; //u cant change this lol 
   }
   settings_save_gfx();
 }

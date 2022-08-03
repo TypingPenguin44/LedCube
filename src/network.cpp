@@ -22,6 +22,7 @@ IPAddress subnet(255,255,255,0);
 
 void network_setup()
 {
+  WiFi.setSleepMode(WIFI_NONE_SLEEP);
   WiFi.mode(WIFI_AP);
   DEBUG_MSG("Setting soft-AP configuration ...\n");
   DEBUG_MSG(WiFi.softAPConfig(local_IP, gateway, subnet) ? "Ready\n" : "Failed!\n");
