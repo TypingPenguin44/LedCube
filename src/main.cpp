@@ -45,6 +45,9 @@ mode switching and sstatic_colors thingy make uniform and not dumb
  get the other led lib from libtest
 
  wifi still dropping but it stays connected at start
+ last anim not working with new lib
+
+ add diagonal option to html
 */
 bool shakeCycle = false;
 int BATTERY = 0;
@@ -107,12 +110,10 @@ void setup() {
   Serial.println("setup adxl");
 
   network_setup(); //init wifi
-  network_initServer(); //init server
-  
+  network_initServer(); //init server  
 }
 
 void loop(){
-  Serial.println("fu");
   yield(); //its good to have it here idk if its needed
 
   if(time_ISR() && ISR_press_count != 0){

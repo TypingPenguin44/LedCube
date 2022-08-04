@@ -1,3 +1,4 @@
+#include <NeoPixelBus.h>
 /*
 * Function prototypes for gfx 
 */
@@ -17,3 +18,4 @@ void gfx_dice();
 void gfx_charge();
 void gfx_dpad();
 void gfx_diagonal();
+void gfx_fill(HsbColor color);

@@ -356,7 +356,7 @@ void gfx_donut(){
       gfx_v = 1;
     }
   }else{
-    strip.ClearTo(HsbColor(gfx_h, gfx_s, gfx_v));
+    gfx_fill(HsbColor(gfx_h, gfx_s, gfx_v));
     
     for(int i = 0; i < 6; i++){
       strip.SetPixelColor(4 + (i*9), HsbColor(0, 0, 0));
@@ -458,7 +458,8 @@ void gfx_snakePlus(){
 //int gfx_color = 0;
 
 void gfx_rainbow(){
-  strip.ClearTo(HsbColor(gfx_h, 255, 255));
+  gfx_fill(HsbColor(gfx_h, 1, 1));
+  
   strip.Show();
   gfx_h += 0.004;
   if (gfx_h >= 1)
@@ -500,6 +501,11 @@ void gfx_reset(){
 void gfx_clear(){
   strip.ClearTo(0);
   strip.Show();
+}
+void gfx_fill(HsbColor color){
+  for(int i = 0; i < PixelCount; i++){
+    strip.SetPixelColor(i, color);
+  }
 }
 
 
