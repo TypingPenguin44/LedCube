@@ -43,9 +43,9 @@ extern unsigned long time_now;
 extern int BATTERY;
 
 extern int current_anim;
-extern uint8_t gfx_h;
-extern uint8_t gfx_s;
-extern uint8_t gfx_v;
+extern float gfx_h;
+extern float gfx_s;
+extern float gfx_v;
 extern Adafruit_ADXL345_Unified accel;
 extern uint8_t gfx_dice_side;
 

@@ -1,20 +1,24 @@
 #include <defs.h>
 #include <gfx.h>
 
-#include <FastLED.h>
+#include <NeoPixelBus.h>
 #include <time.h>
-CRGB gfx_leds[NUM_LEDS] = {0};  // zero initialize array.
 
-uint8_t gfx_h = 0;
-uint8_t gfx_s = 255;
-uint8_t gfx_v = 255;
+const uint16_t PixelCount = 54; 
+const uint8_t PixelPin = 2; //rx pin
+NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(PixelCount, PixelPin);
+
+float gfx_h = 0.0;
+float gfx_s = 1.0;
+float gfx_v = 1.0;
 
 void gfx_setup() {
-  FastLED.addLeds<WS2812B, LED_PIN, GRB>(gfx_leds, NUM_LEDS);
+  //FastLED.addLeds<WS2812B, LED_PIN, GRB>(gfx_leds, NUM_LEDS);
+  strip.Begin();
 }
 
 void gfx_animHandler(){
-  //FastLED.clearData(); //maybe needed idk
+  //strip.ClearTo(0); //maybe needed idk
   if (time_anim()){
     switch (current_anim){
       case 0:
@@ -165,12 +169,13 @@ void gfx_diagonal(){
     //solution is to break this up into more functions
   }
   //ligth it up
-  gfx_leds[gfx_diagonal_leds[2]] = CHSV(gfx_h, gfx_s, 100);
-  gfx_leds[gfx_diagonal_leds[1]] = CHSV(gfx_h, gfx_s, 170);
-  gfx_leds[gfx_diagonal_leds[0]] = CHSV(gfx_h, gfx_s, 255);
+  strip.SetPixelColor(gfx_diagonal_leds[2], HsbColor(gfx_h, gfx_s, 0.4));
+  strip.SetPixelColor(gfx_diagonal_leds[1], HsbColor(gfx_h, gfx_s, 0.6));
+  strip.SetPixelColor(gfx_diagonal_leds[0], HsbColor(gfx_h, gfx_s, 1));
+  
   gfx_cycleColor();
-  FastLED.show();
-  FastLED.clearData();
+  strip.Show();
+  strip.ClearTo(0);
 }
 int gfx_dpad_cornerVal = 0;
 int gfx_dpad_centerVal = 0;
@@ -182,22 +187,22 @@ void gfx_dpad(){
   if(gfx_dpad_explode){
 
     for(int i = 0; i < 6; i++){ //6 sides of cube
-      gfx_leds[1 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_sideVal);
-      gfx_leds[3 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_sideVal);
-      gfx_leds[5 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_sideVal);
-      gfx_leds[7 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_sideVal);
+      strip.SetPixelColor(1 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_sideVal));
+      strip.SetPixelColor(3 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_sideVal));
+      strip.SetPixelColor(5 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_sideVal));
+      strip.SetPixelColor(7 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_sideVal));
 
-      gfx_leds[4 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_centerVal);
+      strip.SetPixelColor(4 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_centerVal));
     }
-    FastLED.show();
-    FastLED.clearData();
+    strip.Show();
+    strip.ClearTo(0);
 
-    gfx_dpad_sideVal -= 4;
+    gfx_dpad_sideVal -= 0.016;
     if(gfx_dpad_sideVal <= 0){
       gfx_dpad_sideVal = 0;
     }
 
-    gfx_dpad_centerVal -= 2;
+    gfx_dpad_centerVal -= 0.008;
     if(gfx_dpad_centerVal <= 0){
       gfx_dpad_explode = false;
       gfx_dpad_cornerVal = 0;
@@ -205,20 +210,20 @@ void gfx_dpad(){
     }
   }else{
     for(int i = 0; i < 6; i++){ //6 sides of cube
-      gfx_leds[0 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_cornerVal);
-      gfx_leds[2 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_cornerVal);
-      gfx_leds[6 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_cornerVal);
-      gfx_leds[8 + i * 9] = CHSV(gfx_h, gfx_s, gfx_dpad_cornerVal);
+      strip.SetPixelColor(0 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_cornerVal));
+      strip.SetPixelColor(2 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_cornerVal));
+      strip.SetPixelColor(6 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_cornerVal));
+      strip.SetPixelColor(8 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_cornerVal));
     }
-    FastLED.show();
-    FastLED.clearData();
+    strip.Show();
+    strip.ClearTo(0);
   
-    gfx_dpad_cornerVal += 2;
-    if(gfx_dpad_cornerVal >= 255){
+    gfx_dpad_cornerVal += 0.008;
+    if(gfx_dpad_cornerVal >= 1){
       gfx_dpad_explode = true;
-      gfx_dpad_centerVal = 255;
-      gfx_dpad_sideVal = 255;
-      gfx_cycleColor(20);
+      gfx_dpad_centerVal = 1;
+      gfx_dpad_sideVal = 1;
+      gfx_cycleColor(0.08);
     }
   }
 }
@@ -239,9 +244,9 @@ void gfx_dpad(){
 
       gfx_leds[4 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
     }
-    FastLED.show();
+    strip.Show();
     //cleardata?
-    FastLED.clearData();
+    strip.ClearTo(0);
     gfx_dpad_cornerVal--;
     gfx_dpad_centerVal++;
     if(gfx_dpad_centerVal == 255){
@@ -262,9 +267,9 @@ void gfx_dpad(){
 
       gfx_leds[4 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
     }
-    FastLED.show();
+    strip.Show();
     //cleardata?
-    FastLED.clearData();
+    strip.ClearTo(0);
     if(gfx_dpad_sideNeg){
       gfx_dpad_sideVal -= 7;
     }else{
@@ -290,9 +295,9 @@ void gfx_dpad(){
 
 void gfx_charge(){
   BATTERY = analogRead(A0);
-  gfx_h = map(BATTERY, 637, 860, 0, 95);
-  gfx_leds[4] = CHSV(gfx_h, 255, 50);
-  FastLED.show();
+  int val = map(BATTERY, 637, 860, 0, 370);
+  strip.SetPixelColor(4, HsbColor(val / 1000, 1, 0.5));
+  strip.Show();
 }
 
 //sensor should be called separately 
@@ -300,43 +305,42 @@ uint8_t gfx_dice_side = 0;
 void gfx_dice(){
   switch(gfx_dice_side){
     case 1:
-      gfx_leds[4] = CHSV(gfx_h, gfx_s, gfx_v);
+      strip.SetPixelColor(4, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
     case 2:
-      gfx_leds[29] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[33] = CHSV(gfx_h, gfx_s, gfx_v);
+      strip.SetPixelColor(29, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(33, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
     case 3:
-      gfx_leds[38] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[40] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[42] = CHSV(gfx_h, gfx_s, gfx_v);
+      strip.SetPixelColor(38, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(40, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(42, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
     case 4:
-      gfx_leds[18] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[20] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[24] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[26] = CHSV(gfx_h, gfx_s, gfx_v);
+      strip.SetPixelColor(18, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(20, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(24, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(26, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
     case 5:
-      gfx_leds[9] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[11] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[13] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[15] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[17] = CHSV(gfx_h, gfx_s, gfx_v);
+      strip.SetPixelColor(9, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(11, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(13, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(15, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(17, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
     case 6:
-      gfx_leds[45] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[46] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[47] = CHSV(gfx_h, gfx_s, gfx_v);
-      
-      gfx_leds[51] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[52] = CHSV(gfx_h, gfx_s, gfx_v);
-      gfx_leds[53] = CHSV(gfx_h, gfx_s, gfx_v);
+      strip.SetPixelColor(45, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(46, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(47, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(51, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(52, HsbColor(gfx_h, gfx_s, gfx_v));
+      strip.SetPixelColor(53, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
   }
   gfx_cycleColor();
-  FastLED.show();
-  FastLED.clearData();
+  strip.Show();
+  strip.ClearTo(0);
 }
 
 bool gfx_donut_in = false;
@@ -344,41 +348,42 @@ void gfx_donut(){
   if(gfx_donut_in == true){
     //currentColor++;
     for(int i = 0; i < 6; i++){
-      gfx_leds[4 + (i*9)] = CHSV(gfx_h, gfx_s, gfx_v);
+      strip.SetPixelColor(4 + (i*9), HsbColor(gfx_h, gfx_s, gfx_v));
     }
-    gfx_v += 5;
-    if(gfx_v >= 255){
+    gfx_v += 0.02;
+    if(gfx_v >= 1){
       gfx_donut_in = false;
-      gfx_v = 255;
+      gfx_v = 1;
     }
   }else{
-    fill_solid(gfx_leds, NUM_LEDS, CHSV(gfx_h, gfx_s, gfx_v));
+    strip.ClearTo(HsbColor(gfx_h, gfx_s, gfx_v));
+    
     for(int i = 0; i < 6; i++){
-      gfx_leds[4 + (i*9)] = CHSV(0, 0, 0);
+      strip.SetPixelColor(4 + (i*9), HsbColor(0, 0, 0));
     }
-    gfx_v -= 5;
+    gfx_v -= 0.02;
     if(gfx_v <= 0){
       gfx_donut_in = true;
       gfx_v = 0;
     }
   }
-  FastLED.show();
+  strip.Show();
   gfx_cycleColor();
-  FastLED.clearData();
+  strip.ClearTo(0);
 }
 void gfx_cycleColor(){
   if(static_colors == false){
-    gfx_h += 1;
-    if(gfx_h >= 255){
+    gfx_h += 0.004;
+    if(gfx_h >= 1){
       gfx_h = 0;
     }
   }
 }
 
-void gfx_cycleColor(int a){
+void gfx_cycleColor(float a){
   if(static_colors == false){
     gfx_h += a;
-    if(gfx_h >= 255){
+    if(gfx_h >= 1){
       gfx_h = 0;
     }
   }
@@ -390,23 +395,23 @@ uint8_t gfx_snake_currentLed = 0;
 
 void gfx_snake(){
   if(gfx_snake_currentLed == 0){
-    gfx_leds[gfx_snake_route[gfx_snake_currentLed]] = CHSV(gfx_h, gfx_s, gfx_v);
+    strip.SetPixelColor(gfx_snake_route[gfx_snake_currentLed], HsbColor(gfx_h, gfx_s, gfx_v));
   }else{
-    gfx_leds[gfx_snake_route[gfx_snake_currentLed]] = CHSV(gfx_h, gfx_s, gfx_v);
-    gfx_leds[gfx_snake_route[gfx_snake_currentLed-1]] = CHSV(gfx_h, gfx_s, gfx_v);
+    strip.SetPixelColor(gfx_snake_route[gfx_snake_currentLed], HsbColor(gfx_h, gfx_s, gfx_v));
+    strip.SetPixelColor(gfx_snake_route[gfx_snake_currentLed-1], HsbColor(gfx_h, gfx_s, gfx_v));
   }
     
   gfx_snake_currentLed++;
   if(gfx_snake_currentLed == NUM_LEDS){
     gfx_snake_currentLed = 0;
   }
-  FastLED.show();
+  strip.Show();
   gfx_cycleColor();
   /*currentColor++;
   if(currentColor == 255){
     currentColor = 0;
   }*/
-  FastLED.clearData();
+  strip.ClearTo(0);
 }
 
 bool gfx_snakePlus_neg = false;
@@ -418,9 +423,9 @@ void gfx_snakePlus(){
     for(int i = 0; i <= gfx_snakePlus_ledsOn; i++){
       if(gfx_snake_currentLed - i < 0){
         byte buf = (gfx_snake_currentLed - i) + 54;
-        gfx_leds[gfx_snake_route[buf]] = CHSV(gfx_h, gfx_s, gfx_v);
+        strip.SetPixelColor(gfx_snake_route[buf], HsbColor(gfx_h, gfx_s, gfx_v));
       }else{
-        gfx_leds[gfx_snake_route[gfx_snake_currentLed - i]] = CHSV(gfx_h, gfx_s, gfx_v);
+        strip.SetPixelColor(gfx_snake_route[gfx_snake_currentLed - i], HsbColor(gfx_h, gfx_s, gfx_v));
       }    
     }
     gfx_snake_currentLed++;
@@ -430,9 +435,9 @@ void gfx_snakePlus(){
      for(int i = 0; i <= gfx_snakePlus_ledsOn; i++){
       if(gfx_snake_currentLed - i < 0) {
         byte buf = (gfx_snake_currentLed - i) +54;
-        gfx_leds[gfx_snake_route[buf]] = CHSV(gfx_h, gfx_s, gfx_v);
+         strip.SetPixelColor(gfx_snake_route[buf], HsbColor(gfx_h, gfx_s, gfx_v));
       } else {
-        gfx_leds[gfx_snake_route[gfx_snake_currentLed - i]] = CHSV(gfx_h, gfx_s, gfx_v);
+        strip.SetPixelColor(gfx_snake_route[gfx_snake_currentLed - i], HsbColor(gfx_h, gfx_s, gfx_v));
       }
     }
     gfx_snake_currentLed++;
@@ -442,34 +447,33 @@ void gfx_snakePlus(){
   if(gfx_snake_currentLed == NUM_LEDS){
     gfx_snake_currentLed = 0;
   }
-  FastLED.show();
+  strip.Show();
   /*currentColor++;
   if(currentColor == 255){currentColor = 0;}*/
   gfx_cycleColor();
-  FastLED.clearData();
+  strip.ClearTo(0);
 }
 
 
 //int gfx_color = 0;
 
 void gfx_rainbow(){
-  fill_solid(gfx_leds, 54, CHSV(gfx_h,255,255));
-  delay(1);
-  FastLED.show();
-  gfx_h++;
-  if (gfx_h == 256)
+  strip.ClearTo(HsbColor(gfx_h, 255, 255));
+  strip.Show();
+  gfx_h += 0.004;
+  if (gfx_h >= 1)
   {
-    gfx_h = 1;
+    gfx_h = 0;
   }
 }
 
 //make it delayless
 void gfx_blink(){
-  gfx_leds[8] = CHSV(0,255,255);
-  FastLED.show();
+  strip.SetPixelColor(8, HsbColor(0, 1, 1));
+  strip.Show();
   delay(250);
-  gfx_leds[8] = CHSV(0,255,0);
-  FastLED.show();
+  strip.SetPixelColor(8, HsbColor(0, 0, 0));
+  strip.Show();
   delay(250);
 }
 
@@ -478,24 +482,24 @@ const uint8_t gfx_load[8] = {0,1,2,3,8,7,6,5};
 void gfx_loading(uint8_t leds, bool stageTwo){
   for(int i = 0; i < leds; i++){
     if(!stageTwo){
-      gfx_leds[gfx_load[i]] =  CHSV(170, 200, 80);
+      strip.SetPixelColor(gfx_load[i], HsbColor(0.55, 0.6, 0.4));
     }else{
-      gfx_leds[gfx_load[i]] =  CHSV(0, 255, 80);
+      strip.SetPixelColor(gfx_load[i], HsbColor(0, 1, 0.4));
     }
   }
-  FastLED.show();
-  FastLED.clearData(); //might be useless
+  strip.Show();
+  strip.ClearTo(0); //might be useless
 }
 
 void gfx_reset(){
   //leave h alone maybe add these in setup?
   gfx_diagonal_first = true;
-  gfx_s = 255;
-  gfx_v = 255;
+  gfx_s = 1;
+  gfx_v = 1;
 }
 void gfx_clear(){
-  FastLED.clearData();
-  FastLED.show();
+  strip.ClearTo(0);
+  strip.Show();
 }
 
 

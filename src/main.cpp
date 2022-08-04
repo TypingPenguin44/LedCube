@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #define FASTLED_ALLOW_INTERRUPTS 0
-#include <FastLED.h>
+//#include <NeoPixelBus.h>
 
 #include <network.h>
 #include <button.h>
@@ -112,6 +112,7 @@ void setup() {
 }
 
 void loop(){
+  Serial.println("fu");
   yield(); //its good to have it here idk if its needed
 
   if(time_ISR() && ISR_press_count != 0){

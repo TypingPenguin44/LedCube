@@ -5,7 +5,7 @@ void gfx_setup();
 void gfx_reset();
 void gfx_animHandler();
 void gfx_cycleColor();
-void gfx_cycleColor(int a);
+void gfx_cycleColor(float a);
 void gfx_clear();
 
 void gfx_snake();
