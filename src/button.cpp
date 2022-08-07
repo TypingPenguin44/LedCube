@@ -151,11 +151,62 @@ void button_accelSetup(){
   }
 }
 
+float shakeX = 0;
+float shakeY = 0;
+float shakeZ = 0;
+int button_shakeCount = 0;
+float button_shakeValues[10][3] = {0};
+
 void button_sensorRead(){
   if(time_sensor()){
     sensors_event_t event; 
     accel.getEvent(&event);
-  
+    if(shakeCycle == true){
+      if(button_shakeCount == 10){
+        shakeX = 0.0;
+        shakeY = 0.0;
+        shakeZ = 0.0;
+        for(int i = 0; i < button_shakeCount; i++){
+          shakeX += button_shakeValues[i][0];
+          shakeY += button_shakeValues[i][1];
+          shakeZ += button_shakeValues[i][2];
+        }
+        shakeX = shakeX/button_shakeCount;
+        shakeY = shakeY/button_shakeCount;
+        shakeZ = shakeZ/button_shakeCount;
+        /*Serial.println("OUT");
+        Serial.println(x);
+        Serial.println(y);
+        Serial.println(z);
+        Serial.println();*/
+        if(time_shake()){
+          if(shakeX > 15 || shakeY > 15 || shakeZ > 15){
+            if(MODE != 1){
+              single_press = true;
+            }else{
+              //shake = true;
+            }
+            Serial.println("END");
+            Serial.println(shakeX);
+            Serial.println(shakeY);
+            Serial.println(shakeZ);
+            Serial.println();
+          }
+        }
+        button_shakeCount = 0;
+      }
+      //Serial.println("READINGS");
+      button_shakeValues[button_shakeCount][0] = fabsf(event.acceleration.x);
+      //Serial.println(fabsf(event.acceleration.x));
+      button_shakeValues[button_shakeCount][1] = fabsf(event.acceleration.y);
+      //Serial.println(fabsf(event.acceleration.y));
+      button_shakeValues[button_shakeCount][2] = fabsf(event.acceleration.z);
+      //Serial.println(fabsf(event.acceleration.z));
+      //Serial.println();
+      button_shakeCount++;
+
+    }
+    
     int x = event.acceleration.x;
     int y = event.acceleration.y;
     int z = event.acceleration.z;

@@ -126,6 +126,15 @@ bool time_sensor() {
   }
   return 0;
 }
+unsigned long time_previous_shake = 0;
+bool time_shake() {
+  time_now = millis();
+  if ((time_now - time_previous_shake) >= 250) {
+    time_previous_shake = time_now;
+    return 1;
+  }
+  return 0;
+}
 
 unsigned long time_ISR_prev = 0;
 bool time_ISR() {

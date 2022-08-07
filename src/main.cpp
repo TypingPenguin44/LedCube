@@ -15,21 +15,11 @@ animations gfx[10];
 /*TODO
 lambda fucntions in index html
 
-test Wifi.setOutputPower
-
 add "tags" before debug messages 
 
 global settings from phone to turn off and on shake to cycle animations == shake sets single press true in certain modes
 
-maybve figure out a way to reorder the animations... switch cases need constant values smh
-if else is best for this but idk if this feature is useful at all
-
-
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
-
-do i need to stop spiffs?
-SPIFFS.end()
-
 
 on button press reset static thingy
 
@@ -38,18 +28,21 @@ implement toggles
 mode switching and sstatic_colors thingy make uniform and not dumb
 
  test turnoff
+  static mode fix colors from web interface
 
- static mdoe, switch out all chsv(xyz) thginys to actually have the variables
-  kinda done 
-
- get the other led lib from libtest
-
- wifi still dropping but it stays connected at start
  last anim not working with new lib
 
  add diagonal option to html
+ donut anim too fast color change
+
+ anim idea
+ a single line is lit in a "circle" around the cube with adxl it mvoves to side to side
+ with shake it swtiches axis and still reacts to tilting the cube
+
+ startup fade in
+ shutdown fade out in mode 0 and 1
 */
-bool shakeCycle = false;
+bool shakeCycle = true;
 int BATTERY = 0;
 uint8_t MODE = 0;
 int current_anim = 0;
@@ -121,13 +114,13 @@ void loop(){
     Serial.println("Isr Count Reset");
   }
   
-  /*if (shakeCycle || gfx[current_anim].adxl){
+  if (shakeCycle || gfx[current_anim].adxl){
     button_sensorRead();
-  }*/ //kinda should rethink this currently it only modofies sides var it aint got nothing to do with shake detect
-  if(gfx[current_anim].adxl){
+  } //kinda should rethink this currently it only modofies sides var it aint got nothing to do with shake detect
+  /*if(gfx[current_anim].adxl){
     button_sensorRead(); //timer already in function
     //Serial.println("yo");
-  }
+  }*/
   if(MODE != 2){
     gfx_animHandler();
   }else if (MODE == 2 && time_clear(2000)){
