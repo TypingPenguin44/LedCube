@@ -161,6 +161,11 @@ void button_sensorRead(){
   if(time_sensor()){
     sensors_event_t event; 
     accel.getEvent(&event);
+
+    int x = event.acceleration.x;
+    int y = event.acceleration.y;
+    int z = event.acceleration.z;
+
     if(shakeCycle == true){
       if(button_shakeCount == 10){
         shakeX = 0.0;
@@ -195,21 +200,53 @@ void button_sensorRead(){
         }
         button_shakeCount = 0;
       }
-      //Serial.println("READINGS");
       button_shakeValues[button_shakeCount][0] = fabsf(event.acceleration.x);
-      //Serial.println(fabsf(event.acceleration.x));
       button_shakeValues[button_shakeCount][1] = fabsf(event.acceleration.y);
-      //Serial.println(fabsf(event.acceleration.y));
       button_shakeValues[button_shakeCount][2] = fabsf(event.acceleration.z);
-      //Serial.println(fabsf(event.acceleration.z));
-      //Serial.println();
+
+      /*Serial.println("READINGS");
+      Serial.println(fabsf(event.acceleration.x));
+      Serial.println(fabsf(event.acceleration.y));
+      Serial.println(fabsf(event.acceleration.z));
+      Serial.println();*/
+      /*Serial.println("READINGS");
+      Serial.println(event.acceleration.x);
+      Serial.println(event.acceleration.y);
+      Serial.println(event.acceleration.z);
+      Serial.println();*/
       button_shakeCount++;
 
     }
-    
-    int x = event.acceleration.x;
-    int y = event.acceleration.y;
-    int z = event.acceleration.z;
+    if(current_anim == 8){ //gfx_lines();
+      float xAcc = event.acceleration.x;
+      float yAcc = event.acceleration.y;
+      float zAcc = event.acceleration.z;
+
+      if(xAcc >= 4){
+        gfx_x_roll = 0;
+      }else if(xAcc <= -4){
+        gfx_x_roll = 2;
+      }else{
+        gfx_x_roll = 1;
+      }
+
+      if(yAcc >= 4){
+        gfx_y_roll = 0;
+      }else if(yAcc <= -4){
+        gfx_y_roll = 2;
+      }else{
+        gfx_y_roll = 1;
+      }
+
+      if(zAcc >= 4){
+        gfx_z_roll = 0;
+      }else if(zAcc <= -4){
+        gfx_z_roll = 2;
+      }else{
+        gfx_z_roll = 1;
+      }
+    }
+
     
     if(z < -7){
       gfx_dice_side = 1;

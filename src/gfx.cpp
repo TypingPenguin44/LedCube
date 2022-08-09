@@ -39,8 +39,11 @@ void gfx_animHandler(){
       case 5:
         gfx_dpad();
         break;
-      case 8:
+      case 7:
         gfx_dice();
+        break;
+      case 8:
+        gfx_lines();
         break;
       case 9:
         gfx_charge();
@@ -507,5 +510,38 @@ void gfx_fill(HsbColor color){
     strip.SetPixelColor(i, color);
   }
 }
+int gfx_x_roll = 0;
+int gfx_y_roll = 0;
+int gfx_z_roll = 0;
+/**
+ * @brief stores the path for lines anim
+ * [0-2][] x axis
+ * [3-5][] y axis
+ * [5-8][] z axis
+ * its less if else if its one single array instead of 3
+ */
+int gfx_lines_path[9][12] = {{0, 5, 6, 9, 14, 15, 47, 46, 45, 33, 34, 35},
+                             {1, 4, 7, 10, 13, 16, 48, 49, 50, 32, 31, 30},
+                             {2, 3, 8, 11, 12, 17, 53, 52, 51, 27, 28, 29},
+                             {0, 1, 2, 26, 25, 24, 51, 50, 45, 36, 37, 38},
+                             {5, 4, 3, 21, 22, 23, 52, 49, 45, 41, 40, 39},
+                             {6, 7, 8, 20, 19, 18, 53, 48, 47, 42, 43, 44},
+                             {9, 10, 11, 20, 21, 26, 29, 30, 35, 38, 39, 44},
+                             {14, 13, 12, 19, 22, 25, 28, 31, 34, 37, 40, 43},
+                             {15, 16, 17, 18, 23, 24, 27, 32, 33, 36, 41, 42}};
 
+int gfx_lines_current = 0;
+int linesbuf = 0;
+void gfx_lines(){
+
+  Serial.println(gfx_x_roll);
+  strip.ClearTo(0);
+  strip.SetPixelColor(gfx_lines_path[gfx_lines_current * 3 + gfx_x_roll][linesbuf], HsbColor(gfx_h, 1, 1));
+  strip.Show();
+  linesbuf++;
+  if(linesbuf >= 12){
+    linesbuf = 0;
+  }
+  gfx_cycleColor();
+}
 

@@ -24,7 +24,7 @@
 #define SLEEP_PRESS_TIME 3000
 #define DEBOUNCE 60
 #define gfx_normal 6
-#define gfx_accel 1
+#define gfx_accel 2
 #define SENSOR_TIME 20
 
 
@@ -59,5 +59,9 @@ extern bool sleep_press;
 
 
 extern unsigned long time_ISR_prev;
+
+extern int gfx_x_roll;
+extern int gfx_y_roll;
+extern int gfx_z_roll;
 
 #endif

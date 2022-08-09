@@ -19,3 +19,4 @@ void gfx_charge();
 void gfx_dpad();
 void gfx_diagonal();
 void gfx_fill(HsbColor color);
+void gfx_lines();
