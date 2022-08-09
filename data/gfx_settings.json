@@ -6,5 +6,5 @@
         {"interval":20,"adxl":false},
         {"interval":0,"adxl":false},
         {"interval":50,"adxl":true},
-        {"interval":500,"adxl":true},
+        {"interval":60,"adxl":true},
         {"interval":2000,"adxl":false}]}

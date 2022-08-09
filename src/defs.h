@@ -56,12 +56,12 @@ extern bool single_press;
 extern bool double_press;
 extern bool long_press;
 extern bool sleep_press;
+extern bool shake;
 
 
 extern unsigned long time_ISR_prev;
 
-extern int gfx_x_roll;
-extern int gfx_y_roll;
-extern int gfx_z_roll;
+extern int gfx_lines_roll[3];
+extern int gfx_lines_axis;
 
 #endif

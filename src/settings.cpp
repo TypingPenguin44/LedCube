@@ -10,7 +10,7 @@ static const animations default_gfx[10] = {{0, 40, 0}, //rainbow
                                            {0, 20, 0}, //dpad?
                                            {0, 0, 0},
                                            {0, 50, 1}, //dice
-                                           {0, 500, 1}, //lines
+                                           {0, 60, 1}, //lines
                                            {0, 2000, 0}}; //charge
 
 void settings_setup(){

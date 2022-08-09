@@ -20,6 +20,7 @@ bool single_press = false;
 bool double_press = false;
 bool long_press = false;
 bool sleep_press = false;
+bool shake = false;
 
 int buf = 0;
 
@@ -116,6 +117,20 @@ void button_handler() {
     }
     shake = false;
   }*/
+  if(shake){
+    if(MODE == 1){
+      if(current_anim == 8){
+        shake = false;
+        gfx_lines_axis++;
+        if(gfx_lines_axis >= 3){
+          gfx_lines_axis = 0;
+        }
+      }
+    }else{
+      shake = false;
+      single_press = true;
+    }
+  }
 
   if(long_press) {
     long_press = false;
@@ -186,11 +201,8 @@ void button_sensorRead(){
         Serial.println();*/
         if(time_shake()){
           if(shakeX > 15 || shakeY > 15 || shakeZ > 15){
-            if(MODE != 1){
-              single_press = true;
-            }else{
-              //shake = true;
-            }
+            shake = true;
+            Serial.println("shake");
             Serial.println("END");
             Serial.println(shakeX);
             Serial.println(shakeY);
@@ -209,8 +221,7 @@ void button_sensorRead(){
       Serial.println(fabsf(event.acceleration.y));
       Serial.println(fabsf(event.acceleration.z));
       Serial.println();*/
-      /*Serial.println("READINGS");
-      Serial.println(event.acceleration.x);
+      /*Serial.println(event.acceleration.x);
       Serial.println(event.acceleration.y);
       Serial.println(event.acceleration.z);
       Serial.println();*/
@@ -218,32 +229,19 @@ void button_sensorRead(){
 
     }
     if(current_anim == 8){ //gfx_lines();
-      float xAcc = event.acceleration.x;
-      float yAcc = event.acceleration.y;
-      float zAcc = event.acceleration.z;
+      float roll_helper[3] = {0};
+      roll_helper[0] = event.acceleration.x;
+      roll_helper[1] = event.acceleration.y;
+      roll_helper[2] = event.acceleration.z;
 
-      if(xAcc >= 4){
-        gfx_x_roll = 0;
-      }else if(xAcc <= -4){
-        gfx_x_roll = 2;
-      }else{
-        gfx_x_roll = 1;
-      }
-
-      if(yAcc >= 4){
-        gfx_y_roll = 0;
-      }else if(yAcc <= -4){
-        gfx_y_roll = 2;
-      }else{
-        gfx_y_roll = 1;
-      }
-
-      if(zAcc >= 4){
-        gfx_z_roll = 0;
-      }else if(zAcc <= -4){
-        gfx_z_roll = 2;
-      }else{
-        gfx_z_roll = 1;
+      for(int i = 0; i < 3; i++){
+        if(roll_helper[i] >= 4){
+          gfx_lines_roll[i] = 0;
+        }else if(roll_helper[i] <= -4){
+          gfx_lines_roll[i] = 2;
+        }else{
+          gfx_lines_roll[i] = 1;
+        }
       }
     }
 
