@@ -183,15 +183,17 @@ void gfx_diagonal(){
   strip.Show();
   strip.ClearTo(0);
 }
-int gfx_dpad_cornerVal = 0;
-int gfx_dpad_centerVal = 0;
-int gfx_dpad_sideVal = 0;
+float gfx_dpad_cornerVal = 0.0;
+float gfx_dpad_centerVal = 0.0;
+float gfx_dpad_sideVal = 0.0;
 bool gfx_dpad_sideNeg = false;
 bool gfx_dpad_explode = false; //if i wanna transition smoother
 
 void gfx_dpad(){
+  //Serial.println("what");
   if(gfx_dpad_explode){
-
+    //Serial.println("exp");
+    //Serial.println(String(gfx_h) + " " + String(gfx_s) + " " + String(gfx_dpad_sideVal));
     for(int i = 0; i < 6; i++){ //6 sides of cube
       strip.SetPixelColor(1 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_sideVal));
       strip.SetPixelColor(3 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_sideVal));
@@ -215,6 +217,8 @@ void gfx_dpad(){
       gfx_cycleColor(0.08);
     }
   }else{
+    //Serial.println("else");
+    //Serial.println(String(gfx_h) + " " + String(gfx_s) + " " + String(gfx_dpad_cornerVal));
     for(int i = 0; i < 6; i++){ //6 sides of cube
       strip.SetPixelColor(0 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_cornerVal));
       strip.SetPixelColor(2 + i * 9, HsbColor(gfx_h, gfx_s, gfx_dpad_cornerVal));

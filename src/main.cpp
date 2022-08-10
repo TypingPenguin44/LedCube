@@ -1,5 +1,5 @@
 #include <Arduino.h>
-//#include <NeoPixelBus.h>
+//#include <NeoPixelBus.h> //using this library but had to modify
 
 #include <network.h>
 #include <button.h>
@@ -12,34 +12,26 @@ animations gfx[10];
 
 
 /*TODO
-lambda fucntions in index html
-
 add "tags" before debug messages 
-
-global settings from phone to turn off and on shake to cycle animations == shake sets single press true in certain modes
 
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
 
 on button press reset static thingy
 
-implement toggles
-
-mode switching and sstatic_colors thingy make uniform and not dumb
-
- test turnoff
-  static mode fix colors from web interface
-
- last anim not working with new lib
+static colors test
 
  add diagonal option to html
  donut anim too fast color change
 
- anim idea
- a single line is lit in a "circle" around the cube with adxl it mvoves to side to side
- with shake it swtiches axis and still reacts to tilting the cube
-
  startup fade in
  shutdown fade out in mode 0 and 1
+
+ dpad fix ....
+ documentation 
+ charging check every 5 sec
+ auto poweroff 
+ toggles in web interface 
+ test every button on web 
 */
 bool shakeCycle = true;
 int BATTERY = 0;

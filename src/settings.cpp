@@ -7,7 +7,7 @@ static const animations default_gfx[10] = {{0, 40, 0}, //rainbow
                                            {0, 40, 0}, //snake++
                                            {0, 20, 0}, //donut
                                            {0, 60, 0}, //diagonal
-                                           {0, 20, 0}, //dpad?
+                                           {0, 10, 0}, //dpad?
                                            {0, 50, 1}, //bubble
                                            {0, 50, 1}, //dice
                                            {0, 60, 1}, //lines
