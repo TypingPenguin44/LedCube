@@ -16,7 +16,8 @@ void gfx_snakePlus();
 void gfx_donut();
 void gfx_dice();
 void gfx_charge();
-void gfx_dpad();
+void gfx_dpad(); //replace this with a freefall reactive anim?
 void gfx_diagonal();
 void gfx_fill(HsbColor color);
 void gfx_lines();
+void gfx_bubble(); //last standalone anim hopefully still need some extra 

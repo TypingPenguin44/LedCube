@@ -64,4 +64,6 @@ extern unsigned long time_ISR_prev;
 extern int gfx_lines_roll[3];
 extern int gfx_lines_axis;
 
+extern int gfx_bubble_corner;
+
 #endif

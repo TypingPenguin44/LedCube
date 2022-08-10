@@ -103,7 +103,7 @@ void button_handler() {
     if(MODE == 0){
       MODE = 1;
       gfx_clear();
-      current_anim = 8;
+      current_anim = 6;
     }
     else if(MODE == 1){
       MODE = 0;  
@@ -163,6 +163,13 @@ void button_accelSetup(){
     Serial.println("Disabling sensor...");
   }else{
     accel.setRange(ADXL345_RANGE_8_G); //SetRange 16, 8, 4, 2
+    accel.setDataRate(ADXL345_DATARATE_100_HZ);
+
+    //calibration data for cube#1
+    //got values from test program 
+    accel.writeRegister(ADXL345_REG_OFSX, -4);
+    accel.writeRegister(ADXL345_REG_OFSY, -3);
+    accel.writeRegister(ADXL345_REG_OFSZ, 0);
   }
 }
 
@@ -221,10 +228,8 @@ void button_sensorRead(){
       Serial.println(fabsf(event.acceleration.y));
       Serial.println(fabsf(event.acceleration.z));
       Serial.println();*/
-      /*Serial.println(event.acceleration.x);
-      Serial.println(event.acceleration.y);
-      Serial.println(event.acceleration.z);
-      Serial.println();*/
+      Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
+      //Serial.println();
       button_shakeCount++;
 
     }
@@ -244,6 +249,34 @@ void button_sensorRead(){
         }
       }
     }
+    if(current_anim == 6){ //gfx_bubbles();
+      if(x <= -2 && y <= -2 && z <= -2){ //-8?
+        //0
+        gfx_bubble_corner = 0;
+      }else if(x >= 2 && y <= -2 && z <= -2){ //-8?
+        //1
+        gfx_bubble_corner = 1;
+      }else if(x >= 2 && y >= 2 && z <= -2){
+        //2
+        gfx_bubble_corner = 2;
+      }else if(x <= -2 && y >= 2 && z <= -2){
+        //3
+        gfx_bubble_corner = 3;
+      }else if(x <= -2 && y <= 2 && z >= 2){
+        //4
+        gfx_bubble_corner = 4;
+      }else if(x >= 2 && y <= -2 && z >= 2){
+        //5
+        gfx_bubble_corner = 5;
+      }else if(x >= 2 && y >= 2 && z >= 2){
+        //6
+        gfx_bubble_corner = 6;
+      }else if(x <= -2 && y >= 2 && z >= 2){
+        //7
+        gfx_bubble_corner = 7;
+      }
+    }
+
 
     
     if(z < -7){

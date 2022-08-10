@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#define FASTLED_ALLOW_INTERRUPTS 0
 //#include <NeoPixelBus.h>
 
 #include <network.h>

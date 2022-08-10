@@ -39,6 +39,9 @@ void gfx_animHandler(){
       case 5:
         gfx_dpad();
         break;
+      case 6:
+        gfx_bubble();
+        break;
       case 7:
         gfx_dice();
         break;
@@ -547,6 +550,25 @@ void gfx_lines(){
   if(gfx_lines_led >= 12){
     gfx_lines_led = 0;
   }
+  gfx_cycleColor();
+}
+
+int gfx_bubble_corners[8][3] = {{0, 38, 35}, //top left
+                                 {2, 26, 29},
+                                 {8, 11, 20},
+                                 {6, 44, 9},
+                                 {45, 36, 33}, //under top left
+                                 {51, 27, 24},
+                                 {53, 18, 17},
+                                 {47, 15, 42}};
+                                 
+int gfx_bubble_corner = 0;
+void gfx_bubble(){
+  for(int i = 0; i < 3; i++){
+    strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_corner][i], HsbColor(gfx_h, 1, 1));
+  }
+  strip.Show();
+  strip.ClearTo(0);
   gfx_cycleColor();
 }
 
