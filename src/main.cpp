@@ -32,6 +32,8 @@ static colors test
  auto poweroff 
  toggles in web interface 
  test every button on web 
+ charge number on web should be % not random integer between 470 and 600 something
+ clear out serial.println and replace (the useful ones) with debug msg 
 */
 bool shakeCycle = true;
 int BATTERY = 0;
