@@ -93,7 +93,7 @@ void button_handler() {
     }else if (MODE == 1){ //if in double mode increment double anim
       current_anim++;
       if(current_anim >= 9){ //wrap around
-        current_anim = 8; //####
+        current_anim = 6; //####
       }
     }
   }else if (double_press == true){
@@ -103,7 +103,7 @@ void button_handler() {
     if(MODE == 0){
       MODE = 1;
       gfx_clear();
-      current_anim = 6;
+      current_anim = 6; // starting anim for accel mdoe 
     }
     else if(MODE == 1){
       MODE = 0;  
@@ -228,7 +228,7 @@ void button_sensorRead(){
       Serial.println(fabsf(event.acceleration.y));
       Serial.println(fabsf(event.acceleration.z));
       Serial.println();*/
-      Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
+      //Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
       //Serial.println();
       button_shakeCount++;
 
@@ -279,17 +279,17 @@ void button_sensorRead(){
 
 
     
-    if(z < -7){
+    if(z < -6){
       gfx_dice_side = 1;
-    }else if(z > 7){
+    }else if(z > 6){
       gfx_dice_side = 6;
-    }else if(x < -7){
+    }else if(x < -6){
       gfx_dice_side = 3;
-    }else if(x > 7){
+    }else if(x > 6){
       gfx_dice_side = 4;
-    }else if(y < -7){
+    }else if(y < -6){
       gfx_dice_side = 2;
-    }else if(y > 7){
+    }else if(y > 6){
       gfx_dice_side = 5;
     }
   }

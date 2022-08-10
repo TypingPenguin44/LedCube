@@ -24,7 +24,7 @@
 #define SLEEP_PRESS_TIME 3000
 #define DEBOUNCE 60
 #define gfx_normal 6
-#define gfx_accel 2
+#define gfx_accel 4
 #define SENSOR_TIME 20
 
 

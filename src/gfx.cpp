@@ -212,7 +212,7 @@ void gfx_dpad(){
     if(gfx_dpad_centerVal <= 0){
       gfx_dpad_explode = false;
       gfx_dpad_cornerVal = 0;
-      gfx_cycleColor(20);
+      gfx_cycleColor(0.08);
     }
   }else{
     for(int i = 0; i < 6; i++){ //6 sides of cube
