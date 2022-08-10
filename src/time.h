@@ -4,9 +4,9 @@ void time_setPrev();
 void time_trigger(unsigned long prev, int interval);
 
 /**
- * @brief Maps value to remaining time to interval end
+ * @brief Maps value to remaining time to interval from start
  * 
- * @param interval Time condition true
+ * @param interval
  * @param valFrom 
  * @param valTo 
  * @param from 
