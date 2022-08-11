@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <time.h>
 #include <gfx.h>
-#include <button.h>
+#include <io.h>
 #include <Adafruit_ADXL345_U.h>
 #include <settings.h>
 
@@ -31,7 +31,7 @@ Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 * @def Have to do this the hard way without any more interrupts because Fastled with ws2812 uses interrupts
 * and it causes problems with wifi on a single threaded cpu like the esp8285 
 */
-void button_check() {
+void io_check() {
   if(digitalRead(BTN) == HIGH) // if button is pressed
   {
     if (single_press == false) // if not btn press before set it true
@@ -43,7 +43,7 @@ void button_check() {
       while(digitalRead(BTN) == HIGH){} //if still pressed infinite loop
       double_press = true;
       single_press = false;
-      DEBUG_MSG("[button_check] Double press\n");
+      DEBUG_MSG("[io_check] Double press\n");
     }
     time_setPrev(); // set previous btn press to now
   }
@@ -76,13 +76,13 @@ void button_check() {
       }
     }
   }
-  button_handler();
+  io_handler();
 }
 
-void button_handler() {
+void io_handler() {
   if(single_press == true && time_check(DOUBLE_PRESS_TIME)){ //250ms after a press it executes    
     single_press = false;
-    DEBUG_MSG("[button_check] Single press\n");
+    DEBUG_MSG("[io_check] Single press\n");
     gfx_reset();
     
     if(MODE == 0){ //if in normal mode increment normal anim
@@ -134,7 +134,7 @@ void button_handler() {
 
   if(long_press) {
     long_press = false;
-    DEBUG_MSG("[button_check] Long press\n");
+    DEBUG_MSG("[io_check] Long press\n");
     if(MODE == 0 || MODE == 1) {
       gfx_clear();
       MODE = 2;
@@ -148,7 +148,7 @@ void button_handler() {
   }
   if(sleep_press){
     sleep_press = false;
-    DEBUG_MSG("[button_check] Sleep press\n");
+    DEBUG_MSG("[io_check] Sleep press\n");
     if(MODE == 0 || MODE == 1 || MODE == 2) { 
       gfx_clear();
       MODE = 3;
@@ -157,7 +157,7 @@ void button_handler() {
   }
 }
 
-void button_accelSetup(){
+void io_accelSetup(){
   if(!accel.begin()){ //adxl345 setup
     Serial.println("Ooops, no ADXL345 detected ... Check your wiring!");
     Serial.println("Disabling sensor...");
@@ -176,10 +176,10 @@ void button_accelSetup(){
 float shakeX = 0;
 float shakeY = 0;
 float shakeZ = 0;
-int button_shakeCount = 0;
-float button_shakeValues[10][3] = {0};
+int io_shakeCount = 0;
+float io_shakeValues[10][3] = {0};
 
-void button_sensorRead(){
+void io_sensorRead(){
   if(time_sensor()){
     sensors_event_t event; 
     accel.getEvent(&event);
@@ -189,18 +189,18 @@ void button_sensorRead(){
     int z = event.acceleration.z;
 
     if(shakeCycle == true){
-      if(button_shakeCount == 10){
+      if(io_shakeCount == 10){
         shakeX = 0.0;
         shakeY = 0.0;
         shakeZ = 0.0;
-        for(int i = 0; i < button_shakeCount; i++){
-          shakeX += button_shakeValues[i][0];
-          shakeY += button_shakeValues[i][1];
-          shakeZ += button_shakeValues[i][2];
+        for(int i = 0; i < io_shakeCount; i++){
+          shakeX += io_shakeValues[i][0];
+          shakeY += io_shakeValues[i][1];
+          shakeZ += io_shakeValues[i][2];
         }
-        shakeX = shakeX/button_shakeCount;
-        shakeY = shakeY/button_shakeCount;
-        shakeZ = shakeZ/button_shakeCount;
+        shakeX = shakeX/io_shakeCount;
+        shakeY = shakeY/io_shakeCount;
+        shakeZ = shakeZ/io_shakeCount;
         /*Serial.println("OUT");
         Serial.println(x);
         Serial.println(y);
@@ -217,11 +217,11 @@ void button_sensorRead(){
             Serial.println();
           }
         }
-        button_shakeCount = 0;
+        io_shakeCount = 0;
       }
-      button_shakeValues[button_shakeCount][0] = fabsf(event.acceleration.x);
-      button_shakeValues[button_shakeCount][1] = fabsf(event.acceleration.y);
-      button_shakeValues[button_shakeCount][2] = fabsf(event.acceleration.z);
+      io_shakeValues[io_shakeCount][0] = fabsf(event.acceleration.x);
+      io_shakeValues[io_shakeCount][1] = fabsf(event.acceleration.y);
+      io_shakeValues[io_shakeCount][2] = fabsf(event.acceleration.z);
 
       /*Serial.println("READINGS");
       Serial.println(fabsf(event.acceleration.x));
@@ -230,7 +230,7 @@ void button_sensorRead(){
       Serial.println();*/
       //Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
       //Serial.println();
-      button_shakeCount++;
+      io_shakeCount++;
 
     }
     if(current_anim == 8){ //gfx_lines();
@@ -295,7 +295,7 @@ void button_sensorRead(){
   }
 }
 
-void button_startReset(){
+void io_startReset(){
   while (digitalRead(BTN) == HIGH) {
     buf = time_map(3000, 3000, 0, 0, 8);
     gfx_loading(buf, 1);
@@ -309,14 +309,14 @@ void button_startReset(){
   }
 }
 //gets called periodically, if battery low it turns off the cube
-void button_batteryCheck(bool override = false){
+void io_batteryCheck(bool override = false){
   if(time_chargeCheck()){
-    button_getCharge();
+    io_getCharge();
   }
   
 }
 //get battery charge value
-void button_getCharge(){
+void io_getCharge(){
   BATTERY = analogRead(A0);
   Serial.println(BATTERY);
 }

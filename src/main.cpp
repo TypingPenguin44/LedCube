@@ -2,7 +2,7 @@
 //#include <NeoPixelBus.h> //using this library but had to modify
 
 #include <network.h>
-#include <button.h>
+#include <io.h>
 #include <defs.h>
 #include <gfx.h>
 #include <settings.h>
@@ -83,7 +83,7 @@ void setup() {
   gfx_setup(); //init gfx
   Serial.println("init gfx");
 
-  button_startReset(); //check for startup reset
+  io_startReset(); //check for startup reset
   Serial.println("startup reset");
 
   settings_load_gfx(); //read config from file
@@ -93,7 +93,7 @@ void setup() {
   printconfig();
   Serial.println();
 
-  button_accelSetup(); //init adxl
+  io_accelSetup(); //init adxl
   Serial.println("setup adxl");
 
   network_setup(); //init wifi
@@ -109,7 +109,7 @@ void loop(){
   }
   
   if (shakeCycle || gfx[current_anim].adxl){
-    button_sensorRead();
+    io_sensorRead();
   } //kinda should rethink this currently it only modofies sides var it aint got nothing to do with shake detect
   /*if(gfx[current_anim].adxl){
     button_sensorRead(); //timer already in function
@@ -131,5 +131,5 @@ void loop(){
     Serial.print(" side: ");
     Serial.println(gfx_dice_side);
   }
-  button_check();
+  io_check();
 }
