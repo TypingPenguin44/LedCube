@@ -38,21 +38,24 @@ void gfx_animHandler(){
         gfx_dpad();
         break;
       case 6:
-        gfx_bubble();
-        break;
-      case 7:
         gfx_dice();
         break;
+      case 7:
+        gfx_bubble();
+        break;
       case 8:
-        gfx_lines();
+        //gfx_loading();
         break;
       case 9:
-        gfx_charge();
+        gfx_lines();
         break;
       case 10:
-        gfx_fade();
+        gfx_charge();
         break;
       case 11:
+        gfx_fade();
+        break;
+      case 12:
         gfx_static();
         break;
       default:

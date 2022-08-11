@@ -233,7 +233,7 @@ void io_sensorRead(){
       io_shakeCount++;
 
     }
-    if(current_anim == 8){ //gfx_lines();
+    if(current_anim == 9){ //gfx_lines();
       float roll_helper[3] = {0};
       roll_helper[0] = event.acceleration.x;
       roll_helper[1] = event.acceleration.y;
@@ -249,47 +249,37 @@ void io_sensorRead(){
         }
       }
     }
-    if(current_anim == 6){ //gfx_bubbles();
-      if(x <= -2 && y <= -2 && z <= -2){ //-8?
-        //0
+    if(current_anim == 7){ //gfx_bubble();
+      if(x <= -2 && y <= -2 && z <= -2){
         gfx_bubble_corner = 0;
-      }else if(x >= 2 && y <= -2 && z <= -2){ //-8?
-        //1
+      }else if(x >= 2 && y <= -2 && z <= -2){
         gfx_bubble_corner = 1;
       }else if(x >= 2 && y >= 2 && z <= -2){
-        //2
         gfx_bubble_corner = 2;
       }else if(x <= -2 && y >= 2 && z <= -2){
-        //3
         gfx_bubble_corner = 3;
       }else if(x <= -2 && y <= 2 && z >= 2){
-        //4
         gfx_bubble_corner = 4;
       }else if(x >= 2 && y <= -2 && z >= 2){
-        //5
         gfx_bubble_corner = 5;
       }else if(x >= 2 && y >= 2 && z >= 2){
-        //6
         gfx_bubble_corner = 6;
       }else if(x <= -2 && y >= 2 && z >= 2){
-        //7
         gfx_bubble_corner = 7;
       }
     }
-
-
     
-    if(z < -6){
+    if(z <= -6){
       gfx_dice_side = 1;
-    }else if(z > 6){
+    }else if(z >= 6){
       gfx_dice_side = 6;
-    }else if(x < -6){
+    }else if(x <= -6){
       gfx_dice_side = 3;
-    }else if(x > 6){
+    }else if(x >= 6){
       gfx_dice_side = 4;
-    }else if(y < -6){
+    }else if(y <= -6){
       gfx_dice_side = 2;
-    }else if(y > 6){
+    }else if(y >= 6){
       gfx_dice_side = 5;
     }
   }
