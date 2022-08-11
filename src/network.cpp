@@ -56,11 +56,12 @@ void network_initServer()
     request->send(200);
   });
   server.on("/colors", HTTP_GET, [](AsyncWebServerRequest *request){
-    //if color slider altered switch to static?
+    //set last trigger time to 0 so instant color change?
     if(static_colors){
       gfx_h = request->getParam("h")->value().toFloat();
       gfx_s = request->getParam("s")->value().toFloat();
       gfx_v = request->getParam("v")->value().toFloat();
+      //Serial.println(String(gfx_h) + " " + String(gfx_s) + " " + String(gfx_v));
     }
     request->send(200);
   });

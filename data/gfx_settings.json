@@ -7,4 +7,6 @@
         {"interval":50,"adxl":true},
         {"interval":50,"adxl":true},
         {"interval":60,"adxl":true},
+        {"interval":40,"adxl":false},
+        {"interval":200,"adxl":false},
         {"interval":2000,"adxl":false}]}

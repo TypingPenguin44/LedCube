@@ -13,12 +13,10 @@ float gfx_s = 1.0;
 float gfx_v = 1.0;
 
 void gfx_setup() {
-  //FastLED.addLeds<WS2812B, LED_PIN, GRB>(gfx_leds, NUM_LEDS);
   strip.Begin();
 }
 
 void gfx_animHandler(){
-  //strip.ClearTo(0); //maybe needed idk
   if (time_anim()){
     switch (current_anim){
       case 0:
@@ -51,14 +49,20 @@ void gfx_animHandler(){
       case 9:
         gfx_charge();
         break;
+      case 10:
+        gfx_fade();
+        break;
+      case 11:
+        gfx_static();
+        break;
       default:
-        //implement yellow loading lol
+        //implement yellow loading
         break;
     }
   }
 }
 
-//cant think of a better perfoming method, lots of unused memory
+//cant think of a better perfoming method, lots of unused memory tho
 const uint8_t gfx_diagonal_route[54][2] {{35, 38}, //0
                                          {0, 0}, //1
                                          {26, 29}, //2
@@ -237,71 +241,6 @@ void gfx_dpad(){
     }
   }
 }
-
-
-/*int gfx_dpad_cornerVal = 255;
-int gfx_dpad_centerVal = 0;
-int gfx_dpad_sideVal = 0;
-bool gfx_dpad_sideNeg = false;
-bool gfx_dpad_explode = false; //if i wanna transition smoother
-void gfx_dpad(){
-  if(gfx_dpad_explode == false){
-    for(int i = 0; i < 6; i++){ //6 sides of cube
-      gfx_leds[0 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[2 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[6 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[8 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-
-      gfx_leds[4 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
-    }
-    strip.Show();
-    //cleardata?
-    strip.ClearTo(0);
-    gfx_dpad_cornerVal--;
-    gfx_dpad_centerVal++;
-    if(gfx_dpad_centerVal == 255){
-      gfx_dpad_explode = true;
-      gfx_dpad_cornerVal = 0;
-    }
-  }else{
-    for(int i = 0; i < 6; i++){ //6 sides of cube
-      gfx_leds[0 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[2 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[6 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-      gfx_leds[8 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_cornerVal);
-
-      gfx_leds[1 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
-      gfx_leds[3 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
-      gfx_leds[5 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
-      gfx_leds[7 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_sideVal);
-
-      gfx_leds[4 + i * 9] = CHSV(gfx_h, 255, gfx_dpad_centerVal);
-    }
-    strip.Show();
-    //cleardata?
-    strip.ClearTo(0);
-    if(gfx_dpad_sideNeg){
-      gfx_dpad_sideVal -= 7;
-    }else{
-      gfx_dpad_sideVal += 7;
-    }
-       
-    gfx_dpad_cornerVal += 2;
-    gfx_dpad_centerVal -= 2;
-    if(gfx_dpad_sideVal >= 255){
-      gfx_dpad_sideNeg = true;
-      gfx_dpad_sideVal = 255;
-    }else if(gfx_dpad_sideVal <= 0){
-      gfx_dpad_sideVal = 0;
-    }
-    if(gfx_dpad_cornerVal >= 255){
-      gfx_dpad_cornerVal = 255;
-      gfx_dpad_centerVal = 0;
-      gfx_dpad_explode = false;
-      gfx_dpad_sideNeg = false;
-    }
-  }
-}*/
 
 void gfx_charge(){
   BATTERY = analogRead(A0);
@@ -578,13 +517,15 @@ void gfx_bubble(){
 
 float gfx_startFade_value = 0;
 void gfx_startFade(bool error){
+  gfx_startFade_value = 0;
+  if(error){
+    gfx_h = 0;
+  }else{
+    gfx_h = 0.5;
+  }
   while(gfx_startFade_value != 0.5){
     yield();
-    if(error){
-      gfx_fill(HsbColor(0, 1, gfx_startFade_value));
-    }else{
-      gfx_fill(HsbColor(0.48, 1, gfx_startFade_value));
-    }
+    gfx_fill(HsbColor(gfx_h, 1, gfx_startFade_value));
     strip.Show();
     gfx_startFade_value += 0.01;
     delay(5);
@@ -592,24 +533,27 @@ void gfx_startFade(bool error){
 }
 
 bool gfx_fade_in = false;
-
 void gfx_fade(){
   gfx_fill(HsbColor(gfx_h, gfx_s, gfx_v));
+  Serial.println(String(gfx_h) + " " + String(gfx_s) + " " + String(gfx_v));
   strip.Show();
   if(!gfx_fade_in){
-    gfx_v -= 0.004;
+    gfx_v -= 0.012;
     if(gfx_v <= 0){
       gfx_fade_in = true;
+      gfx_v = 0; //prevent out of bounds
     }
   }else{
-    gfx_v += 0.004;
+    gfx_v += 0.012;
     if(gfx_v >= 1){
       gfx_fade_in = false;
+      gfx_v = 1; //prevent out of bounds
     }
   }
 }
 void gfx_static(){
   gfx_fill(HsbColor(gfx_h, gfx_s, gfx_v));
+  Serial.println(String(gfx_h) + " " + String(gfx_s) + " " + String(gfx_v));
   strip.Show();
 }
 

@@ -34,7 +34,7 @@ typedef struct {
   bool adxl;
 } animations;
 
-extern animations gfx[10];
+extern animations gfx[12];
 
 extern uint8_t MODE;
 extern bool rendered;

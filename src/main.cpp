@@ -8,7 +8,7 @@
 #include <settings.h>
 #include <time.h>
 
-animations gfx[10];
+animations gfx[12];
 
 
 /*TODO
