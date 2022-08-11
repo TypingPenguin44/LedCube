@@ -576,3 +576,7 @@ void gfx_bubble(){
   gfx_cycleColor();
 }
 
+int gfx_startFade(bool error){
+
+}
+

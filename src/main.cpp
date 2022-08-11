@@ -122,6 +122,7 @@ void loop(){
     //should be moved to animhandler
     gfx_clear();
   }
+  io_batteryCheck(1); //delay in function 
   
   if(time_test(2000)){
     Serial.print("Mode: ");

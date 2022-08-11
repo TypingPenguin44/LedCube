@@ -50,17 +50,17 @@ void network_initServer()
   server.on("/static", HTTP_GET, [](AsyncWebServerRequest *request){
     current_anim = request->getParam("id")->value().toInt();
     static_colors = true;
-    gfx_h = request->getParam("h")->value().toInt();
-    gfx_s = request->getParam("s")->value().toInt();
-    gfx_v = request->getParam("v")->value().toInt();
+    gfx_h = request->getParam("h")->value().toFloat();
+    gfx_s = request->getParam("s")->value().toFloat();
+    gfx_v = request->getParam("v")->value().toFloat();
     request->send(200);
   });
   server.on("/colors", HTTP_GET, [](AsyncWebServerRequest *request){
     //if color slider altered switch to static?
     if(static_colors){
-      gfx_h = request->getParam("h")->value().toInt();
-      gfx_s = request->getParam("s")->value().toInt();
-      gfx_v = request->getParam("v")->value().toInt();
+      gfx_h = request->getParam("h")->value().toFloat();
+      gfx_s = request->getParam("s")->value().toFloat();
+      gfx_v = request->getParam("v")->value().toFloat();
     }
     request->send(200);
   });

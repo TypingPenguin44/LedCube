@@ -220,16 +220,16 @@
   </div>
 	<button type="button" class="collapsible">Static Color Selection</button>
 	<div class="content">
-		<p><input type="range" id="hSlider" onchange="updateSlider(this)" min="0" max="255" value="0" step="1" class="sliders"></p>
+		<p><input type="range" id="hSlider" onchange="updateSlider(this)" min="0" max="1" value="0" step="0.004" class="sliders"></p>
 		
-		<p><input type="range" id="sSlider" onchange="updateSlider(this)" min="0" max="255" value="255" step="1" class="sliders"></p>
+		<p><input type="range" id="sSlider" onchange="updateSlider(this)" min="0" max="1" value="1" step="0.004" class="sliders"></p>
 		
-		<p><input type="range" id="vSlider" onchange="updateSlider(this)" min="0" max="255" value="255" step="1" class="sliders"></p>
+		<p><input type="range" id="vSlider" onchange="updateSlider(this)" min="0" max="1" value="1" step="0.004" class="sliders"></p>
 		<table>
 			<tr>
 				<td style="width:100px;"><p>H: <span id="h">0</span></p></td>
-				<td style="width:100px;"><p>S: <span id="s">255</span></p></td>
-				<td style="width:100px;"><p>V: <span id="v">255</span></p></td>
+				<td style="width:100px;"><p>S: <span id="s">1</span></p></td>
+				<td style="width:100px;"><p>V: <span id="v">1</span></p></td>
         <td style="width:100px; background-color: transparent;" id="sample" name="sample" ></td>
 			</tr>
 		</table>
@@ -348,7 +348,12 @@ const vSlider = document.getElementById("vSlider");
 const vOutput = document.getElementById("v");
 vSlider.oninput = function() {setSample(vSlider, vOutput)};
 
+
+
 function hsvToRgb(h, s, v){
+  h=h*255;
+  s=s*255;
+  v=v*255;
   var r, g, b;
 
   var i = Math.floor(h * 6);
@@ -365,9 +370,11 @@ function hsvToRgb(h, s, v){
     case 4: r = t, g = p, b = v; break;
     case 5: r = v, g = p, b = q; break;
   }
+
   var color = new String("rgb(" + Math.round(r * 255) + ", " + Math.round(g * 255) + ", "+ Math.round(b * 255) + ")");
   return color;
 }
+
 
 function setSample(slider, output){
   output.innerHTML = slider.value;

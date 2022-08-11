@@ -21,3 +21,5 @@ void gfx_diagonal();
 void gfx_fill(HsbColor color);
 void gfx_lines();
 void gfx_bubble(); //last standalone anim hopefully still need some extra 
+
+int gfx_startFade(bool error = false);

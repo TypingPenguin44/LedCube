@@ -308,8 +308,11 @@ void io_startReset(){
     }
   }
 }
-//gets called periodically, if battery low it turns off the cube
-void io_batteryCheck(bool override = false){
+/**
+ * @brief Gets called periodically, if battery low it turns off the cube
+ * @param override Overides turn off feature on low battery
+ */
+void io_batteryCheck(bool override){
   if(time_chargeCheck()){
     io_getCharge();
   }
