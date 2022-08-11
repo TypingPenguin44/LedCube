@@ -20,20 +20,21 @@ on button press reset static thingy
 
 static colors test
 
- add diagonal option to html
- donut anim too fast color change
+add diagonal option to html
+donut anim too fast color change
 
- startup fade in
- shutdown fade out in mode 0 and 1
+startup fade in
+shutdown fade out in mode 0 and 1
 
- dpad fix ....
- documentation 
- charging check every 5 sec
- auto poweroff 
- toggles in web interface 
- test every button on web 
- charge number on web should be % not random integer between 470 and 600 something
- clear out serial.println and replace (the useful ones) with debug msg 
+documentation 
+charging check every 5 sec
+auto poweroff 
+toggles in web interface 
+test every button on web 
+charge number on web should be % not random integer between 470 and 600 something
+clear out serial.println and replace (the useful ones) with debug msg 
+
+in loop move conditions into respective functions
 */
 bool shakeCycle = true;
 int BATTERY = 0;

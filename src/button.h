@@ -9,5 +9,7 @@ void button_check();
 void button_handler();
 void button_sensorRead();
 void button_accelSetup();
+void button_batteryCheck(bool override);
+void button_getCharge();
 
 #endif

@@ -147,3 +147,15 @@ bool time_ISR() {
 
   return 0;
 }
+
+unsigned long time_batteryCheck_prev = 0;
+bool time_chargeCheck() {
+  time_now = millis();
+
+  if (time_now - time_batteryCheck_prev >= 5000) {
+    time_batteryCheck_prev = time_now;
+    return 1;
+  }
+
+  return 0;
+}

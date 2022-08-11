@@ -23,3 +23,4 @@ bool time_clear(int interval);
 bool time_sensor();
 bool time_ISR();
 bool time_shake();
+bool time_chargeCheck();

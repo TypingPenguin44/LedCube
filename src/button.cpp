@@ -308,3 +308,15 @@ void button_startReset(){
     }
   }
 }
+//gets called periodically, if battery low it turns off the cube
+void button_batteryCheck(bool override = false){
+  if(time_chargeCheck()){
+    button_getCharge();
+  }
+  
+}
+//get battery charge value
+void button_getCharge(){
+  BATTERY = analogRead(A0);
+  Serial.println(BATTERY);
+}
