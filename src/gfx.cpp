@@ -519,20 +519,35 @@ void gfx_bubble(){
 }
 
 float gfx_startFade_value = 0;
-void gfx_startFade(bool error){
-  gfx_startFade_value = 0;
+void gfx_startFade(bool error, bool in){
   if(error){
     gfx_h = 0;
   }else{
     gfx_h = 0.5;
   }
-  while(gfx_startFade_value != 0.5){
-    yield();
-    gfx_fill(HsbColor(gfx_h, 1, gfx_startFade_value));
-    strip.Show();
-    gfx_startFade_value += 0.01;
-    delay(5);
-  }
+
+  if(in){
+    gfx_startFade_value = 0;
+    while(!(gfx_startFade_value >= 0.5)){
+      //yield();
+      gfx_fill(HsbColor(gfx_h, 1, gfx_startFade_value));
+      strip.Show();
+      gfx_startFade_value += 0.01;
+      delay(5);
+    }
+  }else{
+    gfx_startFade_value = 1; //= gfx_v?????
+    while(!(gfx_startFade_value <= 0)){
+      //yield();
+      gfx_fill(HsbColor(gfx_h, 1, gfx_startFade_value));
+      strip.Show();
+      gfx_startFade_value -= 0.01;
+      if(gfx_startFade_value < 0){
+        gfx_startFade_value = 0;
+      }
+      delay(5);
+    }
+  } 
 }
 
 bool gfx_fade_in = false;

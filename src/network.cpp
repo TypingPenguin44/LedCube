@@ -35,6 +35,11 @@ void network_stop(){
   DEBUG_MSG("[Network] Turning off wifi");
   WiFi.mode(WIFI_OFF);
 }
+void network_poweroff(){
+  server.end();
+  DEBUG_MSG("[Network] Turning off wifi");
+  WiFi.mode(WIFI_OFF);
+}
 
 void network_initServer()
 {

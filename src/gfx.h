@@ -22,7 +22,7 @@ void gfx_fill(HsbColor color);
 void gfx_lines();
 void gfx_bubble(); //last standalone anim hopefully still need some extra 
 
-void gfx_startFade(bool error = false);
+void gfx_startFade(bool error = false, bool in = true);
 
 void gfx_fade();
 void gfx_static();

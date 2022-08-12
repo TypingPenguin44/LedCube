@@ -140,7 +140,7 @@ unsigned long time_ISR_prev = 0;
 bool time_ISR() {
   time_now = millis();
 
-  if (time_now - time_ISR_prev >= 600) {
+  if(time_now - time_ISR_prev >= 300) {
     time_ISR_prev = time_now;
     return 1;
   }

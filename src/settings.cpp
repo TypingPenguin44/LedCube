@@ -1,6 +1,7 @@
 #include <ArduinoJson.h>
 #include <FS.h>
 #include <defs.h>
+#include <gfx.h>
 
 static const animations default_gfx[12] = {{0, 40, 0}, //rainbow
                                            {0, 60, 0}, //sanke 
@@ -23,8 +24,14 @@ void settings_setup(){
 }
 
 void settings_shutdown(){
+  void network_poweroff();
+  Serial.println("power off");
+  gfx_startFade(0, 0);
+  delay(2);
+  Serial.flush();
   SPIFFS.end();
   Serial.end();
+  
   digitalWrite(latch, LOW);
 }
   

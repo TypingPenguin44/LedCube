@@ -16,11 +16,6 @@ add "tags" before debug messages
 
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
 
-on button press reset static thingy
-
-static colors test
-
-add diagonal option to html
 donut anim too fast color change
 
 startup fade in
@@ -52,15 +47,20 @@ void printconfig(){
 }
 
 uint8_t ISR_press_count = 0;
+bool SHUTDOWN = false;
 
 ICACHE_RAM_ATTR void off() {
+  unsigned long time_now = millis();
   if(ISR_press_count == 3){
     Serial.println("power off");
-    settings_shutdown();
+    //settings_shutdown();
+    SHUTDOWN = true;
     
-  }else{
+  }else if(time_now - time_ISR_prev > 140){
+    Serial.println(time_now);
     ISR_press_count++;
-    time_ISR_prev = millis();
+    time_ISR_prev = time_now;
+    Serial.println("setprevisr");
   }
 }
 
@@ -70,6 +70,8 @@ void setup() {
   pinMode(latch, OUTPUT);
   pinMode(BTN, INPUT);
   digitalWrite(latch, HIGH); // keep the device on
+
+  attachInterrupt(BTN, off, RISING);
 
   Serial.begin(74880); // open serial
   
@@ -97,7 +99,8 @@ void setup() {
   Serial.println("setup adxl");
 
   network_setup(); //init wifi
-  network_initServer(); //init server  
+  network_initServer(); //init server
+  gfx_startFade();
 }
 
 void loop(){
@@ -111,10 +114,6 @@ void loop(){
   if (shakeCycle || gfx[current_anim].adxl){
     io_sensorRead();
   } //kinda should rethink this currently it only modofies sides var it aint got nothing to do with shake detect
-  /*if(gfx[current_anim].adxl){
-    button_sensorRead(); //timer already in function
-    //Serial.println("yo");
-  }*/
   if(MODE != 2){
     gfx_animHandler();
   }else if (MODE == 2 && time_clear(2000)){
@@ -131,6 +130,9 @@ void loop(){
     Serial.print(current_anim);
     Serial.print(" side: ");
     Serial.println(gfx_dice_side);
+  }
+  if(SHUTDOWN){
+    settings_shutdown();
   }
   io_check();
 }
