@@ -17,52 +17,57 @@ void gfx_setup() {
 }
 
 void gfx_animHandler(){
-  if (time_anim()){
-    switch (current_anim){
-      case 0:
-        gfx_rainbow();
-        break;
-      case 1:
-        gfx_snake();
-        break;
-      case 2:
-        gfx_snakePlus();
-        break;
-      case 3:
-        gfx_donut();
-        break;
-      case 4:
-        gfx_diagonal();
-        break;
-      case 5:
-        gfx_dpad();
-        break;
-      case 6:
-        gfx_dice();
-        break;
-      case 7:
-        gfx_bubble();
-        break;
-      case 8:
-        //gfx_loading();
-        break;
-      case 9:
-        gfx_lines();
-        break;
-      case 10:
-        gfx_charge();
-        break;
-      case 11:
-        gfx_fade();
-        break;
-      case 12:
-        gfx_static();
-        break;
-      default:
-        //implement yellow loading
-        break;
+  if(MODE != 2){
+    if (time_anim()){
+      switch (current_anim){
+        case 0:
+          gfx_rainbow();
+          break;
+        case 1:
+          gfx_snake();
+          break;
+        case 2:
+          gfx_snakePlus();
+          break;
+        case 3:
+          gfx_donut();
+          break;
+        case 4:
+          gfx_diagonal();
+          break;
+        case 5:
+          gfx_dpad();
+          break;
+        case 6:
+          gfx_dice();
+          break;
+        case 7:
+          gfx_bubble();
+          break;
+        case 8:
+          //gfx_loading();
+          break;
+        case 9:
+          gfx_lines();
+          break;
+        case 10:
+          gfx_charge();
+          break;
+        case 11:
+          gfx_fade();
+          break;
+        case 12:
+          gfx_static();
+          break;
+        default:
+          //implement yellow loading
+          break;
+      }
     }
+  }else if (MODE == 2 && time_clear(2000)){
+    gfx_clear();
   }
+  
 }
 
 //cant think of a better perfoming method, lots of unused memory tho

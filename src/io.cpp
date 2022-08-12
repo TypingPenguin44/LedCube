@@ -180,107 +180,109 @@ int io_shakeCount = 0;
 float io_shakeValues[10][3] = {0};
 
 void io_sensorRead(){
-  if(time_sensor()){
-    sensors_event_t event; 
-    accel.getEvent(&event);
+  if (shakeCycle || gfx[current_anim].adxl){
+    if(time_sensor()){
+      sensors_event_t event; 
+      accel.getEvent(&event);
 
-    int x = event.acceleration.x;
-    int y = event.acceleration.y;
-    int z = event.acceleration.z;
+      int x = event.acceleration.x;
+      int y = event.acceleration.y;
+      int z = event.acceleration.z;
 
-    if(shakeCycle == true){
-      if(io_shakeCount == 10){
-        shakeX = 0.0;
-        shakeY = 0.0;
-        shakeZ = 0.0;
-        for(int i = 0; i < io_shakeCount; i++){
-          shakeX += io_shakeValues[i][0];
-          shakeY += io_shakeValues[i][1];
-          shakeZ += io_shakeValues[i][2];
+      if(shakeCycle == true){
+        if(io_shakeCount == 10){
+          shakeX = 0.0;
+          shakeY = 0.0;
+          shakeZ = 0.0;
+          for(int i = 0; i < io_shakeCount; i++){
+            shakeX += io_shakeValues[i][0];
+            shakeY += io_shakeValues[i][1];
+            shakeZ += io_shakeValues[i][2];
+          }
+          shakeX = shakeX/io_shakeCount;
+          shakeY = shakeY/io_shakeCount;
+          shakeZ = shakeZ/io_shakeCount;
+          /*Serial.println("OUT");
+          Serial.println(x);
+          Serial.println(y);
+          Serial.println(z);
+          Serial.println();*/
+          if(time_shake()){
+            if(shakeX > 15 || shakeY > 15 || shakeZ > 15){
+              shake = true;
+              Serial.println("shake");
+              Serial.println("END");
+              Serial.println(shakeX);
+              Serial.println(shakeY);
+              Serial.println(shakeZ);
+              Serial.println();
+            }
+          }
+          io_shakeCount = 0;
         }
-        shakeX = shakeX/io_shakeCount;
-        shakeY = shakeY/io_shakeCount;
-        shakeZ = shakeZ/io_shakeCount;
-        /*Serial.println("OUT");
-        Serial.println(x);
-        Serial.println(y);
-        Serial.println(z);
+        io_shakeValues[io_shakeCount][0] = fabsf(event.acceleration.x);
+        io_shakeValues[io_shakeCount][1] = fabsf(event.acceleration.y);
+        io_shakeValues[io_shakeCount][2] = fabsf(event.acceleration.z);
+
+        /*Serial.println("READINGS");
+        Serial.println(fabsf(event.acceleration.x));
+        Serial.println(fabsf(event.acceleration.y));
+        Serial.println(fabsf(event.acceleration.z));
         Serial.println();*/
-        if(time_shake()){
-          if(shakeX > 15 || shakeY > 15 || shakeZ > 15){
-            shake = true;
-            Serial.println("shake");
-            Serial.println("END");
-            Serial.println(shakeX);
-            Serial.println(shakeY);
-            Serial.println(shakeZ);
-            Serial.println();
+        //Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
+        //Serial.println();
+        io_shakeCount++;
+
+      }
+      if(current_anim == 9){ //gfx_lines();
+        float roll_helper[3] = {0};
+        roll_helper[0] = event.acceleration.x;
+        roll_helper[1] = event.acceleration.y;
+        roll_helper[2] = event.acceleration.z;
+
+        for(int i = 0; i < 3; i++){
+          if(roll_helper[i] >= 4){
+            gfx_lines_roll[i] = 0;
+          }else if(roll_helper[i] <= -4){
+            gfx_lines_roll[i] = 2;
+          }else{
+            gfx_lines_roll[i] = 1;
           }
         }
-        io_shakeCount = 0;
       }
-      io_shakeValues[io_shakeCount][0] = fabsf(event.acceleration.x);
-      io_shakeValues[io_shakeCount][1] = fabsf(event.acceleration.y);
-      io_shakeValues[io_shakeCount][2] = fabsf(event.acceleration.z);
-
-      /*Serial.println("READINGS");
-      Serial.println(fabsf(event.acceleration.x));
-      Serial.println(fabsf(event.acceleration.y));
-      Serial.println(fabsf(event.acceleration.z));
-      Serial.println();*/
-      //Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
-      //Serial.println();
-      io_shakeCount++;
-
-    }
-    if(current_anim == 9){ //gfx_lines();
-      float roll_helper[3] = {0};
-      roll_helper[0] = event.acceleration.x;
-      roll_helper[1] = event.acceleration.y;
-      roll_helper[2] = event.acceleration.z;
-
-      for(int i = 0; i < 3; i++){
-        if(roll_helper[i] >= 4){
-          gfx_lines_roll[i] = 0;
-        }else if(roll_helper[i] <= -4){
-          gfx_lines_roll[i] = 2;
-        }else{
-          gfx_lines_roll[i] = 1;
+      if(current_anim == 7){ //gfx_bubble();
+        if(x <= -2 && y <= -2 && z <= -2){
+          gfx_bubble_corner = 0;
+        }else if(x >= 2 && y <= -2 && z <= -2){
+          gfx_bubble_corner = 1;
+        }else if(x >= 2 && y >= 2 && z <= -2){
+          gfx_bubble_corner = 2;
+        }else if(x <= -2 && y >= 2 && z <= -2){
+          gfx_bubble_corner = 3;
+        }else if(x <= -2 && y <= 2 && z >= 2){
+          gfx_bubble_corner = 4;
+        }else if(x >= 2 && y <= -2 && z >= 2){
+          gfx_bubble_corner = 5;
+        }else if(x >= 2 && y >= 2 && z >= 2){
+          gfx_bubble_corner = 6;
+        }else if(x <= -2 && y >= 2 && z >= 2){
+          gfx_bubble_corner = 7;
         }
       }
-    }
-    if(current_anim == 7){ //gfx_bubble();
-      if(x <= -2 && y <= -2 && z <= -2){
-        gfx_bubble_corner = 0;
-      }else if(x >= 2 && y <= -2 && z <= -2){
-        gfx_bubble_corner = 1;
-      }else if(x >= 2 && y >= 2 && z <= -2){
-        gfx_bubble_corner = 2;
-      }else if(x <= -2 && y >= 2 && z <= -2){
-        gfx_bubble_corner = 3;
-      }else if(x <= -2 && y <= 2 && z >= 2){
-        gfx_bubble_corner = 4;
-      }else if(x >= 2 && y <= -2 && z >= 2){
-        gfx_bubble_corner = 5;
-      }else if(x >= 2 && y >= 2 && z >= 2){
-        gfx_bubble_corner = 6;
-      }else if(x <= -2 && y >= 2 && z >= 2){
-        gfx_bubble_corner = 7;
+      
+      if(z <= -6){
+        gfx_dice_side = 1;
+      }else if(z >= 6){
+        gfx_dice_side = 6;
+      }else if(x <= -6){
+        gfx_dice_side = 3;
+      }else if(x >= 6){
+        gfx_dice_side = 4;
+      }else if(y <= -6){
+        gfx_dice_side = 2;
+      }else if(y >= 6){
+        gfx_dice_side = 5;
       }
-    }
-    
-    if(z <= -6){
-      gfx_dice_side = 1;
-    }else if(z >= 6){
-      gfx_dice_side = 6;
-    }else if(x <= -6){
-      gfx_dice_side = 3;
-    }else if(x >= 6){
-      gfx_dice_side = 4;
-    }else if(y <= -6){
-      gfx_dice_side = 2;
-    }else if(y >= 6){
-      gfx_dice_side = 5;
     }
   }
 }

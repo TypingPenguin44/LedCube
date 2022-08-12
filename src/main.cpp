@@ -20,16 +20,11 @@ donut anim too fast color change
 
 startup fade in
 shutdown fade out in mode 0 and 1
-
-documentation 
-charging check every 5 sec
-auto poweroff 
 toggles in web interface 
-test every button on web 
-charge number on web should be % not random integer between 470 and 600 something
 clear out serial.println and replace (the useful ones) with debug msg 
 
-in loop move conditions into respective functions
+auto poweroff //need value first
+charge number on web should be % not random integer between 470 and 600 something
 */
 bool shakeCycle = true;
 int BATTERY = 0;
@@ -53,6 +48,7 @@ ICACHE_RAM_ATTR void off() {
   unsigned long time_now = millis();
   if(ISR_press_count == 3){
     Serial.println("power off");
+    detachInterrupt(BTN);
     //settings_shutdown();
     SHUTDOWN = true;
     
@@ -72,6 +68,7 @@ void setup() {
   digitalWrite(latch, HIGH); // keep the device on
 
   attachInterrupt(BTN, off, RISING);
+  
 
   Serial.begin(74880); // open serial
   
@@ -110,17 +107,11 @@ void loop(){
     ISR_press_count = 0;
     Serial.println("Isr Count Reset");
   }
+  io_sensorRead();
+
   
-  if (shakeCycle || gfx[current_anim].adxl){
-    io_sensorRead();
-  } //kinda should rethink this currently it only modofies sides var it aint got nothing to do with shake detect
-  if(MODE != 2){
-    gfx_animHandler();
-  }else if (MODE == 2 && time_clear(2000)){
-    //lil bit dumb way to clear leds when in mode 2 and playign with loading anim
-    //should be moved to animhandler
-    gfx_clear();
-  }
+  gfx_animHandler();
+  
   io_batteryCheck(1); //delay in function 
   
   if(time_test(2000)){
