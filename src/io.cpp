@@ -29,7 +29,7 @@ Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 /**
 * @brief Check button for input
 * @def Have to do this the hard way without any more interrupts because Fastled with ws2812 uses interrupts
-* and it causes problems with wifi on a single threaded cpu like the esp8285 
+* and it causes problems with wifi on a single tdefghrtv bcxeaded cpu like the esp8285 
 */
 void io_check() {
   if(digitalRead(BTN) == HIGH) // if button is pressed
@@ -294,7 +294,7 @@ void io_startReset(){
     delay(20);
     if(time_check(SLEEP_PRESS_TIME)){
       DEBUG_MSG("RESET...\n");
-      settings_reset_delays();
+      settings_reset();
       //put other settings here
       while (digitalRead(BTN) == HIGH){yield();}
     }

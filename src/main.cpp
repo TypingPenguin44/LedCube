@@ -1,5 +1,6 @@
 #include <Arduino.h>
-//#include <NeoPixelBus.h> //using this library but had to modify
+//using this library but had to modify it thats why it isnt in platformio.ini
+#include <NeoPixelBus.h>
 
 #include <network.h>
 #include <io.h>
@@ -9,6 +10,7 @@
 #include <time.h>
 
 animations gfx[12];
+bool toggles[2];
 
 
 /*TODO
@@ -16,11 +18,9 @@ add "tags" before debug messages
 
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
 
-donut anim too fast color change
-
-startup fade in
-shutdown fade out in mode 0 and 1
-toggles in web interface 
+dice rolling 
+dice scramble on shake
+ 
 clear out serial.println and replace (the useful ones) with debug msg 
 
 auto poweroff //need value first
@@ -85,7 +85,7 @@ void setup() {
   io_startReset(); //check for startup reset
   Serial.println("startup reset");
 
-  settings_load_gfx(); //read config from file
+  settings_load();
   //maybe load other toggles here aswell
   Serial.println("load gfx");
   Serial.println("config");

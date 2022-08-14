@@ -35,6 +35,7 @@ typedef struct {
 } animations;
 
 extern animations gfx[12];
+extern bool toggles[2];
 
 extern uint8_t MODE;
 extern bool rendered;

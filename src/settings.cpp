@@ -2,6 +2,7 @@
 #include <FS.h>
 #include <defs.h>
 #include <gfx.h>
+#include <network.h>
 
 static const animations default_gfx[12] = {{0, 40, 0}, //rainbow
                                            {0, 60, 0}, //sanke 
@@ -16,6 +17,8 @@ static const animations default_gfx[12] = {{0, 40, 0}, //rainbow
                                            {0, 200, 0}, //static
                                            {0, 2000, 0}}; //charge
 
+static const bool default_toggles[2] = {true, false};
+
 void settings_setup(){
   if(!SPIFFS.begin()){ //spiffs setup
     Serial.println("An Error has occurred while mounting SPIFFS");
@@ -24,7 +27,7 @@ void settings_setup(){
 }
 
 void settings_shutdown(){
-  void network_poweroff();
+  network_poweroff();
   Serial.println("power off");
   gfx_startFade(0, 0);
   delay(2);
@@ -33,6 +36,54 @@ void settings_shutdown(){
   Serial.end();
   
   digitalWrite(latch, LOW);
+}
+void settings_save_toggles(){
+  SPIFFS.remove("/gfx_toggles.json");
+  File file = SPIFFS.open("/gfx_toggles.json", "w");
+  if(!file){
+    Serial.println(F("Failed to create file"));
+    return;
+  }
+  DynamicJsonDocument doc(512);
+  for(int i = 0; i < 2; i++){
+    doc["toggles"][i] = toggles[i];
+  }
+
+  if(serializeJson(doc, file) == 0){
+    Serial.println(F("Failed to write to file"));
+  }
+  // Close the file
+  file.close();
+}
+void settings_load_toggles(){
+  File file = SPIFFS.open("/gfx_toggles.json", "r");
+
+  if(!file){
+    Serial.println(F("Failed to open file"));
+    return;
+  }
+  DynamicJsonDocument doc(512);
+  DeserializationError error = deserializeJson(doc, file);
+
+  if(error){
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    file.close();
+    return;
+  }
+
+  for (int i = 0; i < 2; i++){
+    toggles[i] = doc['toggles'][i].as<bool>(); 
+  }
+  file.close();
+}
+
+
+void settings_reset_toggles(){
+  for(int i = 0; i < 2; i++){
+    toggles[i] = default_toggles[i];
+  }
+  settings_save_toggles();
 }
   
 void settings_save_gfx(){
@@ -78,6 +129,7 @@ void settings_load_gfx(){
   if(error){
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
+    file.close();
     return;
   }
 
@@ -99,5 +151,11 @@ void settings_reset_delays(){
 }
 
 void settings_reset(){
-  
+  settings_reset_toggles();
+  settings_reset_delays();
+}
+
+void settings_load(){
+  settings_load_gfx();
+  settings_load_toggles();
 }

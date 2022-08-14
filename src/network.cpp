@@ -49,8 +49,11 @@ void network_initServer()
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/index.html", String(), false);
   });
-  server.on("/config", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/gfx", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/gfx_settings.json", String(), false);
+  });
+  server.on("/toggles", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/gfx_toggles.json", String(), false);
   });
   server.on("/static", HTTP_GET, [](AsyncWebServerRequest *request){
     current_anim = request->getParam("id")->value().toInt();
@@ -121,8 +124,9 @@ void network_initServer()
     settings_save_gfx();
     request->send(200);
   });
-  server.on("/saveAllConfig", HTTP_GET, [](AsyncWebServerRequest *request){
-    //save all configs, other config for shake and roll?
+  server.on("/saveconfig", HTTP_GET, [](AsyncWebServerRequest *request){
+    settings_save_gfx();
+    settings_save_toggles();
     request->send(200);
   });
   server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -138,6 +142,16 @@ void network_initServer()
   });
   server.on("/charge", HTTP_GET, [](AsyncWebServerRequest *request){
     sleep_press = true;
+    request->send(200);
+  });
+  server.on("/enable", HTTP_GET, [](AsyncWebServerRequest *request){
+    int id = request->getParam("id")->value().toInt();
+    toggles[id] = true;
+    request->send(200);
+  });
+  server.on("/disable", HTTP_GET, [](AsyncWebServerRequest *request){
+    int id = request->getParam("id")->value().toInt();
+    toggles[id] = false;
     request->send(200);
   });
   server.begin();

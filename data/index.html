@@ -271,14 +271,14 @@
 				<td style="width:100px;"><span id="delayFeedback"></span></td>
 				<td style="width:100px;"><button class="button button1" type="button" onclick="set_delay()"><b>Set Delay</b></button></td>
 				<td style="width:100px;"><button class="button button1" type="button" onclick="reset_delay()"><b>Reset Delay</b></button></td>
-        <td style="width:100px;"><button class="button button1" type="button" onclick="save_delay()"> <b>Save Delay</b></button></td>
+        <td style="width:100px;"><button class="button button1" type="button" onclick="save_delay()"><b>Save Delay</b></button></td>
 			</tr>
     </table>
     <table>
 			<tr>
 				<td><button class="button button1 orangetext" type="button" onclick="reload()"> <b>Reload Config</b></button></td>
-        <td><button class="button button1 redtext" type="button" onclick="save_config()"> <b>SAVE ALL</b></button></td>
-				<td><button class="button button1 redtext" type="button" onclick="off()"> <b>OFF</b></button></td>
+        <td><button class="button button1 redtext" type="button" onclick="save_config()"><b>SAVE ALL</b></button></td>
+				<td><button class="button button1 redtext" type="button" onclick="off()"><b>OFF</b></button></td>
         <td><button class="button button1 cyantext" type="button" onclick="charge()"><b>Charge</b></button></td>
 			</tr>
 		</table>
@@ -288,13 +288,13 @@
 			<table>
 				<tr>
 					<td><p>Shake to cycle</p></td>
-					<td><button class="button button1 greentext" type="button" onclick=""> <b>Enable</b></button></td>
-					<td><button class="button button1 redtext" type="button" onclick=""> <b>Disable</b></button></td>
+					<td><button class="button button1 greentext" type="button" onclick="enable(0)"><b>Enable</b></button></td>
+					<td><button class="button button1 redtext" type="button" onclick="disable(0)"><b>Disable</b></button></td>
 				</tr>
 				<tr>
 					<td><p>Roll</p></td>
-					<td><button class="button button1 greentext" type="button" onclick=""> <b>Enable</b></button></td>
-					<td><button class="button button1 redtext" type="button" onclick=""> <b>Disable</b></button></td>
+					<td><button class="button button1 greentext" type="button" onclick="enable(1)"><b>Enable</b></button></td>
+					<td><button class="button button1 redtext" type="button" onclick="disable(1)"><b>Disable</b></button></td>
 				</tr>
 			</table>
 		</div>
@@ -493,6 +493,17 @@ function reload(){
 function charge(){
   var xhr = new XMLHttpRequest();
 	xhr.open("GET", "/charge", true);
+	xhr.send();
+}
+
+function enable(id){
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/enable?id=" + id, true);
+	xhr.send();
+}
+function disable(id){
+  var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/disable?id=" + id, true);
 	xhr.send();
 }
 
