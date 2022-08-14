@@ -15,6 +15,7 @@ void gfx_loading(uint8_t leds, bool stageTwo);
 void gfx_snakePlus();
 void gfx_donut();
 void gfx_dice();
+void gfx_dice_set();
 void gfx_charge();
 void gfx_dpad(); //replace this with a freefall reactive anim?
 void gfx_diagonal();

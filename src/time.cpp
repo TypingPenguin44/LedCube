@@ -159,3 +159,15 @@ bool time_chargeCheck() {
 
   return 0;
 }
+
+unsigned long time_scramble_prev = 0;
+bool time_scramble() {
+  time_now = millis();
+
+  if (time_now - time_scramble_prev >= 1000) {
+    time_scramble_prev = time_now;
+    return 1;
+  }
+
+  return 0;
+}

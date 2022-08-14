@@ -21,8 +21,6 @@ maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %
 dice rolling 
 dice scramble on shake
  
-clear out serial.println and replace (the useful ones) with debug msg 
-
 auto poweroff //need value first
 charge number on web should be % not random integer between 470 and 600 something
 */

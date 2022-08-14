@@ -118,13 +118,25 @@ void io_handler() {
     shake = false;
   }*/
   if(shake){
-    if(MODE == 1){
-      if(current_anim == 8){
-        shake = false;
-        gfx_lines_axis++;
-        if(gfx_lines_axis >= 3){
-          gfx_lines_axis = 0;
-        }
+    
+    if(current_anim == 8){
+      shake = false;
+      gfx_lines_axis++;
+      if(gfx_lines_axis >= 3){
+        gfx_lines_axis = 0;
+      }
+    }else if(current_anim == 6){
+      shake = false;
+      gfx_dice_scramble = true;
+      gfx_scramble_length = random(0,15);
+      Serial.print("length: ");
+      Serial.println(gfx_scramble_length);
+      delay(2);
+      for(int i = 0; i < gfx_scramble_length; i++){
+        gfx_scramble_values[i] = random(0,5);
+        Serial.print("values ");
+        Serial.println(gfx_scramble_values[i]);
+        delay(2);
       }
     }else{
       shake = false;

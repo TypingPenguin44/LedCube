@@ -81,11 +81,6 @@ void network_initServer()
     static_colors = false;
     request->send(200);
   });
-  server.on("/shake", HTTP_GET, [](AsyncWebServerRequest *request){
-    //####
-    request->send(200);
-  });
-
   //sends battery charge value to control page
   server.on("/getPercent", HTTP_GET, [](AsyncWebServerRequest *request){
     //AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", String(battery));
@@ -152,6 +147,12 @@ void network_initServer()
   server.on("/disable", HTTP_GET, [](AsyncWebServerRequest *request){
     int id = request->getParam("id")->value().toInt();
     toggles[id] = false;
+    request->send(200);
+  });
+  server.on("/shake", HTTP_GET, [](AsyncWebServerRequest *request){
+    shake = true;
+    Serial.println("shaketrue");
+    delay(2);
     request->send(200);
   });
   server.begin();
