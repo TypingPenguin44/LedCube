@@ -25,3 +25,4 @@ bool time_ISR();
 bool time_shake();
 bool time_chargeCheck();
 bool time_scramble();
+bool time_freeze();

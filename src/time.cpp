@@ -161,13 +161,26 @@ bool time_chargeCheck() {
 }
 
 unsigned long time_scramble_prev = 0;
-bool time_scramble() {
+bool time_scramble(){
   time_now = millis();
 
-  if (time_now - time_scramble_prev >= 1000) {
+  if (time_now - time_scramble_prev >= 80) {
     time_scramble_prev = time_now;
     return 1;
   }
 
+  return 0;
+}
+
+
+unsigned long time_freeze_prev = 0;
+bool time_freeze(){
+  time_now = millis();
+
+  if (time_now - time_freeze_prev >= 3000) {
+    time_freeze_prev = time_now;
+    //Serial.println("setprev");
+    return 1;
+  }
   return 0;
 }

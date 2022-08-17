@@ -69,6 +69,6 @@ extern int gfx_bubble_corner;
 extern bool gfx_dice_scramble;
 
 extern int gfx_scramble_length;
-extern int gfx_scramble_values[15];
+//extern int gfx_scramble_values[15];
 
 #endif

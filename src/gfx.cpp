@@ -263,14 +263,15 @@ uint8_t gfx_dice_side = 0;
 bool gfx_dice_scramble = false;
 int dice_side_offset = 0; // for scramble thingy
 int gfx_scramble_length = 0;
-int gfx_scramble_values[15] = {0};
+//int gfx_scramble_values[15] = {0};
 int gfx_scramble_progress = 0;
+bool gfx_dice_freeze = false;
 
 
 void gfx_dice(){
-  if(gfx_dice_scramble && time_scramble()){
+  if(gfx_dice_scramble && time_scramble()){ //useless if time <50 ms 
     strip.ClearTo(0);
-    dice_side_offset = gfx_scramble_values[gfx_scramble_progress];
+    dice_side_offset = random(0,5);
     for(int i = 0; i < 6; i++){
       gfx_dice_side = i;
       gfx_dice_set();
@@ -278,10 +279,16 @@ void gfx_dice(){
     gfx_scramble_progress++;
     if(gfx_scramble_progress >= gfx_scramble_length){
       gfx_dice_scramble = false;
+      gfx_dice_freeze = true;
+      time_freeze(); //set the prev value
       gfx_scramble_progress = 0;
       dice_side_offset = 0;
     }
-  }else if (!gfx_dice_scramble){
+  }else if(gfx_dice_freeze && time_freeze()){
+    gfx_dice_freeze = false;
+    //Serial.println(millis());
+
+  }else if (!gfx_dice_scramble && !gfx_dice_freeze){
     strip.ClearTo(0);
     gfx_dice_set();
   }
