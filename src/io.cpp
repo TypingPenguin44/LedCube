@@ -283,17 +283,17 @@ void io_sensorRead(){
       }
       
       if(z <= -6){
-        gfx_dice_side = 1;
+        gfx_dice_side = 0;
       }else if(z >= 6){
-        gfx_dice_side = 6;
-      }else if(x <= -6){
-        gfx_dice_side = 3;
-      }else if(x >= 6){
-        gfx_dice_side = 4;
-      }else if(y <= -6){
-        gfx_dice_side = 2;
-      }else if(y >= 6){
         gfx_dice_side = 5;
+      }else if(x <= -6){
+        gfx_dice_side = 2;
+      }else if(x >= 6){
+        gfx_dice_side = 3;
+      }else if(y <= -6){
+        gfx_dice_side = 1;
+      }else if(y >= 6){
+        gfx_dice_side = 4;
       }
     }
   }

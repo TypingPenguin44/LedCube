@@ -266,10 +266,10 @@ int gfx_scramble_length = 0;
 //int gfx_scramble_values[15] = {0};
 int gfx_scramble_progress = 0;
 bool gfx_dice_freeze = false;
-
+int even = 1;
 
 void gfx_dice(){
-  if(gfx_dice_scramble && time_scramble()){ //useless if time <50 ms 
+  if(gfx_dice_scramble && even % 2 == 0){ //&& time_scramble()){ //useless if time <50 ms 
     strip.ClearTo(0);
     dice_side_offset = random(0,5);
     for(int i = 0; i < 6; i++){
@@ -286,45 +286,46 @@ void gfx_dice(){
     }
   }else if(gfx_dice_freeze && time_freeze()){
     gfx_dice_freeze = false;
-    //Serial.println(millis());
-
   }else if (!gfx_dice_scramble && !gfx_dice_freeze){
     strip.ClearTo(0);
     gfx_dice_set();
   }
-  
+  even++;
+  if(even == 3){
+    even = 1;
+  }
   gfx_cycleColor();
   strip.Show();
-  
 }
 void gfx_dice_set(){
   switch(gfx_dice_side){
-    case 1:
+    case 0:
       strip.SetPixelColor((4 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
+      
     break;
-    case 2:
+    case 1:
       strip.SetPixelColor((29 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((33 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
-    case 3:
+    case 2:
       strip.SetPixelColor((38 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((40 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((42 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
-    case 4:
+    case 3:
       strip.SetPixelColor((18 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((20 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((24 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((26 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
-    case 5:
+    case 4:
       strip.SetPixelColor((9 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((11 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((13 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((15 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((17 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
-    case 6:
+    case 5:
       strip.SetPixelColor((45 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((46 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((47 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
