@@ -4,21 +4,21 @@
 #include <gfx.h>
 #include <network.h>
 
-static const animations default_gfx[13] = {{0, 40, 0}, //rainbow
-                                           {0, 60, 0}, //sanke 
-                                           {0, 40, 0}, //snake++
-                                           {0, 20, 0}, //donut
-                                           {0, 60, 0}, //diagonal
-                                           {0, 10, 0}, //dpad?
-                                           {0, 50, 1}, //dice
-                                           {0, 20, 1}, //bubble 50
-                                           {0, 50, 1}, //loading
-                                           {0, 60, 1}, //lines
-                                           {0, 2000, 0}, //charge
-                                           {0, 50, 0}, //fade
-                                           {0, 200, 0}}; //static
+static const animations default_gfx[NUM_ANIM] = {{0, 40, 0}, //rainbow
+                                                 {0, 60, 0}, //sanke 
+                                                 {0, 40, 0}, //snake++
+                                                 {0, 20, 0}, //donut
+                                                 {0, 60, 0}, //diagonal
+                                                 {0, 10, 0}, //dpad?
+                                                 {0, 50, 1}, //dice
+                                                 {0, 20, 1}, //bubble 50
+                                                 {0, 50, 1}, //loading
+                                                 {0, 60, 1}, //lines
+                                                 {0, 2000, 0}, //charge
+                                                 {0, 50, 0}, //fade
+                                                 {0, 200, 0}}; //static
 
-static const bool default_toggles[2] = {true, false};
+static const bool default_toggles[NUM_TOGGLES] = {true};
 
 void settings_setup(){
   if(!SPIFFS.begin()){ //spiffs setup
@@ -46,7 +46,7 @@ void settings_save_toggles(){
     return;
   }
   DynamicJsonDocument doc(512);
-  for(int i = 0; i < 2; i++){
+  for(int i = 0; i < NUM_TOGGLES; i++){
     doc["toggles"][i] = toggles[i];
   }
 
@@ -73,7 +73,7 @@ void settings_load_toggles(){
     return;
   }
 
-  for (int i = 0; i < 2; i++){
+  for (int i = 0; i < NUM_TOGGLES; i++){
     toggles[i] = doc['toggles'][i].as<bool>(); 
   }
   file.close();
@@ -81,7 +81,7 @@ void settings_load_toggles(){
 
 
 void settings_reset_toggles(){
-  for(int i = 0; i < 2; i++){
+  for(int i = 0; i < NUM_TOGGLES; i++){
     toggles[i] = default_toggles[i];
   }
   settings_save_toggles();

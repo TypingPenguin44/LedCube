@@ -167,7 +167,7 @@ void io_handler() {
     if(MODE == 0 || MODE == 1 || MODE == 2) { 
       gfx_clear();
       MODE = 3;
-      current_anim = 9; //set anim to charge
+      current_anim = 10; //set anim to charge
     }
   }
 }

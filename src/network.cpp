@@ -57,6 +57,7 @@ void network_initServer()
   });
   server.on("/static", HTTP_GET, [](AsyncWebServerRequest *request){
     current_anim = request->getParam("id")->value().toInt();
+    MODE = request->getParam("mode")->value().toInt();
     static_colors = true;
     gfx_h = request->getParam("h")->value().toFloat();
     gfx_s = request->getParam("s")->value().toFloat();
@@ -75,17 +76,21 @@ void network_initServer()
   });
 
   server.on("/anim", HTTP_GET, [](AsyncWebServerRequest *request){
+    
     current_anim = request->getParam("id")->value().toInt();
-    gfx_reset();
+    MODE = request->getParam("mode")->value().toInt();
+    //Serial.println(request->getParam("mode")->value());
+    Serial.println(MODE);
     Serial.println(current_anim);
+    gfx_reset();
     static_colors = false;
     request->send(200);
   });
   //sends battery charge value to control page
   server.on("/getPercent", HTTP_GET, [](AsyncWebServerRequest *request){
-    //AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", String(battery));
-    //response->addHeader("Server","ESP Async Web Server");
-    //request->send(response);
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", String(BATTERY));
+    response->addHeader("Server","ESP Async Web Server");
+    request->send(response);
   });
   server.on("/press", HTTP_GET, [](AsyncWebServerRequest *request){
     single_press = true;

@@ -28,6 +28,7 @@
 #define SENSOR_TIME 20
 
 #define NUM_ANIM 13
+#define NUM_TOGGLES 1
 
 
 typedef struct {
@@ -39,7 +40,7 @@ typedef struct {
 extern animations gfx[NUM_ANIM];
 extern bool toggles[2];
 
-extern uint8_t MODE;
+extern int MODE;
 extern bool rendered;
 extern bool clear;
 extern unsigned long time_now;

@@ -18,14 +18,15 @@ add "tags" before debug messages
 
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
 
-roll is basically useless so remove it 
-fade nnot working
+
+fade check delays
 shake button
 switching to adxl anim wont swtich mode on web so press resets current anim to 0
-settings set num of anim as a var....
+
 fix web button charge
-fix loading
- 
+fix charge nwtwork.cpp
+
+auto poweroff
 auto poweroff //need value first
 charge number on web should be % not random integer between 470 and 600 something
 
@@ -33,13 +34,13 @@ charge number on web should be % not random integer between 470 and 600 somethin
 */
 bool shakeCycle = true;
 int BATTERY = 0;
-uint8_t MODE = 0;
+int MODE = 0;
 int current_anim = 0;
 bool static_colors = false;
 
 
 void printconfig(){
-  for (int i = 0; i < 10; i++){
+  for (int i = 0; i < 13; i++){
     Serial.print(gfx[i].interval);
     Serial.print(" ");
     Serial.println(gfx[i].adxl);
