@@ -33,7 +33,7 @@
 
 typedef struct {
   unsigned long last_trig;
-  int interval;
+  unsigned int interval;
   bool adxl;
 } animations;
 

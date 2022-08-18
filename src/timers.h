@@ -1,5 +1,5 @@
-bool time_check(int interval);
-bool time_in_check(int interval);
+bool time_check(unsigned int interval);
+bool time_in_check(unsigned int interval);
 void time_setPrev();
 void time_trigger(unsigned long prev, int interval);
 
@@ -13,12 +13,12 @@ void time_trigger(unsigned long prev, int interval);
  * @param to 
  * @return int 
  */
-int time_map(int interval, int valFrom, int valTo, int from, int to);
+int time_map(unsigned int interval, int valFrom, int valTo, int from, int to);
 
 bool time_anim();
 
-bool time_test(int interval);
-bool time_clear(int interval);
+bool time_test(unsigned int interval);
+bool time_clear(unsigned int interval);
 
 bool time_sensor();
 bool time_ISR();

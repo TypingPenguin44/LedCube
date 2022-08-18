@@ -15,7 +15,7 @@ unsigned long time_previous_sensor;
 
 
 
-bool time_check(int interval) {
+bool time_check(unsigned int interval) {
   time_now = millis();
   
   
@@ -43,7 +43,7 @@ bool time_check(int interval) {
   return 0;
 }
 
-bool time_in_check(int interval) {
+bool time_in_check(unsigned int interval) {
   time_now = millis();
   
   if (interval == 0){
@@ -76,7 +76,7 @@ void time_setPrev() {
 }
 
 
-int time_map(int interval, int valFrom, int valTo, int from, int to)
+int time_map(unsigned int interval, int valFrom, int valTo, int from, int to)
 {
   time_now = millis();
   return map((time_previous_press + interval) - time_now, valFrom, valTo, from, to);
@@ -95,7 +95,7 @@ bool time_anim() {
 }
 unsigned long time_testPrev = 0;
 
-bool time_test(int interval) {
+bool time_test(unsigned int interval) {
   time_now = millis();
 
   if (time_now - time_testPrev >= interval) {
@@ -107,7 +107,7 @@ bool time_test(int interval) {
 }
 
 unsigned long time_clearPrev = 0;
-bool time_clear(int interval) {
+bool time_clear(unsigned int interval) {
   time_now = millis();
 
   if (time_now - time_clearPrev >= interval) {
