@@ -7,7 +7,7 @@
 #include <defs.h>
 #include <gfx.h>
 #include <settings.h>
-#include <time.h>
+#include <timers.h>
 
 animations gfx[NUM_ANIM];
 bool toggles[2];
@@ -23,7 +23,9 @@ auto poweroff
 auto poweroff //need value first
 charge number on web should be % not random integer between 470 and 600 something
 
-
+3.5 730
+4.2 880
+1.68A @ 4.2 full white
 */
 bool shakeCycle = true;
 int BATTERY = 0;

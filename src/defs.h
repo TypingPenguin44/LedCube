@@ -77,4 +77,6 @@ extern int gfx_bubble_fromto[2];
 extern bool gfx_bubble_transition;
 extern bool gfx_loading_clkwise;
 
+extern bool SHUTDOWN;
+
 #endif

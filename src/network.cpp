@@ -130,7 +130,8 @@ void network_initServer()
     request->send(200);
   });
   server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request){
-    settings_shutdown();
+    //settings_shutdown();
+    SHUTDOWN = true;
     request->send(200);
   });
   server.on("/reset", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -156,7 +157,7 @@ void network_initServer()
   });
   server.on("/shake", HTTP_GET, [](AsyncWebServerRequest *request){
     shake = true;
-    Serial.println("shaketrue");
+    //Serial.println("shaketrue");
     delay(2);
     request->send(200);
   });

@@ -1,6 +1,6 @@
 #include <defs.h>
 #include <Arduino.h>
-#include <time.h>
+#include <timers.h>
 #include <gfx.h>
 #include <io.h>
 #include <Adafruit_ADXL345_U.h>
@@ -48,7 +48,7 @@ void io_check() {
     time_setPrev(); // set previous btn press to now
   }
 
-  while (digitalRead(BTN) == HIGH) {
+  while(digitalRead(BTN) == HIGH) {
     buf = time_map(1000, 900, 0, 0, 8);
     if (buf > 1) // if buf more than one call anim
     {
@@ -118,7 +118,6 @@ void io_handler() {
     shake = false;
   }*/
   if(shake){
-    
     if(current_anim == 9){ //lines
       shake = false;
       gfx_lines_axis++;
@@ -141,7 +140,7 @@ void io_handler() {
     }else if(current_anim == 8){ //loading
       shake = false;
       gfx_loading_clkwise = !gfx_loading_clkwise;
-    }else{
+    }else if(shakeCycle){
       shake = false;
       single_press = true;
     }

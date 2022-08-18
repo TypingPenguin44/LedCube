@@ -1,5 +1,5 @@
-#include <Arduino.h>
 #include <defs.h>
+#include <timers.h>
 
 #ifdef DEBUG_ESP_PORT
   #ifndef DEBUG_MSG

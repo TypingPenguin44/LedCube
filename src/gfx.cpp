@@ -2,7 +2,7 @@
 #include <gfx.h>
 
 #include <NeoPixelBus.h>
-#include <time.h>
+#include <timers.h>
 
 const uint16_t PixelCount = 54; 
 const uint8_t PixelPin = 2; //rx pin
