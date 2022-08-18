@@ -8,6 +8,7 @@ const uint16_t PixelCount = 54;
 const uint8_t PixelPin = 2; //rx pin
 NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(PixelCount, PixelPin);
 
+
 float gfx_h = 0.0;
 float gfx_s = 1.0;
 float gfx_v = 1.0;
