@@ -28,3 +28,5 @@ void gfx_startFade(bool error = false, bool in = true);
 
 void gfx_fade();
 void gfx_static();
+
+void gfx_blink();

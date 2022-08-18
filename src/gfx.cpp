@@ -464,6 +464,8 @@ void gfx_rainbow(){
 
 //make it delayless
 void gfx_blink(){
+  strip.ClearTo(0);
+  strip.Show();
   strip.SetPixelColor(8, HsbColor(0, 1, 1));
   strip.Show();
   delay(250);

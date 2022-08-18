@@ -157,8 +157,6 @@ void network_initServer()
   });
   server.on("/shake", HTTP_GET, [](AsyncWebServerRequest *request){
     shake = true;
-    //Serial.println("shaketrue");
-    delay(2);
     request->send(200);
   });
   server.begin();

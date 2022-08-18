@@ -321,13 +321,17 @@ void io_startReset(){
 }
 /**
  * @brief Gets called periodically, if battery low it turns off the cube
- * @param override Overides turn off feature on low battery
+ * @param override Overide disables turn off on low battery
  */
 void io_batteryCheck(bool override){
   if(time_chargeCheck()){
     io_getCharge();
+    if(BATTERY < 730 && !override){
+      Serial.println("Low battery...");
+      gfx_blink();
+      SHUTDOWN = true;
+    }
   }
-  
 }
 //get battery charge value
 void io_getCharge(){

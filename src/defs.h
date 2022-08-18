@@ -28,7 +28,7 @@
 #define SENSOR_TIME 20
 
 #define NUM_ANIM 13
-#define NUM_TOGGLES 1
+#define NUM_TOGGLES 2
 
 
 typedef struct {
