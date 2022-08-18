@@ -140,7 +140,7 @@ void io_handler() {
     }else if(current_anim == 8){ //loading
       shake = false;
       gfx_loading_clkwise = !gfx_loading_clkwise;
-    }else if(shakeCycle){
+    }else if(toggles[0]){
       shake = false;
       single_press = true;
     }
@@ -194,7 +194,7 @@ int io_shakeCount = 0;
 float io_shakeValues[10][3] = {0};
 
 void io_sensorRead(){
-  if (shakeCycle || gfx[current_anim].adxl){
+  if (toggles[0] || gfx[current_anim].adxl){
     if(time_sensor()){
       sensors_event_t event; 
       accel.getEvent(&event);
@@ -203,7 +203,7 @@ void io_sensorRead(){
       int y = event.acceleration.y;
       int z = event.acceleration.z;
 
-      if(shakeCycle == true){
+      if(toggles[0]){
         if(io_shakeCount == 10){
           shakeX = 0.0;
           shakeY = 0.0;

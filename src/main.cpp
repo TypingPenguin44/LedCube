@@ -17,12 +17,12 @@ bool toggles[NUM_TOGGLES];
 add "tags" before debug messages 
 
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
+fix shake cycle 
 
 3.5 730
 4.2 880
 1.68A @ 4.2 full white
 */
-bool shakeCycle = true;
 int BATTERY = 0;
 int MODE = 0;
 int current_anim = 0;
