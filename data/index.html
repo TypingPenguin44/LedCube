@@ -260,6 +260,7 @@
 			<td><button class="button button1 " type="button" onclick="press()"><b>Press</b></button></td>
 			<td><button class="button button1 " type="button" onclick="double_press()"><b>Double Press</b></button></td>
 			<td><button class="button button1 " type="button" onclick="long_press()"><b>Sleep</b></button></td>
+      <td><button class="button button1 " type="button" onclick="shake()"><b>Shake</b></button></td>
 		</tr>
 	</table>
 	<p></p>
@@ -273,13 +274,11 @@
 				<td style="width:100px;"><button class="button button1" type="button" onclick="reset_delay()"><b>Reset Delay</b></button></td>
         <td style="width:100px;"><button class="button button1" type="button" onclick="save_delay()"><b>Save Delay</b></button></td>
 			</tr>
-    </table>
-    <table>
 			<tr>
-				<td><button class="button button1 orangetext" type="button" onclick="reload()"> <b>Reload Config</b></button></td>
-        <td><button class="button button1 redtext" type="button" onclick="save_config()"><b>SAVE ALL</b></button></td>
-				<td><button class="button button1 redtext" type="button" onclick="off()"><b>OFF</b></button></td>
-        <td><button class="button button1 cyantext" type="button" onclick="charge()"><b>Charge</b></button></td>
+				<td style="width:100px;"><button class="button button1 orangetext" type="button" onclick="reload()"> <b>Reload Config</b></button></td>
+        <td style="width:100px;"><button class="button button1 redtext" type="button" onclick="save_config()"><b>SAVE ALL</b></button></td>
+				<td style="width:100px;"><button class="button button1 redtext" type="button" onclick="off()"><b>OFF</b></button></td>
+        <td style="width:100px;"><button class="button button1 cyantext" type="button" onclick="charge()"><b>Charge</b></button></td>
 			</tr>
 		</table>
 	</div>
@@ -499,6 +498,12 @@ function enable(id){
 function disable(id){
   var xhr = new XMLHttpRequest();
 	xhr.open("GET", "/disable?id=" + id, true);
+	xhr.send();
+}
+
+function shake(){
+  var xhr = new XMLHttpRequest();
+	xhr.open("GET", "/shake", true);
 	xhr.send();
 }
 
