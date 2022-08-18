@@ -18,11 +18,13 @@ add "tags" before debug messages
 
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
 
-dice rolling 
-dice scramble on shake
+fix web button charge
+fix loading
  
 auto poweroff //need value first
 charge number on web should be % not random integer between 470 and 600 something
+
+
 */
 bool shakeCycle = true;
 int BATTERY = 0;

@@ -506,7 +506,7 @@ int gfx_lines_roll[3] = {0};
  * [0-2][] x axis
  * [3-5][] y axis
  * [5-8][] z axis
- * its less if else if its one single array instead of 3
+ * its less "if else" if its one single array instead of 3 separate
  */
 int gfx_lines_path[9][12] = {{0, 5, 6, 9, 14, 15, 47, 46, 45, 33, 34, 35},
                              {1, 4, 7, 10, 13, 16, 48, 49, 50, 32, 31, 30},
@@ -540,6 +540,32 @@ void gfx_lines(){
   gfx_cycleColor();
 }
 
+/**
+ * @brief helper array for storing wich corner is connected by which edge 
+ * to which corner
+ */
+int gfx_bubble_edges_helper[8][8] = {{0, 0, 0, 3, 4, 0, 0, 0},
+                                     {0, 0, 1, 0, 0, 5, 0, 0},
+                                     {0, 1, 0, 2, 0, 0, 6, 0},
+                                     {3, 0, 2, 0, 0, 0, 0, 7},
+                                     {4, 0, 0, 0, 0, 8, 0, 11},
+                                     {0, 5, 0, 0, 8, 0, 9, 0},
+                                     {0, 0, 6, 0, 0, 9, 0, 10},
+                                     {0, 0, 0, 7, 11, 0, 10, 0}};
+
+int gfx_bubble_edges[12][2] = {{1, 30},
+                               {4, 21},
+                               {7, 10},
+                               {5, 39},
+                               {34, 37},
+                               {25, 28},
+                               {12, 19},
+                               {14, 43},
+                               {32, 50},
+                               {23, 52},
+                               {16, 48},
+                               {41, 45}}; 
+
 int gfx_bubble_corners[8][3] = {{0, 38, 35}, //top left
                                  {2, 26, 29},
                                  {8, 11, 20},
@@ -550,6 +576,9 @@ int gfx_bubble_corners[8][3] = {{0, 38, 35}, //top left
                                  {47, 15, 42}};
                                  
 int gfx_bubble_corner = 0;
+bool gfx_bubble_transition = false;
+int gfx_bubble_corner_fromto[2] = {0}; 
+
 void gfx_bubble(){
   for(int i = 0; i < 3; i++){
     strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_corner][i], HsbColor(gfx_h, 1, 1));
@@ -558,6 +587,15 @@ void gfx_bubble(){
   strip.ClearTo(0);
   gfx_cycleColor();
 }
+
+/*void gfx_bubble(){
+  for(int i = 0; i < 3; i++){
+    strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_corner][i], HsbColor(gfx_h, 1, 1));
+  }
+  strip.Show();
+  strip.ClearTo(0);
+  gfx_cycleColor();
+}*/
 
 float gfx_startFade_value = 0;
 void gfx_startFade(bool error, bool in){
@@ -594,7 +632,7 @@ void gfx_startFade(bool error, bool in){
 bool gfx_fade_in = false;
 void gfx_fade(){
   gfx_fill(HsbColor(gfx_h, gfx_s, gfx_v));
-  Serial.println(String(gfx_h) + " " + String(gfx_s) + " " + String(gfx_v));
+  //Serial.println(String(gfx_h) + " " + String(gfx_s) + " " + String(gfx_v));
   strip.Show();
   if(!gfx_fade_in){
     gfx_v -= 0.012;
@@ -612,7 +650,7 @@ void gfx_fade(){
 }
 void gfx_static(){
   gfx_fill(HsbColor(gfx_h, gfx_s, gfx_v));
-  Serial.println(String(gfx_h) + " " + String(gfx_s) + " " + String(gfx_v));
+  //Serial.println(String(gfx_h) + " " + String(gfx_s) + " " + String(gfx_v));
   strip.Show();
 }
 

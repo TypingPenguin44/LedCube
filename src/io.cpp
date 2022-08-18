@@ -241,8 +241,7 @@ void io_sensorRead(){
         Serial.println(fabsf(event.acceleration.y));
         Serial.println(fabsf(event.acceleration.z));
         Serial.println();*/
-        //Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
-        //Serial.println();
+        Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
         io_shakeCount++;
 
       }
@@ -261,8 +260,8 @@ void io_sensorRead(){
             gfx_lines_roll[i] = 1;
           }
         }
-      }
-      if(current_anim == 7){ //gfx_bubble();
+      }else if(current_anim == 7){ //gfx_bubble();
+        
         if(x <= -2 && y <= -2 && z <= -2){
           gfx_bubble_corner = 0;
         }else if(x >= 2 && y <= -2 && z <= -2){
@@ -280,20 +279,24 @@ void io_sensorRead(){
         }else if(x <= -2 && y >= 2 && z >= 2){
           gfx_bubble_corner = 7;
         }
-      }
-      
-      if(z <= -6){
-        gfx_dice_side = 0;
-      }else if(z >= 6){
-        gfx_dice_side = 5;
-      }else if(x <= -6){
-        gfx_dice_side = 2;
-      }else if(x >= 6){
-        gfx_dice_side = 3;
-      }else if(y <= -6){
-        gfx_dice_side = 1;
-      }else if(y >= 6){
-        gfx_dice_side = 4;
+        if(gfx_bubble_corner != gfx_bubble_corner_fromto[0]){
+          gfx_bubble_transition = true;
+          gfx_bubble_corner_fromto[1] = gfx_bubble_corner;
+        }
+      }else if(current_anim == 6){ //dice
+        if(z <= -6){
+          gfx_dice_side = 0;
+        }else if(z >= 6){
+          gfx_dice_side = 5;
+        }else if(x <= -6){
+          gfx_dice_side = 2;
+        }else if(x >= 6){
+          gfx_dice_side = 3;
+        }else if(y <= -6){
+          gfx_dice_side = 1;
+        }else if(y >= 6){
+          gfx_dice_side = 4;
+        }
       }
     }
   }

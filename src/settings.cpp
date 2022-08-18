@@ -13,9 +13,9 @@ static const animations default_gfx[12] = {{0, 40, 0}, //rainbow
                                            {0, 50, 1}, //bubble
                                            {0, 50, 1}, //dice
                                            {0, 60, 1}, //lines
-                                           {0, 40, 0}, //fade
-                                           {0, 200, 0}, //static
-                                           {0, 2000, 0}}; //charge
+                                           {0, 2000, 0},  //charge
+                                           {0, 50, 0}, //fade
+                                           {0, 200, 0}}; //static
 
 static const bool default_toggles[2] = {true, false};
 
