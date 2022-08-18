@@ -320,7 +320,9 @@ function ajaxLoad(ajaxURL){
 	ajaxRequest.onreadystatechange = function(){
 		if(ajaxRequest.readyState == 4 && ajaxRequest.status==200){
 			var ajaxResult = ajaxRequest.responseText;
-			document.getElementById('percent').innerHTML = ajaxResult;
+      var precentage = parseFloat(ajaxResult);
+      precentage = ((precentage - 730)/150)*100;
+			document.getElementById('percent').innerHTML = precentage.toFixed(2) + "\%";
 		}
 	}
 	ajaxRequest.send();

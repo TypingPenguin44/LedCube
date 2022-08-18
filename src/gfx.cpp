@@ -584,7 +584,7 @@ void gfx_lines(){
   Serial.println(gfx_lines_roll[gfx_lines_axis]);*/
   
   for(int i = 0; i < 9; i++){
-    strip.SetPixelColor(gfx_lines_path[gfx_lines_axis * 3 + gfx_lines_roll[gfx_lines_axis]][(gfx_lines_led + i) % 12], HsbColor(gfx_h, 1, 1));
+    strip.SetPixelColor(gfx_lines_path[gfx_lines_axis * 3 + gfx_lines_roll[gfx_lines_axis]][(gfx_lines_led + i) % 12], HsbColor(gfx_h, gfx_s, gfx_v));
   }
   strip.Show();
   strip.ClearTo(0);
@@ -648,13 +648,13 @@ bool middledown = false;
 void gfx_bubble(){
   if(gfx_bubble_transition){
     for(int i = 0; i < 3; i++){
-      strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_fromto[0]][i], HsbColor(gfx_h, 1, gfx_bubble_from_v));
+      strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_fromto[0]][i], HsbColor(gfx_h, gfx_s, gfx_bubble_from_v));
     }
     for(int i = 0; i < 2; i++){
-      strip.SetPixelColor(gfx_bubble_edges[gfx_bubble_edges_helper[gfx_bubble_fromto[0]][gfx_bubble_fromto[1]]][i], HsbColor(gfx_h, 1, gfx_bubble_middle_v));
+      strip.SetPixelColor(gfx_bubble_edges[gfx_bubble_edges_helper[gfx_bubble_fromto[0]][gfx_bubble_fromto[1]]][i], HsbColor(gfx_h, gfx_s, gfx_bubble_middle_v));
     }
     for(int i = 0; i < 3; i++){
-      strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_fromto[1]][i], HsbColor(gfx_h, 1, gfx_bubble_to_v));
+      strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_fromto[1]][i], HsbColor(gfx_h, gfx_s, gfx_bubble_to_v));
     }
 
     if(middleup){
@@ -685,7 +685,7 @@ void gfx_bubble(){
 
   }else{
     for(int i = 0; i < 3; i++){
-      strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_fromto[0]][i], HsbColor(gfx_h, 1, 1)); // this is useless in theory
+      strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_fromto[0]][i], HsbColor(gfx_h, gfx_s, 1)); // this is useless in theory
     }
   }
 
