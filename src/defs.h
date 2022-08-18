@@ -24,8 +24,10 @@
 #define SLEEP_PRESS_TIME 3000
 #define DEBOUNCE 60
 #define gfx_normal 6
-#define gfx_accel 4
+#define gfx_accel 5
 #define SENSOR_TIME 20
+
+#define NUM_ANIM 13
 
 
 typedef struct {
@@ -34,7 +36,7 @@ typedef struct {
   bool adxl;
 } animations;
 
-extern animations gfx[12];
+extern animations gfx[NUM_ANIM];
 extern bool toggles[2];
 
 extern uint8_t MODE;
@@ -70,7 +72,8 @@ extern bool gfx_dice_scramble;
 
 extern int gfx_scramble_length;
 //extern int gfx_scramble_values[15];
-extern int gfx_bubble_corner_fromto[2];
+extern int gfx_bubble_fromto[2];
 extern bool gfx_bubble_transition;
+extern bool gfx_loading_clkwise;
 
 #endif

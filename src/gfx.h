@@ -12,6 +12,7 @@ void gfx_clear();
 void gfx_snake();
 void gfx_rainbow();
 void gfx_loading(uint8_t leds, bool stageTwo);
+void gfx_loading_anim();
 void gfx_snakePlus();
 void gfx_donut();
 void gfx_dice();

@@ -45,7 +45,7 @@ void gfx_animHandler(){
           gfx_bubble();
           break;
         case 8:
-          //gfx_loading();
+          gfx_loading_anim();
           break;
         case 9:
           gfx_lines();
@@ -61,6 +61,7 @@ void gfx_animHandler(){
           break;
         default:
           //implement yellow loading
+          current_anim = 0;
           break;
       }
     }
@@ -301,24 +302,23 @@ void gfx_dice_set(){
   switch(gfx_dice_side){
     case 0:
       strip.SetPixelColor((4 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
-      
     break;
-    case 1:
+    case 3:
       strip.SetPixelColor((29 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((33 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
-    case 2:
+    case 4:
       strip.SetPixelColor((38 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((40 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((42 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
-    case 3:
+    case 2:
       strip.SetPixelColor((18 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((20 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((24 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((26 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
     break;
-    case 4:
+    case 1:
       strip.SetPixelColor((9 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((11 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
       strip.SetPixelColor((13 + dice_side_offset * 9) % 54, HsbColor(gfx_h, gfx_s, gfx_v));
@@ -472,6 +472,61 @@ void gfx_blink(){
 }
 
 const uint8_t gfx_load[8] = {0,1,2,3,8,7,6,5};
+bool gfx_loading_clkwise = true;
+int gfx_loading_count = 0;
+int loadingbuf = 0;
+
+void gfx_loading_anim(){
+  if(gfx_loading_clkwise){
+    for(int i = 0; i < 3; i++){
+
+      if(gfx_loading_count - i < 0){
+        loadingbuf = gfx_load[(9 - i)];
+        loadingbuf += (gfx_dice_side*9);
+      }else{
+        loadingbuf = gfx_load[gfx_loading_count - i];
+        loadingbuf += (gfx_dice_side*9);
+      }
+      //Serial.println("count: " + String(gfx_loading_count) + " buf " + String(loadingbuf));
+      if(i == 0){
+        strip.SetPixelColor(loadingbuf, HsbColor(gfx_h, gfx_s, gfx_v));
+      }else if(i == 1){
+        strip.SetPixelColor(loadingbuf, HsbColor(gfx_h, gfx_s, gfx_v*0.75));
+      }else if(i == 2){
+        strip.SetPixelColor(loadingbuf, HsbColor(gfx_h, gfx_s, gfx_v*0.5));
+      }
+    }
+    gfx_loading_count++;
+    if(gfx_loading_count >= 8){
+      gfx_loading_count = 0;
+    }
+  }else{
+    for(int i = 0; i < 3; i++){
+      if(gfx_loading_count + i > 7){
+        loadingbuf = gfx_load[(gfx_loading_count + i)%8];
+        loadingbuf += (gfx_dice_side*9);
+      }else{
+        loadingbuf = gfx_load[gfx_loading_count + i];
+        loadingbuf += (gfx_dice_side*9);
+      }
+      //Serial.println("count: " + String(gfx_loading_count) + " buf " + String(loadingbuf));          
+      if(i == 0){
+        strip.SetPixelColor(loadingbuf, HsbColor(gfx_h, gfx_s, gfx_v));
+      }else if(i == 1){
+        strip.SetPixelColor(loadingbuf, HsbColor(gfx_h, gfx_s, gfx_v*0.75));
+      }else if(i == 2){
+        strip.SetPixelColor(loadingbuf, HsbColor(gfx_h, gfx_s, gfx_v*0.5));
+      }
+    }
+    gfx_loading_count--;
+    if(gfx_loading_count <= 0){
+      gfx_loading_count = 8;
+    }
+  }
+  strip.Show();
+  strip.ClearTo(0); //might be useless
+  gfx_cycleColor();
+}
 
 void gfx_loading(uint8_t leds, bool stageTwo){
   for(int i = 0; i < leds; i++){
@@ -554,7 +609,7 @@ int gfx_bubble_edges_helper[8][8] = {{0, 0, 0, 3, 4, 0, 0, 0},
                                      {0, 0, 0, 7, 11, 0, 10, 0}};
 
 int gfx_bubble_edges[12][2] = {{1, 30},
-                               {4, 21},
+                               {3, 21},
                                {7, 10},
                                {5, 39},
                                {34, 37},
@@ -577,12 +632,62 @@ int gfx_bubble_corners[8][3] = {{0, 38, 35}, //top left
                                  
 int gfx_bubble_corner = 0;
 bool gfx_bubble_transition = false;
-int gfx_bubble_corner_fromto[2] = {0}; 
+int gfx_bubble_fromto[2] = {0}; 
+bool middlereise = true;
+bool equal = false;
+bool middledecr = false;
+
+float gfx_bubble_from_v = 1.0;
+float gfx_bubble_middle_v = 0.0;
+float gfx_bubble_to_v = 0.0;
+
+bool middleup = true;
+bool middledown = false;
 
 void gfx_bubble(){
-  for(int i = 0; i < 3; i++){
-    strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_corner][i], HsbColor(gfx_h, 1, 1));
+  if(gfx_bubble_transition){
+    for(int i = 0; i < 3; i++){
+      strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_fromto[0]][i], HsbColor(gfx_h, 1, gfx_bubble_from_v));
+    }
+    for(int i = 0; i < 2; i++){
+      strip.SetPixelColor(gfx_bubble_edges[gfx_bubble_edges_helper[gfx_bubble_fromto[0]][gfx_bubble_fromto[1]]][i], HsbColor(gfx_h, 1, gfx_bubble_middle_v));
+    }
+    for(int i = 0; i < 3; i++){
+      strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_fromto[1]][i], HsbColor(gfx_h, 1, gfx_bubble_to_v));
+    }
+
+    if(middleup){
+      gfx_bubble_from_v -= 0.18; //0.06
+      gfx_bubble_middle_v += 0.12; //0.04
+      gfx_bubble_to_v += 0.12; //0.02
+    }
+    if(gfx_bubble_from_v <= 0.0){
+      middleup = false;
+      gfx_bubble_from_v = 0.0;
+      middledown = true;
+    }
+    if(middledown){
+      gfx_bubble_middle_v -= 0.12; //0.04
+      gfx_bubble_to_v += 0.12; //0.04
+    }
+    if(gfx_bubble_middle_v <= 0 || gfx_bubble_to_v >= 1){
+      middledown = false;
+      gfx_bubble_from_v = 1.0;
+      gfx_bubble_middle_v = 0.0;
+      gfx_bubble_to_v = 0.0;
+      gfx_bubble_transition = false;
+      middleup = true; // reset value for next transtion
+      
+      gfx_bubble_fromto[0] = gfx_bubble_fromto[1];
+    }
+    //Serial.println("fromv: " + String(gfx_bubble_from_v) + " middelv: " + String(gfx_bubble_middle_v) + " tov: " + String(gfx_bubble_to_v));
+
+  }else{
+    for(int i = 0; i < 3; i++){
+      strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_fromto[0]][i], HsbColor(gfx_h, 1, 1)); // this is useless in theory
+    }
   }
+
   strip.Show();
   strip.ClearTo(0);
   gfx_cycleColor();
@@ -602,7 +707,7 @@ void gfx_startFade(bool error, bool in){
   if(error){
     gfx_h = 0;
   }else{
-    gfx_h = 0.5;
+    gfx_h = 0.65;
   }
 
   if(in){

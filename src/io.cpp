@@ -92,7 +92,7 @@ void io_handler() {
       }
     }else if (MODE == 1){ //if in double mode increment double anim
       current_anim++;
-      if(current_anim >= 9){ //wrap around
+      if(current_anim > 9){ //wrap around
         current_anim = 6; //####
       }
     }
@@ -119,13 +119,13 @@ void io_handler() {
   }*/
   if(shake){
     
-    if(current_anim == 8){
+    if(current_anim == 9){ //lines
       shake = false;
       gfx_lines_axis++;
       if(gfx_lines_axis >= 3){
         gfx_lines_axis = 0;
       }
-    }else if(current_anim == 6){
+    }else if(current_anim == 6){ //dice
       shake = false;
       gfx_dice_scramble = true;
       gfx_scramble_length = random(20,50);
@@ -138,6 +138,9 @@ void io_handler() {
         Serial.println(gfx_scramble_values[i]);
         delay(2);
       }*/
+    }else if(current_anim == 8){ //loading
+      shake = false;
+      gfx_loading_clkwise = !gfx_loading_clkwise;
     }else{
       shake = false;
       single_press = true;
@@ -241,7 +244,7 @@ void io_sensorRead(){
         Serial.println(fabsf(event.acceleration.y));
         Serial.println(fabsf(event.acceleration.z));
         Serial.println();*/
-        Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
+        //Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
         io_shakeCount++;
 
       }
@@ -279,23 +282,25 @@ void io_sensorRead(){
         }else if(x <= -2 && y >= 2 && z >= 2){
           gfx_bubble_corner = 7;
         }
-        if(gfx_bubble_corner != gfx_bubble_corner_fromto[0]){
+        if(gfx_bubble_corner != gfx_bubble_fromto[0] ){ //&& gfx_bubble_transition == false??
           gfx_bubble_transition = true;
-          gfx_bubble_corner_fromto[1] = gfx_bubble_corner;
-        }
-      }else if(current_anim == 6){ //dice
+          gfx_bubble_fromto[1] = gfx_bubble_corner;
+        }/*else{
+          gfx_bubble_fromto[0] = gfx_bubble_corner;
+        }*/ //should be in gfx 
+      }else if(current_anim == 6 || current_anim == 8){ //dice
         if(z <= -6){
-          gfx_dice_side = 0;
+          gfx_dice_side = 0; //1
         }else if(z >= 6){
-          gfx_dice_side = 5;
+          gfx_dice_side = 5; //6
         }else if(x <= -6){
-          gfx_dice_side = 2;
+          gfx_dice_side = 4; //
         }else if(x >= 6){
-          gfx_dice_side = 3;
+          gfx_dice_side = 2; //2
         }else if(y <= -6){
-          gfx_dice_side = 1;
+          gfx_dice_side = 3; //3
         }else if(y >= 6){
-          gfx_dice_side = 4;
+          gfx_dice_side = 1; //4
         }
       }
     }

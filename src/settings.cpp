@@ -4,16 +4,17 @@
 #include <gfx.h>
 #include <network.h>
 
-static const animations default_gfx[12] = {{0, 40, 0}, //rainbow
+static const animations default_gfx[13] = {{0, 40, 0}, //rainbow
                                            {0, 60, 0}, //sanke 
                                            {0, 40, 0}, //snake++
                                            {0, 20, 0}, //donut
                                            {0, 60, 0}, //diagonal
                                            {0, 10, 0}, //dpad?
-                                           {0, 50, 1}, //bubble
                                            {0, 50, 1}, //dice
+                                           {0, 20, 1}, //bubble 50
+                                           {0, 50, 1}, //loading
                                            {0, 60, 1}, //lines
-                                           {0, 2000, 0},  //charge
+                                           {0, 2000, 0}, //charge
                                            {0, 50, 0}, //fade
                                            {0, 200, 0}}; //static
 
@@ -99,7 +100,7 @@ void settings_save_gfx(){
   DynamicJsonDocument doc(1024);
   JsonArray arr = doc.createNestedArray("gfx");
   // Set the values in the document
-  for(int i = 0; i < 12; i++){
+  for(int i = 0; i < NUM_ANIM; i++){
     JsonObject obj = arr.createNestedObject();
     obj["interval"] = gfx[i].interval;
     obj["adxl"] = gfx[i].adxl;
@@ -133,7 +134,7 @@ void settings_load_gfx(){
     return;
   }
 
-  for (int i = 0; i < 12; i++){
+  for (int i = 0; i < NUM_ANIM; i++){
     JsonObject item = doc["gfx"][i];
     gfx[i].interval = item["interval"];
     gfx[i].adxl = item["adxl"];
@@ -143,7 +144,7 @@ void settings_load_gfx(){
 }
 
 void settings_reset_delays(){
-  for(int i = 0; i < 12; i++){
+  for(int i = 0; i < NUM_ANIM; i++){
     gfx[i].interval = default_gfx[i].interval;
     gfx[i].adxl = default_gfx[i].adxl; //u cant change this lol 
   }

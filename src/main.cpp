@@ -9,7 +9,7 @@
 #include <settings.h>
 #include <time.h>
 
-animations gfx[12];
+animations gfx[NUM_ANIM];
 bool toggles[2];
 
 
@@ -18,6 +18,11 @@ add "tags" before debug messages
 
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
 
+roll is basically useless so remove it 
+fade nnot working
+shake button
+switching to adxl anim wont swtich mode on web so press resets current anim to 0
+settings set num of anim as a var....
 fix web button charge
 fix loading
  
