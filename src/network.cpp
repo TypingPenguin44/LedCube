@@ -159,5 +159,10 @@ void network_initServer()
     shake = true;
     request->send(200);
   });
+  server.on("/startfade", HTTP_GET, [](AsyncWebServerRequest *request){
+    startfade = true;
+    request->send(200);
+  });
+
   server.begin();
 }

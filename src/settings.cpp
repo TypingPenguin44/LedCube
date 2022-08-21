@@ -18,7 +18,7 @@ static const animations default_gfx[NUM_ANIM] = {{0, 40, 0}, //rainbow
                                                  {0, 50, 0}, //fade
                                                  {0, 200, 0}}; //static
 
-static const bool default_toggles[NUM_TOGGLES] = {true};
+static const bool default_toggles[NUM_TOGGLES] = {true, true};
 
 void settings_setup(){
   if(!SPIFFS.begin()){ //spiffs setup
@@ -74,7 +74,7 @@ void settings_load_toggles(){
   }
 
   for (int i = 0; i < NUM_TOGGLES; i++){
-    toggles[i] = doc['toggles'][i].as<bool>(); 
+    toggles[i] = doc["toggles"][i].as<bool>();
   }
   file.close();
 }

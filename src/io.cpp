@@ -326,7 +326,7 @@ void io_startReset(){
 void io_batteryCheck(bool override){
   if(time_chargeCheck()){
     io_getCharge();
-    if(BATTERY < 730 && !override){
+    if(BATTERY < 730 && override == false){
       Serial.println("Low battery...");
       gfx_blink();
       SHUTDOWN = true;

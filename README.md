@@ -21,6 +21,11 @@ Battery charging chip
 330mah Li-Po battery
 
 
+##
+Improvements 
+rubik's cube anim that actually works
+Dice and other sensor driven animations flicker if at the tipping point 
+
 ## Software
 I used the Arduino platform not esp-idf because I was familiar with it.
 

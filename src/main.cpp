@@ -13,9 +13,8 @@ animations gfx[NUM_ANIM];
 bool toggles[NUM_TOGGLES];
 
 /*TODO
-add "tags" before debug messages 
-
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
+longpress loading white for some reason
 
 3.5v 730
 4.2v 880
@@ -27,12 +26,19 @@ int MODE = 0;
 int current_anim = 0;
 bool static_colors = false;
 
+bool startfade = false;
+
 //prints out config
 void printconfig(){
   for (int i = 0; i < NUM_ANIM; i++){
     Serial.print(gfx[i].interval);
     Serial.print(" ");
     Serial.println(gfx[i].adxl);
+  }
+  Serial.println();
+  for(int i = 0; i < NUM_TOGGLES; i++){
+    Serial.println(toggles[i]);
+
   }
 }
 
@@ -86,9 +92,9 @@ void setup() {
   settings_load();
   
   //prints config on startup
-  //Serial.println("Config");
-  //printconfig();
-  //Serial.println();
+  Serial.println("Config");
+  printconfig();
+  Serial.println();
 
   Serial.println("Setup adxl");
   io_accelSetup();
@@ -130,6 +136,15 @@ void loop(){
   }*/
   //Check buttonpresses
   io_check();
+
+  if(startfade){
+    startfade = false;
+    MODE = 2;
+    gfx_clear();
+    gfx_startFade();
+    MODE = 0;
+    current_anim = 0;
+  }
 
   //If shutdown triggered start shutdown
   if(SHUTDOWN){

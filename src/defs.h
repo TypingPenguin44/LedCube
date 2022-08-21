@@ -78,4 +78,6 @@ extern bool gfx_loading_clkwise;
 
 extern bool SHUTDOWN;
 
+extern bool startfade;
+
 #endif
