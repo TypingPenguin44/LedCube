@@ -16,6 +16,8 @@ bool toggles[NUM_TOGGLES];
 maybe proper debug messages ? eg: DEBUG_WIFI("[APConfig] local_ip: %s gateway: %s subnet: %s\n", local_ip.toString().c_str(), gateway.toString().c_str(), subnet.toString().c_str());
 longpress loading white for some reason
 
+10th edge not lit properly 
+
 3.5v 730
 4.2v 880
 1.68A @ 4.2 full white should be 3. something amps....
