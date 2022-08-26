@@ -15,26 +15,24 @@
 #define DEBUG_MSG(...)
 #endif
 
-
+//set all input states false
 bool single_press = false;
 bool double_press = false;
 bool long_press = false;
 bool sleep_press = false;
 bool shake = false;
 
-int buf = 0;
 
 Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
 /**
 * @brief Check button for input
-* @def Have to do this the hard way without any more interrupts because Fastled with ws2812 uses interrupts
-* and it causes problems with wifi on a single tdefghrtv bcxeaded cpu like the esp8285 
+* @def Could rewrite it with interrupts in mind, Wasnt possible with previous library
 */
 void io_check() {
   if(digitalRead(BTN) == HIGH) // if button is pressed
   {
-    if (single_press == false) // if not btn press before set it true
+    if(single_press == false) // if not btn press set it true
     {
       single_press = true;
     } // if pressed AND pressed again in 250ms register as double press
@@ -49,23 +47,23 @@ void io_check() {
   }
 
   while(digitalRead(BTN) == HIGH) {
-    buf = time_map(1000, 900, 0, 0, 8);
-    if (buf > 1) // if buf more than one call anim
+    int buf = time_map(1000, 900, 0, 0, 8);
+    if(buf > 1) // call loading anim only if there is something to display
     {
       gfx_loading(buf, 0);
     } 
     delay(5);
-    if (time_check(LONG_PRESS_TIME)){  //if button held down more than 1s
+    if(time_check(LONG_PRESS_TIME)){  //if button held down more than 1s
       long_press = true;
       single_press = false;
       double_press = false;
       
-      while (digitalRead(BTN) == HIGH) { //if button still pressed
-        buf = time_map(3000, 3000, 0, 0, 8);
+      while(digitalRead(BTN) == HIGH) { //if button still pressed
+        int buf = time_map(3000, 3000, 0, 0, 8);
         gfx_loading(buf, 1);
         delay(5);
         
-        if (time_check(SLEEP_PRESS_TIME)){ //after 3s of holding exec
+        if(time_check(SLEEP_PRESS_TIME)){ //after 3s of holding exec
           sleep_press = true;
           long_press = false;
           single_press = false;
@@ -80,7 +78,8 @@ void io_check() {
 }
 
 void io_handler() {
-  if(single_press == true && time_check(DOUBLE_PRESS_TIME)){ //250ms after a press it executes    
+  //single press executes after 250ms
+  if(single_press == true && time_check(DOUBLE_PRESS_TIME)){    
     single_press = false;
     DEBUG_MSG("[io_check] Single press\n");
     gfx_reset();
@@ -93,31 +92,27 @@ void io_handler() {
     }else if (MODE == 1){ //if in double mode increment double anim
       current_anim++;
       if(current_anim > 9){ //wrap around
-        current_anim = 6; //####
+        current_anim = gfx_normal;
       }
     }
   }else if (double_press == true){
     double_press = false;
-    gfx_reset();
+    gfx_reset(); //reset animation values
 
+    //change states
     if(MODE == 0){
       MODE = 1;
       gfx_clear();
-      current_anim = 6; // starting anim for accel mdoe 
+      current_anim = gfx_normal; // starting anim for accel mdoe 
     }
     else if(MODE == 1){
       MODE = 0;  
       gfx_clear();
       current_anim = 0;
     }    
-  }/*else if(shake == true){
-    if(animDouble == 1){
-      loadingReverse = !loadingReverse;
-      loadingPointer = 0;
-    }
-    shake = false;
-  }*/
+  }
   if(shake){
+    //execute animation specific stuff
     if(current_anim == 9){ //lines
       shake = false;
       gfx_lines_axis++;
@@ -127,20 +122,13 @@ void io_handler() {
     }else if(current_anim == 6){ //dice
       shake = false;
       gfx_dice_scramble = true;
-      gfx_scramble_length = random(20,50);
-      Serial.print("length: ");
-      Serial.println(gfx_scramble_length);
-      /*delay(2);
-      for(int i = 0; i < gfx_scramble_length; i++){
-        gfx_scramble_values[i] = random(0,5);
-        Serial.print("values ");
-        Serial.println(gfx_scramble_values[i]);
-        delay(2);
-      }*/
+      gfx_scramble_length = random(20,50); //get random length of scramble
+      //Serial.print("length: ");
+      //Serial.println(gfx_scramble_length);
     }else if(current_anim == 8){ //loading
       shake = false;
-      gfx_loading_clkwise = !gfx_loading_clkwise;
-    }else if(toggles[0]){
+      gfx_loading_clkwise = !gfx_loading_clkwise; //change clockwise state
+    }else if(toggles[0]){ //if shakecycle just increment (works in diagonal as well)
       shake = false;
       single_press = true;
     }
@@ -149,13 +137,14 @@ void io_handler() {
   if(long_press) {
     long_press = false;
     DEBUG_MSG("[io_check] Long press\n");
-    if(MODE == 0 || MODE == 1) {
+
+    //change modes
+    if(MODE == 0 || MODE == 1) { //if in animation go to sleep
       gfx_clear();
       MODE = 2;
     } else if(MODE == 2) { //if in sleep mode go back to normal with longpress
       MODE = 0;
-    }
-    if(MODE == 3) { //if in charge mode go back to normal with longpress
+    }else if(MODE == 3) { //if in charge mode go back to normal with longpress
       MODE = 0;
       current_anim = 0;
     }
@@ -186,7 +175,7 @@ void io_accelSetup(){
     accel.writeRegister(ADXL345_REG_OFSZ, 0);
   }
 }
-
+//shake helper values
 float shakeX = 0;
 float shakeY = 0;
 float shakeZ = 0;
@@ -194,16 +183,19 @@ int io_shakeCount = 0;
 float io_shakeValues[10][3] = {0};
 
 void io_sensorRead(){
-  if (toggles[0] || gfx[current_anim].adxl){
+  if(toggles[0] || gfx[current_anim].adxl){ //read sensor if shakecycle true or animation requires it 
     if(time_sensor()){
+      //get event
       sensors_event_t event; 
       accel.getEvent(&event);
 
+      //extract values
       int x = event.acceleration.x;
       int y = event.acceleration.y;
       int z = event.acceleration.z;
 
-      if(toggles[0]){
+      //shakecycle
+      if(toggles[0] || gfx[current_anim].adxl){
         if(io_shakeCount == 10){
           shakeX = 0.0;
           shakeY = 0.0;
@@ -308,7 +300,7 @@ void io_sensorRead(){
 
 void io_startReset(){
   while (digitalRead(BTN) == HIGH) {
-    buf = time_map(3000, 3000, 0, 0, 8);
+    int buf = time_map(3000, 3000, 0, 0, 8);
     gfx_loading(buf, 1);
     delay(20);
     if(time_check(SLEEP_PRESS_TIME)){
