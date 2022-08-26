@@ -125,7 +125,7 @@ void loop(){
   gfx_animHandler();
   
   //check battery levels
-  io_batteryCheck(toggles[1]);
+  io_batteryCheck(toggles[1]); //override value can be set in web interface 
   
   //print mode, current anim, side value
   /*if(time_test(2000)){

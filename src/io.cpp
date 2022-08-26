@@ -189,22 +189,25 @@ void io_sensorRead(){
       sensors_event_t event; 
       accel.getEvent(&event);
 
-      //extract values
+      //extract to determine side up
       int x = event.acceleration.x;
       int y = event.acceleration.y;
       int z = event.acceleration.z;
 
       //shakecycle
       if(toggles[0] || gfx[current_anim].adxl){
+        //average 10 values of ~200ms 
         if(io_shakeCount == 10){
           shakeX = 0.0;
           shakeY = 0.0;
           shakeZ = 0.0;
+          //add together
           for(int i = 0; i < io_shakeCount; i++){
             shakeX += io_shakeValues[i][0];
             shakeY += io_shakeValues[i][1];
             shakeZ += io_shakeValues[i][2];
           }
+          //divide them
           shakeX = shakeX/io_shakeCount;
           shakeY = shakeY/io_shakeCount;
           shakeZ = shakeZ/io_shakeCount;
@@ -213,19 +216,23 @@ void io_sensorRead(){
           Serial.println(y);
           Serial.println(z);
           Serial.println();*/
+
+          //if time to check determine if one is above threshold 
           if(time_shake()){
             if(shakeX > 15 || shakeY > 15 || shakeZ > 15){
               shake = true;
-              Serial.println("shake");
+
+              /*Serial.println("shake");
               Serial.println("END");
               Serial.println(shakeX);
               Serial.println(shakeY);
               Serial.println(shakeZ);
-              Serial.println();
+              Serial.println();*/
             }
           }
           io_shakeCount = 0;
         }
+        //get values 
         io_shakeValues[io_shakeCount][0] = fabsf(event.acceleration.x);
         io_shakeValues[io_shakeCount][1] = fabsf(event.acceleration.y);
         io_shakeValues[io_shakeCount][2] = fabsf(event.acceleration.z);
@@ -237,7 +244,6 @@ void io_sensorRead(){
         Serial.println();*/
         //Serial.println(String(event.acceleration.x) + " " + String(event.acceleration.y) + " " + String(event.acceleration.z));
         io_shakeCount++;
-
       }
       if(current_anim == 9){ //gfx_lines();
         float roll_helper[3] = {0};
@@ -245,6 +251,7 @@ void io_sensorRead(){
         roll_helper[1] = event.acceleration.y;
         roll_helper[2] = event.acceleration.z;
 
+        //determine if cube is leaning to a side 
         for(int i = 0; i < 3; i++){
           if(roll_helper[i] >= 4){
             gfx_lines_roll[i] = 0;
@@ -255,7 +262,7 @@ void io_sensorRead(){
           }
         }
       }else if(current_anim == 7){ //gfx_bubble();
-        
+        //which corner is up from accel values
         if(x <= -2 && y <= -2 && z <= -2){
           gfx_bubble_corner = 0;
         }else if(x >= 2 && y <= -2 && z <= -2){
@@ -273,19 +280,19 @@ void io_sensorRead(){
         }else if(x <= -2 && y >= 2 && z >= 2){
           gfx_bubble_corner = 7;
         }
+        //if this new corner is not the previous one init transition
         if(gfx_bubble_corner != gfx_bubble_fromto[0] ){ //&& gfx_bubble_transition == false??
           gfx_bubble_transition = true;
           gfx_bubble_fromto[1] = gfx_bubble_corner;
-        }/*else{
-          gfx_bubble_fromto[0] = gfx_bubble_corner;
-        }*/ //should be in gfx 
-      }else if(current_anim == 6 || current_anim == 8){ //dice
+        }
+      }else if(current_anim == 6 || current_anim == 8){ //dice, loading
+        //determines which side is up      
         if(z <= -6){
           gfx_dice_side = 0; //1
         }else if(z >= 6){
           gfx_dice_side = 5; //6
         }else if(x <= -6){
-          gfx_dice_side = 4; //
+          gfx_dice_side = 4; //5
         }else if(x >= 6){
           gfx_dice_side = 2; //2
         }else if(y <= -6){
@@ -297,7 +304,9 @@ void io_sensorRead(){
     }
   }
 }
-
+/**
+ * @brief If button held 3s on startup resets all json settings and restarts the cube
+ */
 void io_startReset(){
   while (digitalRead(BTN) == HIGH) {
     int buf = time_map(3000, 3000, 0, 0, 8);
@@ -306,7 +315,6 @@ void io_startReset(){
     if(time_check(SLEEP_PRESS_TIME)){
       DEBUG_MSG("RESET...\n");
       settings_reset();
-      //put other settings here
       while (digitalRead(BTN) == HIGH){yield();}
     }
   }
