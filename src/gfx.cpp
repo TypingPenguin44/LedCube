@@ -260,7 +260,7 @@ void gfx_charge(){
 }
 
 //sensor should be called separately 
-uint8_t gfx_dice_side = 0;
+int gfx_dice_side = 0;
 
 bool gfx_dice_scramble = false;
 int dice_side_offset = 0; // for scramble thingy
