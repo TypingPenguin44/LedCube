@@ -49,7 +49,7 @@ void printconfig(){
 uint8_t ISR_press_count = 0;
 
 //this function gets called every buttonpress
-ICACHE_RAM_ATTR void off() { 
+ICACHE_RAM_ATTR void off(){ 
   time_now = millis();
   if(ISR_press_count == 3){ //if 3rd press start shutdown 
     Serial.println("Power off");
@@ -66,7 +66,7 @@ ICACHE_RAM_ATTR void off() {
 }
 
 
-void setup() {
+void setup(){
   //Set latch to output 
   pinMode(latch, OUTPUT);
   pinMode(BTN, INPUT);

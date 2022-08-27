@@ -26,15 +26,12 @@ bool shake = false;
 Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
 
-void io_check() {
-  if(digitalRead(BTN) == HIGH) // if button is pressed
-  {
-    if(single_press == false) // if not btn press set it true
-    {
+void io_check(){
+  if(digitalRead(BTN) == HIGH){ // if button is pressed
+    if(single_press == false){ // if not btn press set it true
       single_press = true;
     } // if pressed AND pressed again in 250ms register as double press
-    else if(single_press == true && time_in_check(DOUBLE_PRESS_TIME))
-    {
+    else if(single_press == true && time_in_check(DOUBLE_PRESS_TIME)){
       while(digitalRead(BTN) == HIGH){} //if still pressed infinite loop
       double_press = true;
       single_press = false;
@@ -43,10 +40,9 @@ void io_check() {
     time_setPrev(); // set previous btn press to now
   }
 
-  while(digitalRead(BTN) == HIGH) {
+  while(digitalRead(BTN) == HIGH){
     int buf = time_map(1000, 900, 0, 0, 8);
-    if(buf > 1) // call loading anim only if there is something to display
-    {
+    if(buf > 1){ // call loading anim only if there is something to display
       gfx_loading(buf, 0);
     } 
     delay(5);
@@ -55,7 +51,7 @@ void io_check() {
       single_press = false;
       double_press = false;
       
-      while(digitalRead(BTN) == HIGH) { //if button still pressed
+      while(digitalRead(BTN) == HIGH){ //if button still pressed
         int buf = time_map(3000, 3000, 0, 0, 8);
         gfx_loading(buf, 1);
         delay(5);
@@ -66,7 +62,7 @@ void io_check() {
           single_press = false;
           double_press = false;
           
-          while(digitalRead(BTN) == HIGH) {yield();} //infinite loop while still holding
+          while(digitalRead(BTN) == HIGH){yield();} //infinite loop while still holding
         }
       }
     }
@@ -74,7 +70,7 @@ void io_check() {
   io_handler();
 }
 
-void io_handler() {
+void io_handler(){
   //single press executes after 250ms
   if(single_press == true && time_check(DOUBLE_PRESS_TIME)){    
     single_press = false;
@@ -131,7 +127,7 @@ void io_handler() {
     }
   }
 
-  if(long_press) {
+  if(long_press){
     long_press = false;
     DEBUG_MSG("[io_check] Long press\n");
 
@@ -139,7 +135,7 @@ void io_handler() {
     if(MODE == 0 || MODE == 1) { //if in animation go to sleep
       gfx_clear();
       MODE = 2;
-    } else if(MODE == 2) { //if in sleep mode go back to normal with longpress
+    }else if(MODE == 2) { //if in sleep mode go back to normal with longpress
       MODE = 0;
     }else if(MODE == 3) { //if in charge mode go back to normal with longpress
       MODE = 0;
@@ -303,7 +299,7 @@ void io_sensorRead(){
 }
 
 void io_startReset(){
-  while (digitalRead(BTN) == HIGH) {
+  while(digitalRead(BTN) == HIGH) {
     int buf = time_map(3000, 3000, 0, 0, 8);
     gfx_loading(buf, 1);
     delay(20);

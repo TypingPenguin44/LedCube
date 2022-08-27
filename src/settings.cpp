@@ -155,7 +155,7 @@ void settings_load_gfx(){
     return;
   }
 
-  for (int i = 0; i < NUM_ANIM; i++){
+  for(int i = 0; i < NUM_ANIM; i++){
     JsonObject item = doc["gfx"][i];
     gfx[i].interval = item["interval"];
     gfx[i].adxl = item["adxl"];

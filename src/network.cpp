@@ -22,8 +22,7 @@ IPAddress local_IP(192,168,4,1);
 IPAddress gateway(192,168,4,1);
 IPAddress subnet(255,255,255,0);
 
-void network_setup()
-{
+void network_setup(){
   WiFi.setSleepMode(WIFI_NONE_SLEEP);
   WiFi.mode(WIFI_AP);
   DEBUG_MSG("Setting soft-AP configuration ...\n");
@@ -42,8 +41,7 @@ void network_poweroff(){
   WiFi.mode(WIFI_OFF);
 }
 
-void network_initServer()
-{
+void network_initServer(){
   server.onNotFound([](AsyncWebServerRequest *request){
     request->send(404, "text/plain", "404 Not found");
   });
@@ -115,7 +113,7 @@ void network_initServer()
     request->send(200);
   });
   server.on("/resetdelay", HTTP_GET, [](AsyncWebServerRequest *request){
-    settings_reset_delays();
+    settings_reset_gfx();
     request->send(200);
   });
   server.on("/savedelay", HTTP_GET, [](AsyncWebServerRequest *request){

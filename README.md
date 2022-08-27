@@ -17,7 +17,8 @@ It needed a refactoring because it was written in a way that is dumb, unscalable
 - A way to solve a "Rubik's cube" on the LedCube
 - Dice and other sensor driven animations flicker if at the tipping point between sides
 - Add a Type-C port and USB-Serial converter for easier programming and charging
-- Web page is atrocious in landscape 
+- Web page is atrocious in landscape
+- Properly commenting gfx.cpp...
 
 ## Small bit about the hardware
 The cube is made of six 30x30mm PCBs but with the LEDs and the PCBs being attached by the edges final dimensions are: 37x37x37mm.

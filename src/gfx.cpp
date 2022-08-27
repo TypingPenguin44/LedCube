@@ -163,9 +163,9 @@ void gfx_diagonal(){
       gfx_diagonal_leds[0] += 4;
     }else if(gfx_diagonal_start % 9 == 2){
       gfx_diagonal_leds[0] += 2;
-    } else if(gfx_diagonal_start % 9 == 6){
+    }else if(gfx_diagonal_start % 9 == 6){
       gfx_diagonal_leds[0] -= 2;
-    } else if(gfx_diagonal_start % 9 == 8){
+    }else if(gfx_diagonal_start % 9 == 8){
       gfx_diagonal_leds[0] -= 4;
     }
     //Serial.print("op: ");
@@ -288,7 +288,7 @@ void gfx_dice(){
     }
   }else if(gfx_dice_freeze && time_freeze()){
     gfx_dice_freeze = false;
-  }else if (!gfx_dice_scramble && !gfx_dice_freeze){
+  }else if(!gfx_dice_scramble && !gfx_dice_freeze){
     strip.ClearTo(0);
     gfx_dice_set();
   }
@@ -401,10 +401,6 @@ void gfx_snake(){
   }
   strip.Show();
   gfx_cycleColor();
-  /*currentColor++;
-  if(currentColor == 255){
-    currentColor = 0;
-  }*/
   strip.ClearTo(0);
 }
 
@@ -442,21 +438,16 @@ void gfx_snakePlus(){
     gfx_snake_currentLed = 0;
   }
   strip.Show();
-  /*currentColor++;
-  if(currentColor == 255){currentColor = 0;}*/
   gfx_cycleColor();
   strip.ClearTo(0);
 }
-
-
-//int gfx_color = 0;
 
 void gfx_rainbow(){
   gfx_fill(HsbColor(gfx_h, 1, 1));
   
   strip.Show();
   gfx_h += 0.004;
-  if (gfx_h >= 1)
+  if(gfx_h >= 1)
   {
     gfx_h = 0;
   }
@@ -695,15 +686,6 @@ void gfx_bubble(){
   strip.ClearTo(0);
   gfx_cycleColor();
 }
-
-/*void gfx_bubble(){
-  for(int i = 0; i < 3; i++){
-    strip.SetPixelColor(gfx_bubble_corners[gfx_bubble_corner][i], HsbColor(gfx_h, 1, 1));
-  }
-  strip.Show();
-  strip.ClearTo(0);
-  gfx_cycleColor();
-}*/
 
 float gfx_startFade_value = 0;
 void gfx_startFade(bool error, bool in){
