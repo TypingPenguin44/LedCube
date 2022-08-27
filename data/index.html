@@ -197,7 +197,7 @@
 			<td><button class="button presettext" type="button" onclick="anim(4,0,1)">Static</button></td>
 		</tr>
     <tr>
-			<td><p>Dpad</p></td>
+			<td><p>D-pad</p></td>
 			<td><button class="button orangetext" type="button" onclick="anim(5,0)">Rainbow</button></td>
 			<td><button class="button presettext" type="button" onclick="anim(5,0,1)">Static</button></td>
 		</tr>
@@ -293,7 +293,7 @@
 			</table>
 		</div>
 <script>
-/*Loading battery precentage/value*/
+//Loading battery precentage/value every 5s
 window.onload = function useless(){
 	update_battery();
 }
@@ -321,14 +321,14 @@ function ajaxLoad(ajaxURL){
 		if(ajaxRequest.readyState == 4 && ajaxRequest.status==200){
 			var ajaxResult = ajaxRequest.responseText;
       var precentage = parseFloat(ajaxResult);
-      precentage = ((precentage - 730)/150)*100;
+      precentage = ((precentage - 730)/150)*100; //minimum value = 730, min to max = 150
 			document.getElementById('percent').innerHTML = precentage.toFixed(2) + "\%";
 		}
 	}
 	ajaxRequest.send();
 }
 
-/*collapsible things*/
+//collapsible things
 var coll = document.getElementsByClassName("collapsible");
 var i;
 
@@ -365,7 +365,7 @@ const vOutput = document.getElementById("v");
 vSlider.oninput = function() {setSample(vSlider, vOutput)};
 
 
-
+//converts hsv to rgb only for the "color preview"
 function hsvToRgb(h, s, v){
   h=h*255;
   s=s*255;
@@ -391,7 +391,6 @@ function hsvToRgb(h, s, v){
   return color;
 }
 
-
 function setSample(slider, output){
   output.innerHTML = slider.value;
   //var color = new String("hsl(" + Math.round(hSlider.value / 255) + ", " + Math.round(sSlider.value / 255 * 100) + "%, "+ Math.round(vSlider.value / 255 * 100) + "%)");
@@ -400,7 +399,7 @@ function setSample(slider, output){
   element.style.backgroundColor = hsvToRgb(hSlider.value / 255, sSlider.value / 255, vSlider.value / 255);
 }
 
-/*sending values back*/
+//sending values back to cube
 function updateSlider() {
 
 	var hSliderValue = document.getElementById("hSlider").value;
@@ -416,7 +415,7 @@ function updateSlider() {
 	xhr.send();
 }
 
-/*other functions*/
+//other functions, these make the "links" work in network.cpp
 
 function anim(id, mode, static = 0){
   if(static == 1){
@@ -491,7 +490,6 @@ function charge(){
 	xhr.open("GET", "/charge", true);
 	xhr.send();
 }
-
 function enable(id){
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "/enable?id=" + id, true);
@@ -502,7 +500,6 @@ function disable(id){
 	xhr.open("GET", "/disable?id=" + id, true);
 	xhr.send();
 }
-
 function shake(){
   var xhr = new XMLHttpRequest();
 	xhr.open("GET", "/shake", true);
