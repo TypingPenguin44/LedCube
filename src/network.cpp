@@ -3,6 +3,7 @@
 
 #include <ESPAsyncWebServer.h>
 #include <ESPAsyncTCP.h>
+#include <network.h>
 #include <defs.h>
 #include <settings.h>
 #include <gfx.h>
@@ -74,9 +75,7 @@ void network_initServer()
     }
     request->send(200);
   });
-
   server.on("/anim", HTTP_GET, [](AsyncWebServerRequest *request){
-    
     current_anim = request->getParam("id")->value().toInt();
     MODE = request->getParam("mode")->value().toInt();
     //Serial.println(request->getParam("mode")->value());
@@ -115,7 +114,6 @@ void network_initServer()
     gfx[current_anim].interval = request->getParam("val")->value().toInt();
     request->send(200);
   });
-
   server.on("/resetdelay", HTTP_GET, [](AsyncWebServerRequest *request){
     settings_reset_delays();
     request->send(200);
@@ -130,7 +128,6 @@ void network_initServer()
     request->send(200);
   });
   server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request){
-    //settings_shutdown();
     SHUTDOWN = true;
     request->send(200);
   });

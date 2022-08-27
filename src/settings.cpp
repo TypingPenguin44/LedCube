@@ -3,7 +3,9 @@
 #include <defs.h>
 #include <gfx.h>
 #include <network.h>
+#include <settings.h>
 
+//default settings 
 static const animations default_gfx[NUM_ANIM] = {{0, 40, 0}, //rainbow
                                                  {0, 60, 0}, //sanke 
                                                  {0, 40, 0}, //snake++
@@ -18,7 +20,8 @@ static const animations default_gfx[NUM_ANIM] = {{0, 40, 0}, //rainbow
                                                  {0, 50, 0}, //fade
                                                  {0, 200, 0}}; //static
 
-static const bool default_toggles[NUM_TOGGLES] = {true, true};
+//shakecycle, batt check override
+static const bool default_toggles[NUM_TOGGLES] = {true, true}; //batt override default true!!!
 
 void settings_setup(){
   if(!SPIFFS.begin()){ //spiffs setup
@@ -39,33 +42,48 @@ void settings_shutdown(){
   digitalWrite(latch, LOW);
 }
 void settings_save_toggles(){
+  //delete existing file
   SPIFFS.remove("/gfx_toggles.json");
+
+  //create file
   File file = SPIFFS.open("/gfx_toggles.json", "w");
+
+  //if it doesnt exist error
   if(!file){
     Serial.println(F("Failed to create file"));
     return;
   }
+  //create document
   DynamicJsonDocument doc(512);
+
+  //for every toggle store it in doc
   for(int i = 0; i < NUM_TOGGLES; i++){
     doc["toggles"][i] = toggles[i];
   }
 
+  //serialize it to file 
   if(serializeJson(doc, file) == 0){
     Serial.println(F("Failed to write to file"));
   }
-  // Close the file
+  //close the file
   file.close();
 }
+
 void settings_load_toggles(){
+  //open file for reading
   File file = SPIFFS.open("/gfx_toggles.json", "r");
 
+  //if it doesnt exist error
   if(!file){
     Serial.println(F("Failed to open file"));
     return;
   }
+  //create document to read data into
   DynamicJsonDocument doc(512);
+  //deserialize it
   DeserializationError error = deserializeJson(doc, file);
 
+  //if error abort
   if(error){
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
@@ -73,9 +91,12 @@ void settings_load_toggles(){
     return;
   }
 
+  //read every toggle and store it as a variable
   for (int i = 0; i < NUM_TOGGLES; i++){
     toggles[i] = doc["toggles"][i].as<bool>();
   }
+
+  //close file
   file.close();
 }
 
@@ -143,17 +164,17 @@ void settings_load_gfx(){
   file.close();
 }
 
-void settings_reset_delays(){
+void settings_reset_gfx(){
   for(int i = 0; i < NUM_ANIM; i++){
     gfx[i].interval = default_gfx[i].interval;
-    gfx[i].adxl = default_gfx[i].adxl; //u cant change this lol 
+    gfx[i].adxl = default_gfx[i].adxl; //u cant change this lol no point in saving it 
   }
   settings_save_gfx();
 }
 
 void settings_reset(){
   settings_reset_toggles();
-  settings_reset_delays();
+  settings_reset_gfx();
 }
 
 void settings_load(){

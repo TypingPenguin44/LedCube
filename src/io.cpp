@@ -25,10 +25,7 @@ bool shake = false;
 
 Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
-/**
-* @brief Check button for input
-* @def Could rewrite it with interrupts in mind, Wasnt possible with previous library
-*/
+
 void io_check() {
   if(digitalRead(BTN) == HIGH) // if button is pressed
   {
@@ -304,9 +301,7 @@ void io_sensorRead(){
     }
   }
 }
-/**
- * @brief If button held 3s on startup resets all json settings and restarts the cube
- */
+
 void io_startReset(){
   while (digitalRead(BTN) == HIGH) {
     int buf = time_map(3000, 3000, 0, 0, 8);
@@ -319,10 +314,7 @@ void io_startReset(){
     }
   }
 }
-/**
- * @brief Gets called periodically, if battery low it turns off the cube
- * @param override Overide disables turn off on low battery
- */
+
 void io_batteryCheck(bool override){
   if(time_chargeCheck()){
     io_getCharge();
