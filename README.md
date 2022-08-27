@@ -1,5 +1,6 @@
 # LED Cube
-### Video: 
+### Video: https://youtu.be/NiWNA6QWti0
+### Video of the animations: https://youtu.be/tz9rI_uMX1A
 ### Description: A cube made out of PCBs with 54 RGB LEDs a webserver and an accelerometer for pretty animations.
 ### Original Idea: https://www.youtube.com/watch?v=6NPTslF68Q0
 The hardware is 80% the same, the pcbs I designed myself after mostly copying the schematics but still managed to break some things which were "fixed" without being able to get a second version of the PCB.
